@@ -7,7 +7,7 @@
 
 (defn hello-world []
   [:div
-   [:h1 "Hello World!"]])
+   [:h1.text-4xl.font-bold.text-center.text-indigo-500 "Hello World!"]])
 
 (defn dev-setup []
   (when config/debug?

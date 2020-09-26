@@ -1,0 +1,6 @@
+@tailwind base;
+@tailwind components;
+.btn {
+  @apply inline-block px-1 py-2 rounded-sm;
+}
+@tailwind utilities;
