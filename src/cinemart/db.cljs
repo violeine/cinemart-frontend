@@ -1,4 +1,5 @@
 (ns cinemart.db)
 
 (def default-db
-  {:name "re-fram"})
+  {:name "re-frame"
+   :current-route nil})

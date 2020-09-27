@@ -3,4 +3,18 @@
 .btn {
   @apply inline-block px-1 py-2 rounded-sm;
 }
+
+::-webkit-scrollbar {
+  @apply w-2 h-2;
+}
+::-webkit-scrollbar-thumb {
+  @apply rounded;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-500;
+}
+::-webkit-scrollbar-track {
+  @apply bg-gray-300;
+}
+
 @tailwind utilities;
