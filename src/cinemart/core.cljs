@@ -7,17 +7,23 @@
     [cinemart.config :as config]
     [cinemart.router :as rt]
     [cinemart.components.footer :refer [footer]]
+    [cinemart.components.notification :refer [notification]]
     [cinemart.components.header :refer [header]]))
 
 (defn hello-world []
   (let [current-route @(rf/subscribe [::subs/current-route])]
-    [:div.mx-auto.flex.flex-col.justify-between.min-h-screen
+    [:div.flex.flex-col.justify-between.min-h-screen
      [header {:routes rt/router
               :current-route current-route}]
-     [:section.bg-yellow-400.flex-1.lg:container.mx-auto
-      (when current-route
-        [(-> current-route :data :view)])]
-     [footer]]))
+     (when current-route
+       [(-> current-route :data :view) {:classes
+                                        ["bg-gray-300"
+                                         "xl:container"
+                                         "w-screen"
+                                         "flex-1"
+                                         "mx-auto"]}])
+     [footer]
+     [notification]]))
 
 (defn dev-setup []
   (when config/debug?

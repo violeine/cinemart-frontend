@@ -3,18 +3,17 @@
     [re-frame.core :as rf]
     [cinemart.db :as db]
     [day8.re-frame.tracing :refer-macros [fn-traced]]
+    [cinemart.effects :as fx]
     [reitit.frontend.controllers :as rfc]))
 
 (rf/reg-event-db
   ::init-db
   (fn-traced [_ _]
              db/default-db))
-
 (rf/reg-event-fx
   ::navigate
   (fn-traced [db [_ & route]]
-             {::navigate! route}))
-
+             {::fx/navigate! route}))
 (rf/reg-event-db
   ::navigated
   (fn-traced [db [_ new-match]]
@@ -24,5 +23,6 @@
                                  new-match)]
                (assoc db :current-route
                       (assoc new-match :controllers controllers)))))
+
 
 

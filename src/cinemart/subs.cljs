@@ -7,3 +7,8 @@
   (fn-traced [db]
              (:current-route db))) ; get current route out
 
+(rf/reg-sub
+  :auth?
+  (fn-traced [db]
+             (:auth? db)))
+

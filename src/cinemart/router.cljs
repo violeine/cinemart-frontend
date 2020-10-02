@@ -6,6 +6,7 @@
     [cinemart.events :as events]
     [cinemart.home.view :refer [home-page]]
     [cinemart.about.view :refer [about-page]]
+    [cinemart.login.view :refer [login]]
     [re-frame.core :refer [dispatch]]))
 
 (defn href
@@ -39,10 +40,10 @@
    ["login"
     {:name      ::login
      :link-text "Log in"
-     :view about-page
+     :view login
      :auth? false
      :controllers
-     [{:params (fn [match]
+     [{:identity (fn [match]
                  (js/console.log match)
                  (get-in match [:data :auth?]))
        :start (fn [auth?] (js/console.log auth?))

@@ -7,3 +7,5 @@
   ::navigate!
   (fn-traced [route]
              (apply rfe/push-state route)))
+
+(rfe/push-state "/profile")
