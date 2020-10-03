@@ -6,8 +6,8 @@
     [cinemart.subs :as subs]
     [cinemart.config :as config]
     [cinemart.router :as rt]
+    [cinemart.notification.view :refer [notification]]
     [cinemart.components.footer :refer [footer]]
-    [cinemart.components.notification :refer [notification]]
     [cinemart.components.header :refer [header]]))
 
 (defn hello-world []
@@ -16,12 +16,7 @@
      [header {:routes rt/router
               :current-route current-route}]
      (when current-route
-       [(-> current-route :data :view) {:classes
-                                        ["bg-gray-300"
-                                         "xl:container"
-                                         "w-screen"
-                                         "flex-1"
-                                         "mx-auto"]}])
+       [(-> current-route :data :view)])
      [footer]
      [notification]]))
 

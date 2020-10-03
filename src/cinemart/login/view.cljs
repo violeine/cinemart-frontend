@@ -1,6 +1,7 @@
 (ns cinemart.login.view
   (:require [reagent.core :as r]
     [re-frame.core :refer [dispatch]]
+    [cinemart.components.container :refer [container]]
     [cinemart.login.events :as events]))
 
 ;TODO check input
@@ -10,7 +11,7 @@
   (let [values (r/atom {:email ""
                         :password ""})]
     (fn []
-      [:div.flex.flex-col.justify-center {:class classes}
+      [container {:classes ["flex" "flex-col" "justify-center"]}
        [:div.m-auto.bg-gray-100.shadow.rounded.px-5.py-3
         [:p.text-xl.text-center.mb-8.text-gray-800 "Welcome Back"]
         [:form
@@ -29,7 +30,7 @@
            "Password:"]
           [:input#password.border.border-gray-300.rounded.px-3.py-2.w-64.leading-tight.text-gray-700
            {:type "password"
-            :placeholder "**********"
+            :placeholder "password"
             :on-change #(swap! values assoc :password (-> % .-target .-value))
             :value (:password @values)}]]
          [:div.mb-3

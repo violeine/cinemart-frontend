@@ -1,7 +1,8 @@
 (ns cinemart.login.events
   (:require [re-frame.core :refer [reg-event-fx reg-event-db]]
     [day8.re-frame.tracing :refer-macros [fn-traced]]
-    [cinemart.events :as events]))
+    [cinemart.events :as events]
+    [cinemart.notification.events :as noti]))
 
 (reg-event-fx
   ::login
@@ -12,7 +13,7 @@
           correct-pass? (= password (:password user))]
       (cond
         (not user)
-        ;TODO notification
+          ;TODO notification
         {:db (assoc-in db [:error :email]
                        "Wrong email")}
         (not correct-pass?)
@@ -22,7 +23,10 @@
         {:db (-> db
                  (assoc :auth? true)
                  (update-in [:error] dissoc :email))
-         :dispatch [::events/navigate :cinemart.router/profile]}))))
+         :fx [[:dispatch [::events/navigate
+                          :cinemart.router/profile]]
+              [:dispatch [::noti/notify
+                          {:title "logged-in"}]]]}))))
 
 (reg-event-db
   ::logout
