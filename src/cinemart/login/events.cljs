@@ -13,12 +13,14 @@
           correct-pass? (= password (:password user))]
       (cond
         (not user)
-          ;TODO notification
         {:db (assoc-in db [:error :email]
-                       "Wrong email")}
+                       "Wrong email")
+         :fx [[:dispatch [::noti/notify
+                          {:title "Wrong password or email"}]]]}
         (not correct-pass?)
         {:db (assoc-in db [:error :email]
-                       "Wrong password")}
+                       "Wrong password")
+         :fx [[:dispatch [::noti/notify {:title "Wrong password or email"}]]]}
         correct-pass?
         {:db (-> db
                  (assoc :auth? true)
@@ -28,11 +30,15 @@
               [:dispatch [::noti/notify
                           {:title "logged-in"}]]]}))))
 
-(reg-event-db
+(reg-event-fx
   ::logout
   (fn-traced
-    [db [_ _]]
-    (assoc db :auth? false)))
+    [{:keys [db]} [_ _]]
+    {:db (assoc db :auth? false)
+     :fx [[:dispatch [::events/navigate
+                      :cinemart.router/home]]
+          [:dispatch [::noti/notify
+                           {:title "logged out"}]]]}))
 
 
 

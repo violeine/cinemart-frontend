@@ -11,5 +11,5 @@
        and written by me & homies"]
     [:button.mt-3.py-2.px-3.bg-blue-300.rounded.ml-2
      {:on-click #(rf/dispatch-sync [::events/notify
-                                    {:title "yo"}])}
+                               {:title "yo"}])}
      "Open notification"]]])

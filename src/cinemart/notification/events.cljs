@@ -8,43 +8,39 @@
 (rf/reg-event-fx
   ::noti-animated-end
   (fn-traced
-    [{:keys [db]} [_ id]]
-    (let [noti (get-in db [:noti id])]
+    [{:keys [db]} [_ uuid]]
+    (let [noti (get-in db [:noti uuid])]
       {:db
-       (assoc-in db [:noti id]
+       (assoc-in db [:noti uuid]
                  (assoc noti
-                        :class ["translate-x-0"
-                                "mr-3"]))
-       :fx [[:dispatch-later {:ms 4000
-                              :dispatch [::close-noti id]}]]})))
-
+                        :class ["translate-x-0" "mr-3"]))
+       :fx [[:dispatch-later {:ms 4000 :dispatch [::noti-close uuid]}]]})))
 (rf/reg-event-fx
-  ::close-noti
+  ::noti-close
   (fn-traced
-    [{:keys [db]} [_ id]]
-    (let [noti (get-in db [:noti id])]
-      {:db (assoc-in db [:noti id]
-                     (assoc noti
-                            :class "translate-x-full"))
-       :fx [[:dispatch-later {:ms 400
-                              :dispatch [::kill-noti id]}]]})))
+    [{:keys [db]} [_ uuid]]
+    (let [noti (get-in db [:noti uuid])]
+      {:db
+       (assoc-in db [:noti uuid]
+                 (assoc noti
+                        :class "translate-x-full"))
+       :fx [[:dispatch-later {:ms 300 :dispatch [::kill-noti uuid]}]]})))
 
 (rf/reg-event-db
   ::kill-noti
   (fn-traced
-    [db [_ id]]
-    (let [noti (:noti db)]
-      (assoc db :noti (remove-indexed noti id)))))
+    [db [_ uuid]]
+    (let [notis (:noti db)]
+      (assoc db :noti (dissoc notis uuid)))))
 
 (rf/reg-event-fx
   ::notify
   (fn-traced
     [{:keys [db]} [_ prop]]
-    (let [noti (:noti db)
-          id (count noti)]
-      {:db (assoc db :noti (conj noti (assoc prop
-                                             :uuid (random-uuid)
-                                             :class "translate-x-full")))
-       :fx [[:dispatch [::noti-animated-end id]]]})))
+    (let [uuid (random-uuid)]
+      {:db (assoc-in db [:noti uuid] (assoc prop
+                                            :uuid uuid
+                                            :class "translate-x-full"))
+       :fx [[:dispatch [::noti-animated-end uuid]]]})))
 
 

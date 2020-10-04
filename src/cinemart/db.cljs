@@ -4,6 +4,6 @@
   {:name "re-frame"
    :current-route nil
    :auth? false
-   :noti []
+   :noti {}
    :users {"john@doe.com" {:email "john@doe.com"
                            :password "password"}}})

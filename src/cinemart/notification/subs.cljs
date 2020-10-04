@@ -5,6 +5,6 @@
 (rf/reg-sub
   ::get-noti
   (fn-traced [db]
-             (:noti db)))
+             (map second (:noti db))))
 
 
