@@ -6,6 +6,7 @@
     [cinemart.subs :as subs]
     [cinemart.config :as config]
     [cinemart.router :as rt]
+    [day8.re-frame.http-fx]
     [cinemart.notification.view :refer [notification]]
     [cinemart.components.footer :refer [footer]]
     [cinemart.components.header :refer [header]]))

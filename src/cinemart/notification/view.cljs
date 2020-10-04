@@ -3,8 +3,7 @@
     [cinemart.notification.subs :as noti]
     [cinemart.notification.events :as notify]))
 
-(def noti-class {
-                 :noti ["yo"]
+(def noti-class {:noti ["yo"]
                  :danger ["yo"]
                  :error  "yo"})
 (defn notification

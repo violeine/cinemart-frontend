@@ -38,7 +38,7 @@
      :fx [[:dispatch [::events/navigate
                       :cinemart.router/home]]
           [:dispatch [::noti/notify
-                           {:title "logged out"}]]]}))
+                      {:title "logged out"}]]]}))
 
 
 

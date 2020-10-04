@@ -1,4 +1,6 @@
-(ns cinemart.config)
+(ns cinemart.config
+  (:require [ajax.core :as ajax]
+    [cinemart.env :refer [api-key]]))
 
 (def debug?
   ^boolean goog.DEBUG)
@@ -13,3 +15,16 @@
                   :alt "re-frame"
                   :href "https://day8.github.io/re-frame/"}])
 
+(def api-interceptor
+  (ajax/to-interceptor
+    {:name "inject api key and append uri"
+     :request (fn [request]
+                (let [uri (:uri request)]
+                  (-> request
+                      (assoc-in
+                        [:params
+                         :api_key]
+                        api-key)
+                      (assoc-in
+                        [:uri]
+                        (str "https://api.themoviedb.org/3" uri)))))}))
