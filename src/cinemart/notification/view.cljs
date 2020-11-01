@@ -1,20 +1,31 @@
 (ns cinemart.notification.view
   (:require [re-frame.core :as rf]
-    [cinemart.notification.subs :as noti]
-    [cinemart.notification.events :as notify]))
+            [cinemart.notification.subs :as noti]
+            [cinemart.notification.events :as notify]))
 
-(def noti-class {:noti ["yo"]
-                 :danger ["yo"]
-                 :error  "yo"})
+(def noti-type {:danger {:css ["bg-red-500"]
+                         :icon "d"}
+                :warning {:css ["bg-yellow-500"]
+                          :icon "w"}
+                :success {:css ["bg-green-500"]
+                          :icon "s"}
+                :info {:css ["bg-blue-500"]
+                       :icon "i"}})
+
 (defn notification
   []
   (let [notis @(rf/subscribe [::noti/get-noti])]
     [:div.fixed.bottom-0.right-0.mb-32
      (for
-      [{:keys [uuid title class]} notis
-       :when (not (nil? uuid))]
-       [:div.mb-2.px-3.py-5.w-64.h-16.rounded.bg-gray-100.shadow-md.transition.duration-300.ease-in-out.transform
+      [{:keys [uuid text class type]} notis
+       :when (not (nil? uuid))
+       :let [{{:keys [css icon]} type} noti-type]]
+       [:div.mb-2.w-64.rounded.shadow-md.transition.duration-300.ease-in-out.transform
         {:class class
-         :on-click #(rf/dispatch [::notify/noti-close uuid])
+
          :key uuid}
-        title uuid])]))
+        [:p.text-white.px-3.py-2 {:class css}
+         [:i.mr-4 icon]
+         [:span.mr-5 text]
+         [:a {:on-click #(rf/dispatch [::notify/noti-close uuid])}
+          "x"]]])]))

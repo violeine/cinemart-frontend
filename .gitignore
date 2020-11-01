@@ -7,6 +7,8 @@ public/css
 /src/gen
 /src/cinemart/env.cljs
 !.gitignore
+.clj-kondo/cache
+.clj-kondo/.cache
 pom.xml
 pom.xml.asc
 *.iml
