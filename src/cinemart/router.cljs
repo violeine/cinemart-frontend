@@ -1,22 +1,24 @@
 (ns cinemart.router
   (:require
-    [reitit.coercion.spec :as rss]
-    [reitit.frontend :as rf]
-    [reitit.frontend.easy :as rfe]
-    [cinemart.events :as events]
-    [cinemart.home.view :refer [home-page]]
-    [cinemart.about.view :refer [about-page]]
-    [cinemart.login.view :refer [login]]
-    [re-frame.core :refer [dispatch]]))
+   [reitit.coercion.spec :as rss]
+   [reitit.frontend :as rf]
+   [reitit.frontend.easy :as rfe]
+   [cinemart.events :as events]
+   [cinemart.movie.events :as movie-events]
+   [cinemart.home.view :refer [home-page]]
+   [cinemart.about.view :refer [about-page]]
+   [cinemart.movie.view :refer [movie]]
+   [cinemart.login.view :refer [login]]
+   [re-frame.core :refer [dispatch]]))
 
 (defn href
   "Return relative url for given route, url can be html links"
   ([k]
-    (href k nil nil))
+   (href k nil nil))
   ([k params]
-    (href k params nil))
+   (href k params nil))
   ([k params query]
-    (rfe/href k params query)))
+   (rfe/href k params query)))
 
 (def routes
   ["/"
@@ -44,8 +46,8 @@
      :auth? false
      :controllers
      [{:identity (fn [match]
-                 (js/console.log match)
-                 (get-in match [:data :auth?]))
+                   (js/console.log match)
+                   (get-in match [:data :auth?]))
        :start (fn [auth?] (js/console.log auth?))
        :stop  (fn [& params] (js/console.log "Leaving sub-page login"))}]}]
    ["profile"
@@ -55,7 +57,16 @@
      :auth? true
      :controllers
      [{:start (fn [& params] (js/console.log "Entering sub-page 1"))
-       :stop  (fn [& params] (js/console.log "Leaving sub-page 1"))}]}]])
+       :stop  (fn [& params] (js/console.log "Leaving sub-page 1"))}]}]
+   ["movie/:id"
+    {:name ::movie
+     :link-text "movie"
+     :view movie
+     :auth? false
+     :controllers [{:parameters {:path [:id]}
+                    :start (fn [params] (dispatch
+                                         [::movie-events/fetch-movie
+                                          (-> params :path :id)]))}]}]])
 
 (defn on-navigate [new-match]
   (when new-match
