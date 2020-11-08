@@ -17,4 +17,22 @@
   @apply bg-gray-300;
 }
 
+.slide-enter {
+  transform: translateX(105%);
+}
+
+.slide-enter.slide-enter-active {
+  transform: translateX(0);
+  transition: transform 300ms;
+}
+
+.slide-exit {
+  transform: translateX(0);
+}
+
+.slide-exit.slide-exit-active {
+  transform: translateX(105%);
+  transition: transform 300ms;
+}
+
 @tailwind utilities;

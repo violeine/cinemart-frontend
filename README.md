@@ -20,10 +20,10 @@ npm install
   npm run watch-tw
   ```
 
-- start shadow-cljs
+- start dev server
 
     ```bash
-    npx shadow watch app
+    npm start
     ```
 
 - open [localhost](http://localhost:3000)

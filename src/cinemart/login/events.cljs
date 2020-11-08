@@ -16,11 +16,13 @@
       {:db (assoc-in db [:error :email]
                      "Wrong email")
        :fx [[:dispatch [::noti/notify
-                        {:title "Wrong password or email"}]]]}
+                        {:text "Wrong password or email"
+                         :type :warning}]]]}
       (not correct-pass?)
       {:db (assoc-in db [:error :email]
                      "Wrong password")
-       :fx [[:dispatch [::noti/notify {:title "Wrong password or email"}]]]}
+       :fx [[:dispatch [::noti/notify {:text "Wrong password or email"
+                                       :type :warning}]]]}
       correct-pass?
       {:db (-> db
                (assoc :auth? true)
@@ -28,7 +30,8 @@
        :fx [[:dispatch [::events/navigate
                         :cinemart.router/profile]]
             [:dispatch [::noti/notify
-                        {:title "logged-in"}]]]}))))
+                        {:text "logged-in"
+                         :type :info}]]]}))))
 
 (reg-event-fx
  ::logout
@@ -38,7 +41,7 @@
    :fx [[:dispatch [::events/navigate
                     :cinemart.router/home]]
         [:dispatch [::noti/notify
-                    {:title "logged out"
+                    {:text "logged out"
                      :type :info}]]]}))
 
 
