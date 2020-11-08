@@ -16,6 +16,6 @@
     {:db
      (assoc-in db [:noti uuid] (assoc prop
                                       :uuid uuid))
-     :fx [[:dispatch-later {:ms 4000
+     :fx [[:dispatch-later {:ms 40000
                             :dispatch [::kill-noti uuid]}]]})))
 
