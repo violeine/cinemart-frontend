@@ -3,9 +3,11 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
+    "start":"shadow-cljs watch app",
     "tw": "cross-env NODE_ENV=dev postcss tw/tailwind.css -o public/css/main.css",
     "watch-tw": "cross-env NODE_ENV=dev postcss tw/tailwind.css -o public/css/main.css --watch",
-    "build-tw": "cross-env NODE_ENV=production postcss tw/tailwind.css -o public/css/main.css"
+    "build-tw": "cross-env NODE_ENV=production postcss tw/tailwind.css -o public/css/main.css",
+    "postinstall":"cross-env NODE_ENV=dev postcss tw/tailwind.css -o public/css/main.css"
   },
   "devDependencies": {
     "shadow-cljs": "2.11.4"
