@@ -8,12 +8,12 @@
     "build-tw": "cross-env NODE_ENV=production postcss tw/tailwind.css -o public/css/main.css"
   },
   "devDependencies": {
-    "shadow-cljs": "2.11.4",
-    "cross-env": "^7.0.2"
+    "shadow-cljs": "2.11.4"
   },
   "dependencies": {
     "@fullhuman/postcss-purgecss": "^3.0.0",
     "autoprefixer": "^10.0.0",
+    "cross-env": "^7.0.2",
     "cssnano": "^4.1.10",
     "highlight.js": "9.18.1",
     "postcss": "^8.0.9",

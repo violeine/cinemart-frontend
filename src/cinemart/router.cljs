@@ -9,6 +9,7 @@
    [cinemart.about.view :refer [about-page]]
    [cinemart.movie.view :refer [movie]]
    [cinemart.login.view :refer [login]]
+   [cinemart.signup.view :refer [signup]]
    [re-frame.core :refer [dispatch]]))
 
 (defn href
@@ -24,8 +25,9 @@
   ["/"
    [""
     {:name      ::home
-     :link-text "Home"
+     :link-text "home"
      :view home-page
+     :hidden false
      :controllers
      [{;; Do whatever initialization needed for home page
        ;; I.e (re-frame/dispatch [::events/load-something-with-ajax])
@@ -34,39 +36,48 @@
        :stop  (fn [& params] (js/console.log "Leaving home page"))}]}]
    ["about"
     {:name      ::about
-     :link-text "About"
+     :link-text "about"
      :view about-page
+     :hidden false
      :controllers
      [{:start (fn [params] (js/console.log params))
        :stop  (fn [params] (js/console.log "Leaving sub-page 1"))}]}]
+   ["movie/:id"
+    {:name ::movie
+     :link-text "movie"
+     :view movie
+     :hidden true
+     :controllers [{:parameters {:path [:id]}
+                    :start (fn [params] (dispatch
+                                         [::movie-events/fetch-movie
+                                          (-> params :path :id)]))}]}]
    ["login"
     {:name      ::login
-     :link-text "Log in"
+     :link-text "log in"
      :view login
      :auth? false
+     :hidden false
      :controllers
      [{:identity (fn [match]
                    (js/console.log match)
                    (get-in match [:data :auth?]))
        :start (fn [auth?] (js/console.log auth?))
        :stop  (fn [& params] (js/console.log "Leaving sub-page login"))}]}]
+   ["signup"
+    {:name      ::signup
+     :link-text "sign up"
+     :view signup
+     :auth? false
+     :hidden false}]
    ["profile"
     {:name      ::profile
-     :link-text "Profile"
+     :link-text "profile"
      :view about-page
      :auth? true
+     :hidden false
      :controllers
      [{:start (fn [& params] (js/console.log "Entering sub-page 1"))
-       :stop  (fn [& params] (js/console.log "Leaving sub-page 1"))}]}]
-   ["movie/:id"
-    {:name ::movie
-     :link-text "movie"
-     :view movie
-     :auth? false
-     :controllers [{:parameters {:path [:id]}
-                    :start (fn [params] (dispatch
-                                         [::movie-events/fetch-movie
-                                          (-> params :path :id)]))}]}]])
+       :stop  (fn [& params] (js/console.log "Leaving sub-page 1"))}]}]])
 
 (defn on-navigate [new-match]
   (when new-match
