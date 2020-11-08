@@ -8,11 +8,14 @@
   (let [notis (:noti db)]
     (assoc db :noti (dissoc notis uuid)))))
 
-(rf/reg-event-db
+(rf/reg-event-fx
  ::notify
  (fn-traced
-  [db [_ prop]]
+  [{:keys [db]} [_ prop]]
   (let [uuid (random-uuid)]
-    (assoc-in db [:noti uuid] (assoc prop
-                                     :uuid uuid)))))
+    {:db
+     (assoc-in db [:noti uuid] (assoc prop
+                                      :uuid uuid))
+     :fx [[:dispatch-later {:ms 4000
+                            :dispatch [::kill-noti uuid]}]]})))
 

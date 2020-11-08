@@ -32,9 +32,9 @@
          :in true
          :appear true
          :timeout 250}
-        [:div.mb-2.w-64.rounded.shadow-md
+        [:div.mb-2.w-64.rounded.shadow-md.mr-5
          {:class class}
-         [:p.text-white.px-3.py-2 {:class css}
+         [:p.text-white.px-3.py-2.min-w-full {:class css}
           [:i.mr-4 icon]
           [:span.mr-5 text]
           [:a {:on-click #(rf/dispatch [::notify/kill-noti uuid])}
