@@ -28,7 +28,8 @@
        :fx [[:dispatch [::events/navigate
                         :cinemart.router/profile]]
             [:dispatch [::noti/notify
-                        {:title "logged-in"}]]]}))))
+                        {:title "logged-in"
+                        :type :info}]]]}))))
 
 (reg-event-fx
  ::logout
