@@ -29,7 +29,7 @@
                         :cinemart.router/profile]]
             [:dispatch [::noti/notify
                         {:title "logged-in"
-                        :type :info}]]]}))))
+                         :type :info}]]]}))))
 
 (reg-event-fx
  ::logout
