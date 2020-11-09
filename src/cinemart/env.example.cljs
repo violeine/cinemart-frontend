@@ -1,3 +1,3 @@
 (ns cinemart.env)
 
-(def api-key "")
+(def api-key "api_key")
