@@ -1,0 +1,28 @@
+name: build static page
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: create api key
+      env:
+        API_KEY: ${{secrets.API_KEY}}
+      run: |
+        sed "s/API_KEY/$API_KEY/g" src/cinemart/env-example.cljs src/cinemart/env.cljs
+    - name: Use node.js
+      uses: actions/setup-node@v1
+      with:
+          node-version:'14.x'
+    - name: Install deps
+      run: |
+        npm install
+        npx shadow-cljs build app
+
+
+
+
+
