@@ -25,7 +25,7 @@ jobs:
     - name: Install deps
       run: |
         npm install
-        npx shadow-cljs compile app
+        npx shadow-cljs release app
     - name: Push to public repo
       run: |
         cp -a public/. build/
