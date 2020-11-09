@@ -16,7 +16,7 @@ jobs:
     - name: create api key
       run: |
         cp src/cinemart/env.example.cljs src/cinemart/env.cljs
-        sed -i "s/API_KEY/${{ secrets.API_KEY }}/g" src/cinemart/env.cljs
+        sed -i "s/api_key/${{ secrets.API_KEY }}/g" src/cinemart/env.cljs
     - name: Use node.js
       uses: actions/setup-node@v1
       with:
