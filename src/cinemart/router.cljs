@@ -88,5 +88,5 @@
 (defn init-routes!
   []
   (println "init routes")
-  (rfe/start! router on-navigate {:use-fragment false}))
+  (rfe/start! router on-navigate {:use-fragment true}))
 

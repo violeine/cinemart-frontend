@@ -10,7 +10,7 @@ jobs:
     - uses: actions/checkout@v2
     - uses: actions/checkout@v2
       with:
-        repository: violeine/violeine.github.io
+        repository: violeine/cinemart
         token: ${{secrets.GH_TOKEN}}
         path: build
     - name: create api key
