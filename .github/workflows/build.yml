@@ -11,6 +11,7 @@ jobs:
     - uses: actions/checkout@v2
       with:
         repository: violeine/cinemart
+        token: ${{secrets.GH_TOKEN}} 
         path: build
     - name: create api key
       env:
