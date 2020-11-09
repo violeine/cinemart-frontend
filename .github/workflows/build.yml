@@ -30,6 +30,8 @@ jobs:
       run: |
         cp -a public/. build/
         cd build
+        sed -i "s+/js/main.js+https://violeine.github.io/cinemart/js/main.js" index.html
+        sed -i "s+/css/main.css+https://violeine.github.io/cinemart/css/main.css" index.html
         git config user.name github.actions
         git config user.email github-actions@github.com
         git add .
