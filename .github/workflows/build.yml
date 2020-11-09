@@ -10,7 +10,7 @@ jobs:
     - uses: actions/checkout@v2
     - uses: actions/checkout@v2
       with:
-        repository: violeine/cinemart
+        repository: violeine/violeine.github.io
         token: ${{secrets.GH_TOKEN}}
         path: build
     - name: create api key
@@ -30,14 +30,11 @@ jobs:
       run: |
         cp -a public/. build/
         cd build
-        sed -i "s+/js/main.js+https://violeine.github.io/cinemart/js/main.js+g" index.html
-        sed -i "s+/css/main.css+https://violeine.github.io/cinemart/css/main.css+g" index.html
         git config user.name github.actions
         git config user.email github-actions@github.com
         git add .
         git commit -m "generated"
         git push
-
 
 
 
