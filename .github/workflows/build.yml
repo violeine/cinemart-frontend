@@ -13,10 +13,11 @@ jobs:
         repository: violeine/cinemart
         token: ${{secrets.GH_TOKEN}}
         path: build
-    - name: create api key
+    - name: create api key and use fragment for github.io
       run: |
         cp src/cinemart/env.example.cljs src/cinemart/env.cljs
         sed -i "s/api_key/${{ secrets.API_KEY }}/g" src/cinemart/env.cljs
+        sed -i "s/:use-fragment false/:use-fragment true/g" src/cinemart/router.cljs
     - name: Use node.js
       uses: actions/setup-node@v1
       with:
