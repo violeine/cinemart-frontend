@@ -36,3 +36,66 @@
 }
 
 @tailwind utilities;
+
+.accent-effect__corner {
+  transition: transform 0.1s;
+  height: 0;
+  width: 0;
+}
+
+.accent-effect__corner-top {
+  border-top: 6px solid transparent;
+  border-bottom: 6px solid transparent;
+  border-right: 6px solid currentcolor;
+  transform-origin: center left;
+  transform: translateY(6px) scale(0);
+}
+
+.accent-effect__corner-bottom {
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 6px solid currentcolor;
+  transform-origin: bottom center;
+  transform: translateX(6px) scale(0);
+}
+.accent-effect__edge {
+  @apply bg-current;
+  transition: transform 0.1s;
+  transform-origin: 0 100%;
+}
+.accent-effect__edge-left {
+  width: 6px;
+  transform: scaleX(0);
+}
+
+.accent-effect__edge-bottom {
+  height: 6px;
+  transform: scaleY(0);
+}
+.accent-effect__children {
+  transition: transform 0.1s;
+}
+
+.accent-effect:hover .accent-effect__corner-top {
+  transform: translateY(-6px) scale(1);
+  transition-delay: 75ms;
+}
+
+.accent-effect:hover .accent-effect__corner-bottom {
+  transform: translateX(6px) scale(1);
+  transition-delay: 75ms;
+}
+
+.accent-effect:hover .accent-effect__edge-left {
+  transform: scaleX(1);
+  transition-delay: 75ms;
+}
+
+.accent-effect:hover .accent-effect__edge-bottom {
+  transform: scaleY(1);
+  transition-delay: 75ms;
+}
+.accent-effect:hover .accent-effect__children {
+  transform: translate3d(6px, -6px, 0);
+  transition-delay: 75ms;
+}
