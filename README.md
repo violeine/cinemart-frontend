@@ -8,12 +8,6 @@ npm install
 
 ## Run
 
-- generate css
-
-  ```bash
-  npm run tw
-  ```
-
 - watch css
 
   ```bash
@@ -28,4 +22,7 @@ npm install
 
 - open [localhost](http://localhost:3000)
 
+## Demo 
 
+ - static build at [cinemart](https://violeine.github.io)
+ - Powered by Github Action <3
