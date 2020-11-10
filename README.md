@@ -24,5 +24,5 @@ npm install
 
 ## Demo 
 
- - static build at [cinemart](https://violeine.github.io)
+ - static build at [cinemart](https://violeine.github.io/cinemart)
  - Powered by Github Action <3
