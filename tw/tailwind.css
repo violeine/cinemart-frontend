@@ -37,6 +37,10 @@
 
 @tailwind utilities;
 
+.h-96 {
+  height: 24rem;
+}
+
 .accent-effect__corner {
   transition: transform 0.1s;
   height: 0;

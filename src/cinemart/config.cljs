@@ -29,4 +29,21 @@
                       [:uri]
                       (str "https://api.themoviedb.org/3" uri)))))}))
 
+(def image-base-url "https://image.tmdb.org/t/p/")
+(def image-type {:backdrop {:sm "w300"
+                            :md "w780"
+                            :lg "w1280"
+                            :og "original"}
+                 :logo {:sm "w185"
+                        :md "w300"
+                        :lg "w500"
+                        :og "original"}
+                 :poster {:sm "w342"
+                          :md "w500"
+                          :lg "w780"
+                          :og "original"}})
+
+(defn image-link [t url]
+  (str image-base-url (get-in image-type t) url))
+
 

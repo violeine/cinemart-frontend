@@ -31,7 +31,8 @@
     (rdom/unmount-component-at-node root-el)
     (rdom/render [hello-world] root-el)))
 
-(defn ^:export start []
+(defn ^:export init []
   (rf/dispatch-sync [::events/init-db])
   (dev-setup)
   (mount-root))
+
