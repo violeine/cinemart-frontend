@@ -1,15 +1,14 @@
 (ns cinemart.core
-  (:require
-    [reagent.dom :as rdom]
-    [re-frame.core :as rf]
-    [cinemart.events :as events]
-    [cinemart.subs :as subs]
-    [cinemart.config :as config]
-    [cinemart.router :as rt]
-    [day8.re-frame.http-fx]
-    [cinemart.notification.view :refer [notification]]
-    [cinemart.components.footer :refer [footer]]
-    [cinemart.components.header :refer [header]]))
+  (:require [reagent.dom :as rdom]
+            [re-frame.core :as rf]
+            [cinemart.events :as events]
+            [cinemart.subs :as subs]
+            [cinemart.config :as config]
+            [cinemart.router :as rt]
+            [day8.re-frame.http-fx]
+            [cinemart.notification.view :refer [notification]]
+            [cinemart.components.footer :refer [footer]]
+            [cinemart.components.header :refer [header]]))
 
 (defn hello-world []
   (let [current-route @(rf/subscribe [::subs/current-route])]
@@ -32,7 +31,7 @@
     (rdom/unmount-component-at-node root-el)
     (rdom/render [hello-world] root-el)))
 
-(defn ^:export init []
+(defn ^:export start []
   (rf/dispatch-sync [::events/init-db])
   (dev-setup)
   (mount-root))
