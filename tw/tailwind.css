@@ -17,6 +17,10 @@
   @apply bg-gray-300;
 }
 
+.track-current::-webkit-scrollbar-track {
+  @apply bg-current rounded;
+}
+
 .slide-enter {
   transform: translateX(105%);
 }

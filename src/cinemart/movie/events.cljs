@@ -11,18 +11,30 @@
 (rf/reg-event-fx
  ::fetch-movie
  (fn-traced [_ [_ id]]
-            {:http-xhrio {:method :get
-                          :uri (str "/movie/" id)
-                          :response-format (ajax/json-response-format
-                                            {:keywords? true})
-                          :interceptors [api-interceptor]
-                          :on-success [::success]
-                          :on-failure [::failure]}}))
+            {:http-xhrio [{:method :get
+                           :uri (str "/movie/" id)
+                           :response-format (ajax/json-response-format
+                                             {:keywords? true})
+                           :interceptors [api-interceptor]
+                           :on-success [::success-movie]
+                           :on-failure [::failure]}
+                          {:method :get
+                           :uri (str "/movie/" id "/credits")
+                           :response-format (ajax/json-response-format
+                                             {:keywords? true})
+                           :interceptors [api-interceptor]
+                           :on-success [::success-credit]
+                           :on-failure [::failure]}]}))
 
 (rf/reg-event-db
- ::success
+ ::success-movie
  (fn-traced [db [_ result]]
             (assoc db :movie result)))
+
+(rf/reg-event-db
+ ::success-credit
+ (fn-traced [db [_ result]]
+            (assoc db :credit result)))
 
 (rf/reg-event-db
  ::failure

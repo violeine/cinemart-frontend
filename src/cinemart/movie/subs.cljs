@@ -6,3 +6,8 @@
  ::movie
  (fn-traced [db]
             (:movie db)))
+
+(rf/reg-sub
+ ::credit
+ (fn-traced [db]
+            (:credit db)))

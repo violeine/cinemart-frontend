@@ -41,7 +41,11 @@
                  :poster {:sm "w342"
                           :md "w500"
                           :lg "w780"
-                          :og "original"}})
+                          :og "original"}
+                 :profile {:sm "w45"
+                           :md "w185"
+                           :lg "h632"
+                           :og "original"}})
 
 (defn image-link [t url]
   (str image-base-url (get-in image-type t) url))
