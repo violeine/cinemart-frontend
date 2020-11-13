@@ -12,15 +12,6 @@
    [cinemart.signup.view :refer [signup]]
    [re-frame.core :refer [dispatch]]))
 
-(defn href
-  "Return relative url for given route, url can be html links"
-  ([k]
-   (href k nil nil))
-  ([k params]
-   (href k params nil))
-  ([k params query]
-   (rfe/href k params query)))
-
 (def routes
   ["/"
    [""

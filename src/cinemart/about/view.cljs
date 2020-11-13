@@ -4,6 +4,7 @@
             [cinemart.notification.events :as noti]
             [cinemart.notification.view :refer [noti-type]]
             [cinemart.events :as fetch]
+            [reitit.frontend.easy :refer [href]]
             [re-frame.core :as rf]))
 
 (defn about-page []
@@ -34,7 +35,6 @@
      [:p.mb-4 "Card demo"]
      [:div.w-32.h-32
       [card "indigo-500" [:div.h-32.bg-blue-400]]]]
-    [:p]
-    [:button.mt-3.py-2.px-3.bg-blue-300.rounded
-     {:on-click #(rf/dispatch [::fetch/test-fetch])}
-     "Fetch something"]]])
+    [:a.mt-3.py-2.px-3.bg-blue-300.rounded
+     {:href (href :cinemart.router/movie {:id 335984})}
+     "go to movie page"]]])
