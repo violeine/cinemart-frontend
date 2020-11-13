@@ -38,7 +38,8 @@
                         :md "w300"
                         :lg "w500"
                         :og "original"}
-                 :poster {:sm "w342"
+                 :poster {:xsm "w185"
+                          :sm "w342"
                           :md "w500"
                           :lg "w780"
                           :og "original"}

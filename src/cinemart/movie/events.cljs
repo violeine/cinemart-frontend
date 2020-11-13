@@ -24,6 +24,20 @@
                                              {:keywords? true})
                            :interceptors [api-interceptor]
                            :on-success [::success-credit]
+                           :on-failure [::failure]}
+                          {:method :get
+                           :uri (str "/movie/" id "/reviews")
+                           :response-format (ajax/json-response-format
+                                             {:keywords? true})
+                           :interceptors [api-interceptor]
+                           :on-success [::success-review]
+                           :on-failure [::failure]}
+                          {:method :get
+                           :uri (str "/movie/" id "/images?language=en")
+                           :response-format (ajax/json-response-format
+                                             {:keywords? true})
+                           :interceptors [api-interceptor]
+                           :on-success [::success-media]
                            :on-failure [::failure]}]}))
 
 (rf/reg-event-db
@@ -35,6 +49,16 @@
  ::success-credit
  (fn-traced [db [_ result]]
             (assoc db :credit result)))
+
+(rf/reg-event-db
+ ::success-review
+ (fn-traced [db [_ result]]
+            (assoc db :review result)))
+
+(rf/reg-event-db
+ ::success-media
+ (fn-traced [db [_ result]]
+            (assoc db :media result)))
 
 (rf/reg-event-db
  ::failure

@@ -11,3 +11,13 @@
  ::credit
  (fn-traced [db]
             (:credit db)))
+
+(rf/reg-sub
+ ::review
+ (fn-traced [db]
+            (:review db)))
+
+(rf/reg-sub
+ ::media
+ (fn-traced [db]
+            (:media db)))

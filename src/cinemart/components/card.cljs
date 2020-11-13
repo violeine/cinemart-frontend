@@ -1,6 +1,6 @@
 (ns cinemart.components.card)
 
-(defn card [colors & children]
+(defn card [colors children]
   [:div.relative.accent-effect {:class [(str "text-" colors) "w-full"]}
    [:div.absolute.accent-effect__corner.accent-effect__corner-top.left-0.top-0]
    [:div.absolute.accent-effect__corner.accent-effect__corner-bottom.right-0.bottom-0]
