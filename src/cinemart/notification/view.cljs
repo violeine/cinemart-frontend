@@ -7,13 +7,13 @@
             ["react-transition-group" :refer [TransitionGroup CSSTransition]]
             [cinemart.notification.events :as notify]))
 
-(def noti-type {:danger {:css ["bg-red-500"]
+(def noti-type {:danger {:css ["bg-red-500" "text-red-100"]
                          :icon i-shield-exclaimation}
-                :warning {:css ["bg-yellow-500"]
+                :warning {:css ["bg-yellow-500" "text-yellow-100"]
                           :icon i-exclaimation}
-                :success {:css ["bg-green-500"]
+                :success {:css ["bg-green-500" "text-green-100"]
                           :icon i-check-circle}
-                :info {:css ["bg-blue-500"]
+                :info {:css ["bg-blue-500" "text-blue-100"]
                        :icon  i-info-circle}})
 
 (defn notification

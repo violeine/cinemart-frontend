@@ -12,7 +12,7 @@
 
 (defn hello-world []
   (let [current-route @(rf/subscribe [::subs/current-route])]
-    [:div.flex.flex-col.justify-between.min-h-screen
+    [:div.flex.flex-col.justify-between.min-h-screen.bg-purple-900
      [header {:routes rt/router
               :current-route current-route}]
      (when current-route

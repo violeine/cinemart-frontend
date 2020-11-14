@@ -11,7 +11,7 @@
                  {:src "https://tailwindcss.com/_next/static/media/tailwindcss-mark.6ea76c3b72656960a6ae5ad8b85928d0.svg"
                   :alt "tailwind"
                   :href "https://tailwindcss.com/"}
-                 {:src "https://github.com/day8/re-frame/raw/master/docs/images/logo/re-frame-colour.png?raw=true"
+                 {:src "https://raw.githubusercontent.com/day8/re-frame/master/docs/images/logo/re-frame-white.svg"
                   :alt "re-frame"
                   :href "https://day8.github.io/re-frame/"}])
 
@@ -51,4 +51,11 @@
 (defn image-link [t url]
   (str image-base-url (get-in image-type t) url))
 
+(defn media-queries
+  [size vect]
+  (map #(str size %) vect))
+
+(defn css
+  [vect]
+  (vec (flatten vect)))
 
