@@ -31,7 +31,7 @@
  ::test-fetch
  (fn-traced [_ _]
             {:http-xhrio {:method :get
-                          :uri "http://violeine.duckdns.org:4000/ping"
+                          :uri "https://violeine.duckdns.org/ping"
                           :response-format (ajax/json-response-format
                                             {:keywords? true})
                           :on-success [::good-http-result]
