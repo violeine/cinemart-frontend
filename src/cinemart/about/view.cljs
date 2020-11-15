@@ -36,5 +36,8 @@
      [:div.w-32.h-32
       [card "indigo-500" [:div.h-32.bg-blue-400]]]]
     [:a.mt-3.py-2.px-3.bg-blue-300.rounded
+     {:on-click #(rf/dispatch [::fetch/test-fetch])}
+     "fetch from backend"]
+    [:a.mt-3.py-2.px-3.bg-blue-300.rounded
      {:href (href :cinemart.router/movie {:id 335984})}
      "go to movie page"]]])

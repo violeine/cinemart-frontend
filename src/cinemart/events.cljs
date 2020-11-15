@@ -31,10 +31,9 @@
  ::test-fetch
  (fn-traced [_ _]
             {:http-xhrio {:method :get
-                          :uri "/movie/76341"
+                          :uri "http://violeine.duckdns.org:4000/ping"
                           :response-format (ajax/json-response-format
                                             {:keywords? true})
-                          :interceptors [api-interceptor]
                           :on-success [::good-http-result]
                           :on-failure [::bad-http-result]}}))
 
