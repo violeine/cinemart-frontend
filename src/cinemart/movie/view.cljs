@@ -18,7 +18,7 @@
         {:keys [results]} @(rf/subscribe [::movie/review])
         {:keys [posters]} @(rf/subscribe [::movie/media])]
     [container
-     {:classes ["bg-gray-800" "h-screen"]}
+     {:classes ["bg-gray-800"]}
      [:<>
       [:div.px-3
        [:img.object-cover.w-full.h-96.object-center.shadow-lg

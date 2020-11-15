@@ -36,7 +36,7 @@
          :timeout 250}
         [:div.mb-2.w-64.rounded.shadow-md.mr-5
          {:class class}
-         [:p.text-white.px-3.py-2.min-w-full.flex.justify-between.rounded.shadow-md {:class css}
+         [:p.text-white.px-3.py-2.min-w-full.flex.justify-between.rounded.shadow-md.items-center {:class css}
           [icon {:class ["w-8" "mr-5"]}]
           [:span.mr-5.flex-grow text]
           [:a {:on-click #(rf/dispatch [::notify/kill-noti uuid])}

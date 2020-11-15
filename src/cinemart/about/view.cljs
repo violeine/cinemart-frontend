@@ -15,7 +15,7 @@
        and written by me & homies"]
     [:div.mb-2
      [:p.mb-4 "Notification demo"]
-     [:div.ml-2.flex
+     [:div.ml-2.flex.w-full
       (for [noti (keys noti-type)
             :let [css (get-in noti-type [noti :css])
                   icon (get-in noti-type [noti :icon])]]
@@ -23,7 +23,7 @@
          {:class ["w-1/3"]}
          [card
           "gray-400"
-          [:a.py-2.px-3.flex.shadow-md
+          [:a.py-2.px-3.flex.shadow-md.items-center
            {:class css
             :on-click #(rf/dispatch-sync [::noti/notify
                                           {:text (str "this is a " noti)

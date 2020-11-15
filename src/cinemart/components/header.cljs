@@ -11,7 +11,8 @@
   (let [auth? @(rf/subscribe [:auth?])]
     [:header.bg-gray-800.shadow-md
      [:nav.xl:container.mx-auto.flex.py-2.px-3
-      [:a.mr-auto.text-3xl.text-gray-400.font-bold.flex {:href (href ::rt/home)}
+      [:a.mr-auto.text-3xl.text-gray-400.font-bold.flex.items-center
+       {:href (href ::rt/home)}
        [i-film {:class ["w-8" "mr-3"]}] "cinemart"]
       [:div.my-auto
        (for [route-name (r/route-names routes)
