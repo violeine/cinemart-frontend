@@ -22,7 +22,7 @@
         [:div.mr-5
          {:class ["w-1/3"]}
          [card
-          "gray-400"
+          "text-gray-400"
           [:a.py-2.px-3.flex.shadow-md.items-center
            {:class css
             :on-click #(rf/dispatch-sync [::noti/notify
@@ -34,7 +34,7 @@
     [:div.mb-2
      [:p.mb-4 "Card demo"]
      [:div.w-32.h-32
-      [card "indigo-500" [:div.h-32.bg-blue-400]]]]
+      [card "text-indigo-500" [:div.h-32.bg-blue-400]]]]
     [:a.mt-3.py-2.px-3.bg-blue-300.rounded
      {:on-click #(rf/dispatch [::fetch/test-fetch])}
      "fetch from backend"]
