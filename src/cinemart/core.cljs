@@ -7,6 +7,7 @@
             [cinemart.router :as rt]
             [day8.re-frame.http-fx]
             [cinemart.notification.view :refer [notification]]
+            [cinemart.overlay.view :refer [overlay]]
             [cinemart.components.footer :refer [footer]]
             [cinemart.components.header :refer [header]]))
 
@@ -18,6 +19,7 @@
      (when current-route
        [(-> current-route :data :view)])
      [footer]
+     [overlay]
      [notification]]))
 
 (defn dev-setup []
