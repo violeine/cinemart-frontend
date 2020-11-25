@@ -4,7 +4,6 @@
             [cinemart.movie.subs :as movie]
             [cinemart.components.container :refer [container]]
             [cinemart.components.review :refer [review]]
-            [cinemart.config :refer [media-queries css]]
             [clojure.string :as s]
             [cinemart.components.card :refer [card]]
             [cinemart.config :refer [image-link]]))
@@ -26,21 +25,21 @@
          :style {:filter "brightness(65%)"}}]]
       [:div.flex.p-3.justify-center.flex-col.md:flex-row
        [:div
-        {:class (css ["w-2/3" "-mt-48" "mx-auto"
-                      (media-queries "md:" ["-mt-32" "w-auto" "ml-8"])
-                      (media-queries "lg:" ["-mt-48"])])}
+        {:class ["w-2/3" "-mt-48" "mx-auto"
+                 "md:-mt-32" "md:w-auto" "md:ml-8"
+                 "lg:-mt-48"]}
         [card
-         "red-500"
+         "text-red-500"
          [:img
-          {:class (css ["max-w-none" "w-full"
-                        (media-queries "md:" ["max-w-xs" "w-auto"])
-                        (media-queries "lg:" ["max-w-md"])])
+          {:class ["max-w-none" "w-full"
+                   "md:max-w-xs" "md:w-auto"
+                   "lg:max-w-md"]
            :src (image-link [:poster :lg] (if (nil? @poster-custom)
                                             poster_path
                                             @poster-custom))}]]]
        [:div.w-full.text-gray-200.flex.flex-col.px-2.justify-center
-        {:class (css [(media-queries "md:" ["ml-8"])
-                      (media-queries "xl:" ["mx-16"])])}
+        {:class ["md:ml-8",
+                 "xl:mx-16"]}
         [:p.font-bold.text-3xl.mt-6 title]
         [:div.text-gray-500.mt-2
          [:span.mr-6.text-lg (str runtime " mins")]
@@ -54,7 +53,7 @@
         [:div.mt-12
          [:div.inline-block
           [card
-           "indigo-400"
+           "text-indigo-400"
            [:a.bg-indigo-600.text-lg.px-8.py-4.flex "buy ticket"]]]]]]
       [:div.px-3.py-5
        [:div.text-indigo-300.text-2xl.ml-8 "Casts"]
@@ -65,7 +64,7 @@
           [:div.w-full.mr-5
            {:key id}
            [card
-            "indigo-400"
+            "text-indigo-400"
             [:a.relative.text-indigo-100.text-lg.block
              {:href (str "https://www.themoviedb.org/person/"
                          (apply str
@@ -92,7 +91,7 @@
            [:div.px-3.pb-3
             {:class ["w-1/3"]}
             [card
-             "red-400"
+             "text-red-400"
              [:img.w-full {:on-click #(reset! poster-custom path)
                            :src
                            (image-link [:poster :og] path)}]]])]]

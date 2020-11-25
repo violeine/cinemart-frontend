@@ -25,5 +25,4 @@
                            {day8.re-frame.tracing day8.re-frame.tracing-stubs}}}
 
                 :devtools {:http-root "public"
-                           :proxy-url "http://0.0.0.0"
                            :http-port 3000}}}}

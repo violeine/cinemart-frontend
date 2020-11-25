@@ -21,25 +21,6 @@
   @apply bg-current rounded;
 }
 
-/*! purgecss start ignore */
-.slide-enter {
-  transform: translateX(105%);
-}
-
-.slide-enter.slide-enter-active {
-  transform: translateX(0);
-  transition: transform 300ms;
-}
-
-.slide-exit {
-  transform: translateX(0);
-}
-
-.slide-exit.slide-exit-active {
-  transform: translateX(105%);
-  transition: transform 300ms;
-}
-/*! purgecss end ignore */
 @tailwind utilities;
 
 .h-96 {
@@ -108,3 +89,22 @@
   transform: translate3d(6px, -6px, 0);
   transition-delay: 75ms;
 }
+/*! purgecss start ignore */
+.slide-enter {
+  transform: translateX(105%);
+}
+
+.slide-enter.slide-enter-active {
+  transform: translateX(0);
+  transition: transform 300ms;
+}
+
+.slide-exit {
+  transform: translateX(0);
+}
+
+.slide-exit.slide-exit-active {
+  transform: translateX(105%);
+  transition: transform 300ms;
+}
+/*! purgecss end ignore */
