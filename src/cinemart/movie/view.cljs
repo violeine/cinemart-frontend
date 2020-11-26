@@ -2,13 +2,13 @@
   (:require [re-frame.core :as rf]
             [reagent.core :as r]
             [cinemart.movie.subs :as movie]
+            [cinemart.overlay.events :as overlay]
             [cinemart.components.container :refer [container]]
             [cinemart.components.review :refer [review]]
             [clojure.string :as s]
             [cinemart.components.card :refer [card]]
             [cinemart.config :refer [image-link]]))
 
-(def poster-custom (r/atom nil))
 (defn movie
   []
   (let [{:keys [title overview runtime genres release-date poster_path backdrop_path vote_average]}
@@ -19,6 +19,7 @@
     [container
      {:classes ["bg-gray-800"]}
      [:<>
+      ;; backdrop
       [:div.px-3
        [:img.object-cover.w-full.h-96.object-center.shadow-lg
         {:src (image-link [:backdrop :lg] backdrop_path)
@@ -34,9 +35,8 @@
           {:class ["max-w-none" "w-full"
                    "md:max-w-xs" "md:w-auto"
                    "lg:max-w-md"]
-           :src (image-link [:poster :lg] (if (nil? @poster-custom)
-                                            poster_path
-                                            @poster-custom))}]]]
+           :src (image-link [:poster :lg] poster_path)}]]]
+       ;; movie and description section
        [:div.w-full.text-gray-200.flex.flex-col.px-2.justify-center
         {:class ["md:ml-8",
                  "xl:mx-16"]}
@@ -55,6 +55,7 @@
           [card
            "text-indigo-400"
            [:a.bg-indigo-600.text-lg.px-8.py-4.flex "buy ticket"]]]]]]
+      ;; Casts
       [:div.px-3.py-5
        [:div.text-indigo-300.text-2xl.ml-8 "Casts"]
        [:div.flex.overflow-x-scroll.overflow-y-visible.mx-8.pt-3.pb-1.text-gray-700.track-current
@@ -80,6 +81,7 @@
                [:span.bg-indigo-400.inline-block.m-0.px-1.text-indigo-200 "as"]]
               [:div
                [:span.bg-indigo-400.inline-block.m-0.px-1 character]]]]]])]]
+      ;;Media and Reviews
       [:div.md:flex.w-full
        [:div.px-1.py-5
         {:class ["w-full"
@@ -92,7 +94,13 @@
             {:class ["w-1/3"]}
             [card
              "text-red-400"
-             [:img.w-full {:on-click #(reset! poster-custom path)
+             [:img.w-full {:on-click #((rf/dispatch [::overlay/open
+                                                     {:component
+                                                      (fn []
+                                                        [:div.shadow-md
+                                                         [:img
+                                                          {:src (image-link [:poster :og] path)}]])
+                                                      :class ["max-w-md"]}]))
                            :src
                            (image-link [:poster :og] path)}]]])]]
        [:div.pl-8.py-5.pr-5
@@ -105,6 +113,5 @@
            [:div.mb-3
             {:key id}
             [review content author]])]]]]]))
-
 
 

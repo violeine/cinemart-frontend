@@ -13,7 +13,7 @@
    {:classes ["p-5"]}
    [:<>
     [:p.mb-2 "This app is written in Clojurescript with reframe
-       and written by me & homies"]
+             and written by me & homies"]
     [:div.mb-2
      [:p.mb-4 "Notification demo"]
      [:div.ml-2.flex.w-full
@@ -45,6 +45,9 @@
       "go to movie page"]
      [:a.mt-3.py-2.px-3.bg-blue-300.rounded.mr-2
       {:on-click #(rf/dispatch [::overlay/open {:component
-                                                [card
-                                                 [:div "hello"]]}])}
+                                                (fn
+                                                  []
+                                                  [card
+                                                   "text-gray-400"
+                                                   [:div.w-64.h-32.bg-indidgo-200 "hello"]])}])}
       "go to movie page"]]]])
