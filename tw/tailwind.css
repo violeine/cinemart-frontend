@@ -107,4 +107,25 @@
   transform: translateX(105%);
   transition: transform 300ms;
 }
+
+.overlay-enter {
+  transform: translate(-50%, -50%);
+}
+
+.overlay-enter.overlay-enter-active {
+  transform: translate(-50%, -50%);
+  transition: transform 300ms;
+}
+
+.overlay-enter-done {
+  transform: translate(-50%, -50%);
+}
+.overlay-exit {
+  transform: translate(-50%, -50%);
+}
+
+.overlay-exit.overlay-exit-active {
+  transform: translate(-50%, -380%);
+  transition: transform 300ms;
+}
 /*! purgecss end ignore */
