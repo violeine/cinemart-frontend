@@ -8,21 +8,25 @@
 
 (defn overlay
   []
-  (let [{:keys [component class]} @(rf/subscribe [::subs/get])]
-    [:div.fixed.w-screen.h-screen.top-0.right-0.bg-gray-800.bg-opacity-80
+  (let [{:keys [component class]} @(rf/subscribe [::subs/get])
+        open @(rf/subscribe [::subs/hidden])]
+    [:> TransitionGroup
      {:on-click #(rf/dispatch [::events/close])
-      :class [(when (nil? component) "hidden")]}
+      :component "div"
+      :className
+      (apply str (interpose " "
+                            ["fixed" "w-screen" "h-screen" "top-0" "right-0" "bg-gray-800" " bg-opacity-80"
+                             (if open "" "hidden")]))}
      (when (not (nil? component))
        [:> CSSTransition
-        {:classNames "slide"
+        {:classNames "overlay"
          :in true
          :appear true
          :timeout 250}
-        [:div.absolute.transform.bg-red-300.p-5
+        [:div.absolute.bg-red-300.p-5
          {:class
           (apply conj
-                 ["-translate-x-1/2" "-translate-y-1/2"
-                  "top-1/2" "left-1/2"]
+                 ["top-1/2" "left-1/2" "transform" "-translate-x-50" "-translate-y-50"]
                  class)
           :on-click (fn [e]
                       (.stopPropagation e)

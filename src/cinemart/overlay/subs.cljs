@@ -7,4 +7,8 @@
  (fn-traced [db]
             (:overlay db)))
 
+(rf/reg-sub
+ ::hidden
+ (fn-traced [db]
+            (:overlay-open db)))
 
