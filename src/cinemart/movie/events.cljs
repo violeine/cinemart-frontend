@@ -22,7 +22,7 @@
                            :uri (str "/movie/" id "/credits")
                            :response-format (ajax/json-response-format
                                              {:keywords? true})
-                           :interceptors []
+                           :interceptors [movie-interceptor]
                            :on-success [::success-credit]
                            :on-failure [::failure]}
                           {:method :get

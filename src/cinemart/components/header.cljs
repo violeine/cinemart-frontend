@@ -3,7 +3,7 @@
             [cinemart.router :as rt]
             [re-frame.core :as rf]
             [reitit.frontend.easy :refer [href]]
-            [cinemart.login.events :as events]
+            [cinemart.auth.events :as events]
             [cinemart.components.icons :refer [i-film]]))
 
 (defn header
