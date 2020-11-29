@@ -5,7 +5,7 @@
    [day8.re-frame.tracing :refer-macros [fn-traced]]
    [cinemart.effects :as fx]
    [ajax.core :as ajax]
-   [cinemart.config :refer [api-interceptor]]
+   [cinemart.config :refer [movie-interceptor]]
    [reitit.frontend.controllers :as rfc]))
 
 (rf/reg-event-fx
@@ -15,28 +15,28 @@
                            :uri (str "/movie/" id)
                            :response-format (ajax/json-response-format
                                              {:keywords? true})
-                           :interceptors [api-interceptor]
+                           :interceptors [movie-interceptor]
                            :on-success [::success-movie]
                            :on-failure [::failure]}
                           {:method :get
                            :uri (str "/movie/" id "/credits")
                            :response-format (ajax/json-response-format
                                              {:keywords? true})
-                           :interceptors [api-interceptor]
+                           :interceptors []
                            :on-success [::success-credit]
                            :on-failure [::failure]}
                           {:method :get
                            :uri (str "/movie/" id "/reviews")
                            :response-format (ajax/json-response-format
                                              {:keywords? true})
-                           :interceptors [api-interceptor]
+                           :interceptors [movie-interceptor]
                            :on-success [::success-review]
                            :on-failure [::failure]}
                           {:method :get
                            :uri (str "/movie/" id "/images?language=en")
                            :response-format (ajax/json-response-format
                                              {:keywords? true})
-                           :interceptors [api-interceptor]
+                           :interceptors [movie-interceptor]
                            :on-success [::success-media]
                            :on-failure [::failure]}]}))
 

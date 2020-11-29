@@ -15,16 +15,16 @@
                   :alt "re-frame"
                   :href "https://day8.github.io/re-frame/"}])
 
-(def api-interceptor
+(def movie-interceptor
   (ajax/to-interceptor
    {:name "inject api key and append uri"
     :request (fn [request]
                (let [uri (:uri request)]
                  (-> request
                      (assoc-in
-                      [:params
-                       :api_key]
-                      api-key)
+                      [:headers
+                       :Authorization]
+                      (str "Bearer " api-key))
                      (assoc-in
                       [:uri]
                       (str "https://api.themoviedb.org/3" uri)))))}))
