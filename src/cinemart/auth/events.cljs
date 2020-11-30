@@ -20,11 +20,7 @@
                           :on-failure [::login-failure]}}))
 
 (reg-event-fx
- ;;TODO switch to effect
  ::login-success
- ;;TODO save to localstorage refresh token and access token
- ;;TODO kick to previous page?
- ;;TODO set noti to success
  (fn-traced [{:keys [db]} [_ result]]
             (let [ref-token (get-in result [:user :refresh-token])
                   token (get-in result [:user :token])]
@@ -40,8 +36,6 @@
                                                :type :success}]]]})))
 
 ;; TODO implement refresh mechanism herre
-
-
 (reg-event-db
  ::login-failure
  ;;TODO noti it's up
@@ -52,5 +46,16 @@
 
 (reg-event-fx
  ::logout
- (fn-traced [db [_ result]]
-            (println "logged out")))
+ (fn-traced [{:keys [db]} [_ result]]
+            ;;TODO clear storage!
+            ;;TODO dissoc auth and user
+            ;;TODO notify logged out
+            (println "logged out")
+            {:db
+             (-> db
+                 (assoc :auth? false)
+                 (dissoc :user))
+             :fx [[::fx/clear-storage!]
+                  [:dispatch [::noti/notify {:text "Logged out"
+                                             :type :info}]]]}))
+
