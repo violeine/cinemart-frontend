@@ -4,7 +4,7 @@
             [cinemart.effects :as fx]
             [cinemart.events :as events]
             [ajax.core :as ajax]
-            [cinemart.config :refer [uri-interceptor]]
+            [cinemart.config :refer [backend-interceptor]]
             [cinemart.notification.events :as noti]))
 
 (reg-event-fx
@@ -15,7 +15,7 @@
                           :params payload
                           :format (ajax/json-request-format)
                           :response-format (ajax/json-response-format {:keywords? true})
-                          :interceptors [uri-interceptor]
+                          :interceptors [backend-interceptor]
                           :on-success [::login-success]
                           :on-failure [::login-failure]}}))
 
@@ -42,15 +42,9 @@
  (fn-traced [db [_ result]]
             (assoc db :http-failure result)))
 
-;;TODO move log out logic to here
-
 (reg-event-fx
  ::logout
  (fn-traced [{:keys [db]} [_ result]]
-            ;;TODO clear storage!
-            ;;TODO dissoc auth and user
-            ;;TODO notify logged out
-            (println "logged out")
             {:db
              (-> db
                  (assoc :auth? false)

@@ -15,6 +15,7 @@
                   :alt "re-frame"
                   :href "https://day8.github.io/re-frame/"}])
 
+;;TODO change name to tmdb
 (def movie-interceptor
   (ajax/to-interceptor
    {:name "inject api key and append uri"
@@ -29,7 +30,7 @@
                       [:uri]
                       (str "https://api.themoviedb.org/3" uri)))))}))
 
-(def uri-interceptor
+(def backend-interceptor
   (ajax/to-interceptor
    {:name "append uri"
     :request (fn [request]
@@ -39,15 +40,15 @@
                       [:uri]
                       (str "https://violeine.duckdns.org" uri)))))}))
 
-(defn api-interceptor [token]
+(defn token-interceptor [token]
   (ajax/to-interceptor
-   {:name "inject api key and append uri"
+   {:name "inject token to header"
     :request (fn [request]
                (-> request
                    (assoc-in
                     [:headers
                      :Authorization]
-                    (str "Bearer " token))))}))
+                    (str  token))))}))
 
 (def image-base-url "https://image.tmdb.org/t/p/")
 
