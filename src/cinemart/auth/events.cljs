@@ -1,6 +1,7 @@
 (ns cinemart.auth.events
   (:require [re-frame.core :refer [reg-event-fx reg-event-db]]
             [day8.re-frame.tracing :refer-macros [fn-traced]]
+            [cinemart.effects :as fx]
             [cinemart.events :as events]
             [ajax.core :as ajax]
             [cinemart.config :refer [uri-interceptor]]
@@ -18,18 +19,29 @@
                           :on-success [::login-success]
                           :on-failure [::login-failure]}}))
 
-(reg-event-db
+(reg-event-fx
  ;;TODO switch to effect
  ::login-success
  ;;TODO save to localstorage refresh token and access token
  ;;TODO kick to previous page?
  ;;TODO set noti to success
- (fn-traced [db [_ result]]
-            (-> db
-                (assoc :auth? true)
-                (assoc :user (:user result)))))
+ (fn-traced [{:keys [db]} [_ result]]
+            (let [ref-token (get-in result [:user :refresh-token])
+                  token (get-in result [:user :token])]
+              (println ref-token)
+              {:db
+               (-> db
+                   (assoc :auth? true)
+                   (assoc :user (:user result)))
+               :fx [[::fx/save-storage! ["refresh-token" ref-token]]
+                    [::fx/save-storage! ["token" token]]
+                    [::fx/back!]
+                    [:dispatch [::noti/notify {:text "Login successfully"
+                                               :type :success}]]]})))
 
 ;; TODO implement refresh mechanism herre
+
+
 (reg-event-db
  ::login-failure
  ;;TODO noti it's up
