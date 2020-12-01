@@ -23,11 +23,20 @@
  ::navigated
  (fn-traced [db [_ new-match]]
             (let [old-match (:current-route db)
+                  path_params (get-in db [:current-route :path-params])
+                  old_name (get-in db [:current-route :data :name])
+                  new_name (get-in new-match [:data :name])
                   controllers (rfc/apply-controllers
                                (:controllers old-match)
                                new-match)]
-              (assoc db :current-route
-                     (assoc new-match :controllers controllers)))))
+              (if (not= old_name new_name)
+                (-> db
+                    (assoc  :current-route
+                            (assoc new-match :controllers controllers))
+                    (assoc :prev-route {:name old_name
+                                        :path-params path_params}))
+                (assoc db :current-route
+                       (assoc new-match :controllers controllers))))))
 ;"https://api.themoviedb.org/3/movie/76341"
 
 (rf/reg-event-fx

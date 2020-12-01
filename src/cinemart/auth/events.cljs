@@ -22,12 +22,14 @@
  ::login-success
  (fn-traced [{:keys [db]} [_ result]]
             (let [ref-token (get-in result [:user :refresh-token])
-                  token (get-in result [:user :token])]
+                  token (get-in result [:user :token])
+                  prev-route (get-in db [:prev-route :name])
+                  prev-param (get-in db [:prev-route :path-params])]
               {:db
                (-> db
                    (assoc :auth? true)
                    (assoc :user (:user result)))
-               :fx [[::fx/back!]
+               :fx [[:dispatch [:cinemart.events/navigate prev-route prev-param]]
                     [::fx/save-storage! ["refresh-token" ref-token]]
                     [::fx/save-storage! ["token" token]]
                     [:dispatch [::noti/notify {:text "Login successfully"
