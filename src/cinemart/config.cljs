@@ -48,7 +48,7 @@
                    (assoc-in
                     [:headers
                      :Authorization]
-                    (str  token))))}))
+                    (str "Bearer " token))))}))
 
 (def image-base-url "https://image.tmdb.org/t/p/")
 

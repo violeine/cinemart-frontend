@@ -5,6 +5,7 @@
    [cinemart.config :refer [backend-interceptor token-interceptor]]
    [day8.re-frame.tracing :refer-macros [fn-traced]]
    [cinemart.effects :as fx]
+   [cinemart.auth.events :as auth]
    [ajax.core :as ajax]
    [reitit.frontend.controllers :as rfc]))
 
@@ -30,14 +31,17 @@
 (rf/reg-event-fx
  ::test-fetch
  (fn-traced [{:keys [db]} _]
-            {:http-xhrio {:method :get
-                          :uri "/me"
-                          :interceptors [backend-interceptor (token-interceptor
-                                                              (get-in db [:user :token]))]
-                          :response-format (ajax/json-response-format
-                                            {:keywords? true})
-                          :on-success [::good-http-result]
-                          :on-failure [::bad-http-result]}}))
+            (println (.includes "Token invalid" "invalid"))
+            (let [http-req {:method :get
+                            :uri "/me"
+                            :interceptors [backend-interceptor (token-interceptor
+                                                                (get-in db [:user :token]))]
+                            :response-format (ajax/json-response-format
+                                              {:keywords? true})
+                            :on-success [::good-http-result]
+                            :on-failure [::auth/api-failure]}]
+              {:http-xhrio http-req
+               :db (assoc db :prev-req http-req)})))
 
 (rf/reg-event-db
  ::good-http-result
@@ -50,7 +54,7 @@
             (assoc db :http-failure result)))
 
 (rf/reg-event-db
-  ::clear-http-result
+ ::clear-http-result
  (fn-traced [db _]
             (-> db
                 (dissoc :http-result)

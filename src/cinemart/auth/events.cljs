@@ -2,9 +2,8 @@
   (:require [re-frame.core :refer [reg-event-fx reg-event-db]]
             [day8.re-frame.tracing :refer-macros [fn-traced]]
             [cinemart.effects :as fx]
-            [cinemart.events :as events]
             [ajax.core :as ajax]
-            [cinemart.config :refer [backend-interceptor]]
+            [cinemart.config :refer [backend-interceptor token-interceptor]]
             [cinemart.notification.events :as noti]))
 
 (reg-event-fx
@@ -24,32 +23,95 @@
  (fn-traced [{:keys [db]} [_ result]]
             (let [ref-token (get-in result [:user :refresh-token])
                   token (get-in result [:user :token])]
-              (println ref-token)
               {:db
                (-> db
                    (assoc :auth? true)
                    (assoc :user (:user result)))
-               :fx [[::fx/save-storage! ["refresh-token" ref-token]]
+               :fx [[::fx/back!]
+                    [::fx/save-storage! ["refresh-token" ref-token]]
                     [::fx/save-storage! ["token" token]]
-                    [::fx/back!]
                     [:dispatch [::noti/notify {:text "Login successfully"
                                                :type :success}]]]})))
 
-;; TODO implement refresh mechanism herre
-(reg-event-db
+(reg-event-fx
  ::login-failure
  ;;TODO noti it's up
- (fn-traced [db [_ result]]
-            (assoc db :http-failure result)))
+ (fn-traced [{:keys [db]} [_ result]]
+            (let [status (:status result)
+                  response (get-in result [:response :error])
+                  ref-token (get-in db [:user :refresh-token])]
+              {:db (assoc db :http-failure result)
+               :fx [[:dispatch [::noti/notify {:text response
+                                               :type :warning}]]]})))
+
+;; TODO implement refresh mechanism herre
+(reg-event-fx
+ ::api-failure
+ (fn-traced [{:keys [db]} [_ result]]
+            (let [status (:status result)
+                  response (get-in result [:response :error])
+                  ref-token (get-in db [:user :refresh-token])]
+
+              (if (= 401 status)
+                ;; unauthorized
+                (if (.includes response "expired")
+                  ;; expired -> attempt to refresh
+                  {:http-xhrio {:method :post
+                                :uri "/refresh-token"
+                                :response-format (ajax/json-response-format {:keywords? true})
+                                :format (ajax/json-request-format)
+                                :interceptors [backend-interceptor
+                                               (token-interceptor ref-token)]
+                                :on-success [::refresh-success]
+                                :on-failure [::login-failure]}}
+                  ;; invalid -> goto login
+                  {:fx [[:dispatch [::refresh-failure]]]})
+                ;; another error code
+                {:fx [[:dispatch [::noti/notify {:text (str status response)}]]]}))))
+
+;; if success, re request all the cached request
+(reg-event-fx
+ ::refresh-success
+ (fn-traced [{:keys [db]} [_ result]]
+            (let [ref-token (get-in result [:user :refresh-token])
+                  token (get-in result [:user :token])
+                  prev-req (:prev-req db)
+                  new-req
+                  (if (vector? prev-req)
+                    (map #(merge %  {:interceptors [backend-interceptor token-interceptor token]}))
+                    (merge prev-req {:interceptors [backend-interceptor (token-interceptor token)]}))]
+              {:db
+               (-> db
+                   (assoc :auth? true)
+                   (dissoc :prev-req)
+                   (assoc :user (:user result)))
+               :fx [[::fx/save-storage! ["refresh-token" ref-token]]
+                    [::fx/save-storage! ["token" token]]
+                    [:http-xhrio new-req]
+                    [:dispatch [::noti/notify {:text "refresh token successfully"
+                                               :type :success}]]]})))
+
+;; if failure, log user out and kick to logged in
+(reg-event-fx
+ ::refresh-failure
+ (fn-traced [{:keys [db]} [_ result]]
+            {:fx [[:dispatch [::remove-user]]
+                  [:dispatch [::noti/notify {:text "token invalid"
+                                             :type :danger}]]
+                  [:dispatch [:cinemart.events/navigate :cinemart.router/login]]]}))
+
+(reg-event-db
+ ::remove-user
+ (fn-traced [db _]
+            (-> db
+                (assoc :auth? false)
+                (dissoc :user))))
 
 (reg-event-fx
  ::logout
  (fn-traced [{:keys [db]} [_ result]]
-            {:db
-             (-> db
-                 (assoc :auth? false)
-                 (dissoc :user))
-             :fx [[::fx/clear-storage!]
+            {:fx [[::fx/clear-storage!]
+                  [:dispatch [::remove-user]]
                   [:dispatch [::noti/notify {:text "Logged out"
                                              :type :info}]]]}))
 
