@@ -33,4 +33,13 @@
  (fn-traced []
             (.clear (.-localStorage js/window))))
 
+(rf/reg-cofx
+ ::init-storage
+ (fn-traced
+  []
+  (let
+   [token (.getItem (.-localStorage js/window) "token")
+    refresh-token (.getItem (.-localStorage js/window) "refresh-token")]
+    {:user {:refresh-token refresh-token
+            :token token}})))
 

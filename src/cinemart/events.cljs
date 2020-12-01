@@ -9,10 +9,12 @@
    [ajax.core :as ajax]
    [reitit.frontend.controllers :as rfc]))
 
-(rf/reg-event-db
+(rf/reg-event-fx
  ::init-db
- (fn-traced [_ _]
-            db/default-db))
+ [(rf/inject-cofx ::fx/init-storage)]
+ (fn-traced [cofx _]
+            {:db (merge db/default-db cofx)}))
+
 (rf/reg-event-fx
  ::navigate
  (fn-traced [db [_ & route]]
