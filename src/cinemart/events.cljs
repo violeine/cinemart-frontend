@@ -13,7 +13,9 @@
  ::init-db
  [(rf/inject-cofx ::fx/init-storage)]
  (fn-traced [cofx _]
-            {:db (merge db/default-db cofx)}))
+            (let [auth?
+                  {:auth? (not (nil?  (get-in cofx [:user :token])))}]
+              {:db (merge db/default-db cofx auth?)})))
 
 (rf/reg-event-fx
  ::navigate
