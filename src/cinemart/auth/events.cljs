@@ -112,8 +112,17 @@
 (reg-event-fx
  ::logout
  (fn-traced [{:keys [db]} [_ result]]
-            {:fx [[::fx/clear-storage!]
-                  [:dispatch [::remove-user]]
-                  [:dispatch [::noti/notify {:text "Logged out"
-                                             :type :info}]]]}))
+            (let [request {:method :post
+                           :uri  "/logout"
+                           :format (ajax/json-request-format)
+                           :response-format (ajax/json-response-format {:keywords? true})
+                           :interceptors [backend-interceptor (token-interceptor
+                                                               (get-in db [:user :token]))]
+                           :on-success [:cinemart.events/nothing]
+                           :on-failure [:cinemart.events/nothing]}]
+              {:fx [[::fx/clear-storage!]
+                    [:http-xhrio request]
+                    [:dispatch [::remove-user]]
+                    [:dispatch [::noti/notify {:text "Logged out"
+                                               :type :info}]]]})))
 

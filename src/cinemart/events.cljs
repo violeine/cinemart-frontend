@@ -72,3 +72,8 @@
             (-> db
                 (dissoc :http-result)
                 (dissoc :http-failure))))
+
+(rf/reg-event-db
+ ::nothing
+ (fn [db _]
+   db))
