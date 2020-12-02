@@ -17,6 +17,17 @@
                           :interceptors [backend-interceptor]
                           :on-success [::login-success]
                           :on-failure [::login-failure]}}))
+(reg-event-fx
+ ::signup
+ (fn-traced [_ [_ payload]]
+            {:http-xhrio {:method :post
+                          :uri  "/register"
+                          :params payload
+                          :format (ajax/json-request-format)
+                          :response-format (ajax/json-response-format {:keywords? true})
+                          :interceptors [backend-interceptor]
+                          :on-success [::login-success]
+                          :on-failure [::login-failure]}}))
 
 (reg-event-fx
  ::login-success
@@ -80,6 +91,7 @@
                   prev-req (:prev-req db)
                   new-req
                   (if (vector? prev-req)
+                    ; insert new token
                     (map #(merge %  {:interceptors [backend-interceptor token-interceptor token]}))
                     (merge prev-req {:interceptors [backend-interceptor (token-interceptor token)]}))]
               {:db
