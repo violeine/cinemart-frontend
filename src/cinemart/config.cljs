@@ -15,21 +15,43 @@
                   :alt "re-frame"
                   :href "https://day8.github.io/re-frame/"}])
 
-(def api-interceptor
+;;TODO change name to tmdb
+(def movie-interceptor
   (ajax/to-interceptor
    {:name "inject api key and append uri"
     :request (fn [request]
                (let [uri (:uri request)]
                  (-> request
                      (assoc-in
-                      [:params
-                       :api_key]
-                      api-key)
+                      [:headers
+                       :Authorization]
+                      (str "Bearer " api-key))
                      (assoc-in
                       [:uri]
                       (str "https://api.themoviedb.org/3" uri)))))}))
 
+(def backend-interceptor
+  (ajax/to-interceptor
+   {:name "append uri"
+    :request (fn [request]
+               (let [uri (:uri request)]
+                 (-> request
+                     (assoc-in
+                      [:uri]
+                      (str "https://violeine.duckdns.org" uri)))))}))
+
+(defn token-interceptor [token]
+  (ajax/to-interceptor
+   {:name "inject token to header"
+    :request (fn [request]
+               (-> request
+                   (assoc-in
+                    [:headers
+                     :Authorization]
+                    (str "Bearer " token))))}))
+
 (def image-base-url "https://image.tmdb.org/t/p/")
+
 (def image-type {:backdrop {:sm "w300"
                             :md "w780"
                             :lg "w1280"

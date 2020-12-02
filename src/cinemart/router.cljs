@@ -8,8 +8,8 @@
    [cinemart.home.view :refer [home-page]]
    [cinemart.about.view :refer [about-page]]
    [cinemart.movie.view :refer [movie]]
-   [cinemart.login.view :refer [login]]
-   [cinemart.signup.view :refer [signup]]
+   [cinemart.auth.login :refer [login]]
+   [cinemart.auth.signup :refer [signup]]
    [re-frame.core :refer [dispatch]]))
 
 (def routes
