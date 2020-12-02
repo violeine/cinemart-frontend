@@ -7,3 +7,39 @@
  ::navigate!
  (fn-traced [route]
             (apply rfe/push-state route)))
+
+(rf/reg-fx
+ ::back!
+ (fn-traced []
+            (.go js/window.history -1)))
+
+(rf/reg-fx
+ ::save-storage!
+ (fn-traced [[key val]]
+            (.setItem (.-localStorage js/window) key val)))
+
+(rf/reg-fx
+ ::get-storage!
+ (fn-traced [key]
+            (.getItem (.-localStorage js/window) key)))
+
+(rf/reg-fx
+ ::remove-key-storage!
+ (fn-traced [key]
+            (.removeItem (.-localStorage js/window) key)))
+
+(rf/reg-fx
+ ::clear-storage!
+ (fn-traced []
+            (.clear (.-localStorage js/window))))
+
+(rf/reg-cofx
+ ::init-storage
+ (fn-traced
+  []
+  (let
+   [token (.getItem (.-localStorage js/window) "token")
+    refresh-token (.getItem (.-localStorage js/window) "refresh-token")]
+    {:user {:refresh-token refresh-token
+            :token token}})))
+

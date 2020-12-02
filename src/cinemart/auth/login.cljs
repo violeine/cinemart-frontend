@@ -1,14 +1,12 @@
-(ns cinemart.signup.view
+(ns cinemart.auth.login
   (:require [reagent.core :as r]
             [re-frame.core :refer [dispatch]]
             [cinemart.components.container :refer [container]]
-            [cinemart.login.events :as events]))
+            [cinemart.auth.events :as events]))
 
-;TODO check input
-(defn check-input [] "to")
-(defn signup
+(defn login
   [{:keys [classes]}]
-  (let [values (r/atom {:email ""
+  (let [values (r/atom {:mail ""
                         :password ""})]
     (fn []
       [container {:classes ["flex" "flex-col" "justify-center"]}
@@ -16,15 +14,15 @@
         [:p.text-xl.text-center.mb-8.text-gray-800 "Welcome Back"]
         [:form
          [:div.mb-3
-          [:label.block.text-gray-700.font-bold.mb-1 {:for "email"}
-           "Email Address:"]
-          [:input#email.border.border-gray-300.rounded.px-3.py-2.w-64.leading-tight.text-gray-700
+          [:label.block.text-gray-700.font-bold.mb-1 {:for "mail"}
+           "mail Address:"]
+          [:input#mail.border.border-gray-300.rounded.px-3.py-2.w-64.leading-tight.text-gray-700
            {:type "text"
-            :name "email"
+            :name "mail"
             :required true
-            :value (:email @values)
-            :on-change #(swap! values assoc :email (-> % .-target .-value))
-            :placeholder "john@doe.com"}]]
+            :value (:mail @values)
+            :on-change #(swap! values assoc :mail (-> % .-target .-value))
+            :placeholder "john@doe"}]]
          [:div.mb-6
           [:label.block.text-gray-700.font-bold.mb-1 {:for "password"}
            "Password:"]

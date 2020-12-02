@@ -1,15 +1,16 @@
-(ns cinemart.login.view
+(ns cinemart.auth.signup
   (:require [reagent.core :as r]
-    [re-frame.core :refer [dispatch]]
-    [cinemart.components.container :refer [container]]
-    [cinemart.login.events :as events]))
+            [re-frame.core :refer [dispatch]]
+            [cinemart.components.container :refer [container]]
+            [cinemart.auth.events :as events]))
 
-;TODO check input
-(defn check-input [] "to")
-(defn login
+(defn signup
   [{:keys [classes]}]
-  (let [values (r/atom {:email ""
-                        :password ""})]
+  (let [values (r/atom {:mail ""
+                        :password ""
+                        :username "john"
+                        :dob "1/1/1970"
+                        :fullname "John Doe"})]
     (fn []
       [container {:classes ["flex" "flex-col" "justify-center"]}
        [:div.m-auto.bg-gray-100.shadow.rounded.px-5.py-3
@@ -22,8 +23,8 @@
            {:type "text"
             :name "email"
             :required true
-            :value (:email @values)
-            :on-change #(swap! values assoc :email (-> % .-target .-value))
+            :value (:mail @values)
+            :on-change #(swap! values assoc :mail (-> % .-target .-value))
             :placeholder "john@doe.com"}]]
          [:div.mb-6
           [:label.block.text-gray-700.font-bold.mb-1 {:for "password"}
@@ -37,7 +38,7 @@
           [:button.w-full.bg-blue-300.py-2.rounded-lg.shadow-lg.mb-2.text-gray-100.font-bold.focus:outline-none.focus:shadow-outline.hover:bg-blue-400
            {:on-click (fn [e]
                         (.preventDefault e)
-                        (dispatch [::events/login @values]))}
+                        (dispatch [::events/signup @values]))}
            "Login"]
           [:a.text-sm.text-gray-500
            {:href "/"}
