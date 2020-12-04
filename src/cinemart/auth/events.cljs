@@ -51,7 +51,7 @@
  ;;TODO noti it's up
  (fn-traced [{:keys [db]} [_ result]]
             (let [status (:status result)
-                  response (get-in result [:response :error])
+                  response (get-in result [:response :error] "Something very wrong happened!")
                   ref-token (get-in db [:user :refresh-token])]
               {:db (assoc db :http-failure result)
                :fx [[:dispatch [::noti/notify {:text response
@@ -62,7 +62,7 @@
  ::api-failure
  (fn-traced [{:keys [db]} [_ result]]
             (let [status (:status result)
-                  response (get-in result [:response :error])
+                  response (get-in result [:response :error] " something very wrong happened!")
                   ref-token (get-in db [:user :refresh-token])]
 
               (if (= 401 status)
@@ -80,7 +80,9 @@
                   ;; invalid -> goto login
                   {:fx [[:dispatch [::refresh-failure]]]})
                 ;; another error code
-                {:fx [[:dispatch [::noti/notify {:text (str status response)}]]]}))))
+                {:db (assoc db :http-failure result)
+                 :fx [[:dispatch [::noti/notify {:text (str status response)
+                                                 :type :danger}]]]}))))
 
 ;; if success, re request all the cached request
 (reg-event-fx
