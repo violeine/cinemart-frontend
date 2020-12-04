@@ -8,9 +8,9 @@
 
 (reg-event-fx
  ::login
- (fn-traced [_ [_ payload]]
+ (fn-traced [_ [_ {:keys [payload role]}]]
             {:http-xhrio {:method :post
-                          :uri  "/login"
+                          :uri (str "/login" role)
                           :params payload
                           :format (ajax/json-request-format)
                           :response-format (ajax/json-response-format {:keywords? true})
@@ -39,7 +39,8 @@
               {:db
                (-> db
                    (assoc :auth? true)
-                   (assoc :user (:user result)))
+                   (assoc :http-result result)
+                   (assoc :user (:response result)))
                :fx [[:dispatch [:cinemart.events/navigate prev-route prev-param]]
                     [::fx/save-storage! ["refresh-token" ref-token]]
                     [::fx/save-storage! ["token" token]]
