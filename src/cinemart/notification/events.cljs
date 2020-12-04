@@ -14,7 +14,8 @@
   [{:keys [db]} [_ prop]]
   (let [uuid (random-uuid)]
     {:db
-     (assoc-in db [:noti uuid] (assoc prop
-                                      :uuid uuid))
+     (assoc-in db [:noti uuid] (merge {:type :info}
+                                      (assoc prop
+                                             :uuid uuid)))
      :fx [[:dispatch-later {:ms 4000
                             :dispatch [::kill-noti uuid]}]]})))
