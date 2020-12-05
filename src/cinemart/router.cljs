@@ -4,11 +4,13 @@
    [reitit.frontend :as rf]
    [reitit.frontend.easy :as rfe]
    [cinemart.events :as events]
+   [cinemart.auth.events :as auth]
    [cinemart.movie.events :as movie-events]
    [cinemart.home.view :refer [home-page]]
    [cinemart.about.view :refer [about-page]]
    [cinemart.movie.view :refer [movie]]
    [cinemart.auth.login :refer [login]]
+   [cinemart.notification.events :as noti]
    [cinemart.auth.signup :refer [signup]]
    [re-frame.core :refer [dispatch]]))
 
@@ -49,25 +51,47 @@
      :auth? false
      :hidden false
      :controllers
-     [{:identity (fn [match]
-                   (js/console.log match)
-                   (get-in match [:data :auth?]))
-       :start (fn [auth?] (js/console.log auth?))
+     [{:identity identity
+       :start (fn [match] (dispatch [::auth/guard {:next [::noti/notify {:text "login"
+                                                                         :type :success}]
+                                                   :route-match match}]))
        :stop  (fn [& params] (js/console.log "Leaving sub-page login"))}]}]
    ["signup"
     {:name      ::signup
      :link-text "sign up"
      :view signup
      :auth? false
-     :hidden false}]
+     :hidden false
+     :controllers
+     [{:identity identity
+       :start (fn [match] (dispatch [::auth/guard {:next [::noti/notify {:text "signup"
+                                                                         :type :success}]
+                                                   :route-match match}]))}]}]
    ["profile"
     {:name      ::profile
      :link-text "profile"
      :view about-page
      :auth? true
+     :role "user"
      :hidden false
      :controllers
-     [{:start (fn [& params] (js/console.log "Entering sub-page 1"))
+     [{:identity identity
+       :start (fn [match] (dispatch [::auth/guard {:next [::noti/notify {:text "profile"
+                                                                         :type :success}]
+                                                   :route-match match}]))
+       :stop  (fn [& params] (js/console.log "Leaving sub-page 1"))}]}]
+   ["admin"
+    {:name      ::admin
+     :link-text "admin"
+     :view about-page
+     :auth? true
+     :role "admin"
+     :hidden false
+     :controllers
+     [{:identity identity
+       :start (fn [match] (dispatch [::auth/guard {:next [::noti/notify {:text "admin"
+                                                                         :type :success}]
+                                                   :route-match match}]))
        :stop  (fn [& params] (js/console.log "Leaving sub-page 1"))}]}]])
 
 (defn on-navigate [new-match]

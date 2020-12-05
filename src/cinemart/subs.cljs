@@ -8,11 +8,6 @@
             (:current-route db))) ; get current route out
 
 (rf/reg-sub
- :auth?
- (fn-traced [db]
-            (:auth? db)))
-
-(rf/reg-sub
  ::http-result
  (fn-traced [db]
             (:http-result db)))

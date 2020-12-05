@@ -4,4 +4,5 @@
   {:name "re-frame"
    :current-route nil
    :auth? false
-   :noti {}})
+   :noti {}
+   :prev-route {:name :cinemart.router/home}})

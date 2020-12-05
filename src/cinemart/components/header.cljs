@@ -4,11 +4,13 @@
             [re-frame.core :as rf]
             [reitit.frontend.easy :refer [href]]
             [cinemart.auth.events :as events]
+            [cinemart.auth.subs :as auth]
             [cinemart.components.icons :refer [i-film]]))
 
 (defn header
   [{:keys [routes current-route]}]
-  (let [auth? @(rf/subscribe [:auth?])]
+  (let [auth? @(rf/subscribe [::auth/auth?])
+        role @(rf/subscribe [::auth/role])]
     [:header.bg-gray-800.shadow-md
      [:nav.xl:container.mx-auto.flex.py-2.px-3
       [:a.mr-auto.text-3xl.text-gray-400.font-bold.flex.items-center
@@ -19,8 +21,9 @@
              :let [route (r/match-by-name routes route-name)
                    text (-> route :data :link-text)
                    auth-route (get-in route [:data :auth?] :always)
+                   role-route (get-in route [:data :role])
                    hidden (get-in route [:data :hidden])]
-             :when (and (or (= auth-route auth?) (= auth-route :always))
+             :when (and (or (= role-route role) (= auth-route :always))
                         (not hidden))]
          (cond
            (= route-name ::rt/signup) [:a.mr-2.text-xl.rounded.border-solid.border-gray-500.text-gray-500.border-2.p-2

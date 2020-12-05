@@ -38,8 +38,7 @@
  (fn-traced
   []
   (let
-   [token (.getItem (.-localStorage js/window) "token")
-    refresh-token (.getItem (.-localStorage js/window) "refresh-token")]
-    {:user {:refresh-token refresh-token
-            :token token}})))
+   [user-string (.getItem (.-localStorage js/window) "user")
+    user (js->clj (.parse js/JSON user-string) :keywordize-keys true)]
+    {:user user})))
 

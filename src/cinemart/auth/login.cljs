@@ -37,7 +37,7 @@
          [:div.mb-6
           [:label.block.text-gray-700.font-bold.mb-1 {:for "role"}
            "Role:"]
-          [:input#password.border.border-gray-300.rounded.px-3.py-2.w-64.leading-tight.text-gray-700
+          [:input#role.border.border-gray-300.rounded.px-3.py-2.w-64.leading-tight.text-gray-700
            {:type "text"
             :placeholder "role"
             :on-change #(swap! values assoc :role (-> % .-target .-value))

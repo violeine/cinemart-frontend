@@ -32,18 +32,17 @@
 (reg-event-fx
  ::login-success
  (fn-traced [{:keys [db]} [_ result]]
-            (let [ref-token (get-in result [:user :refresh-token])
-                  token (get-in result [:user :token])
-                  prev-route (get-in db [:prev-route :name])
-                  prev-param (get-in db [:prev-route :path-params])]
+            (let [ref-token (get-in result [:response :refresh-token])
+                  token (get-in result [:response :token])]
               {:db
                (-> db
                    (assoc :auth? true)
                    (assoc :http-result result)
                    (assoc :user (:response result)))
-               :fx [[:dispatch [:cinemart.events/navigate prev-route prev-param]]
+               :fx [[:dispatch [:cinemart.events/back]]
                     [::fx/save-storage! ["refresh-token" ref-token]]
                     [::fx/save-storage! ["token" token]]
+                    [::fx/save-storage! ["user" (.stringify js/JSON (clj->js (:response result)))]]
                     [:dispatch [::noti/notify {:text "Login successfully"
                                                :type :success}]]]})))
 
@@ -89,8 +88,8 @@
 (reg-event-fx
  ::refresh-success
  (fn-traced [{:keys [db]} [_ result]]
-            (let [ref-token (get-in result [:user :refresh-token])
-                  token (get-in result [:user :token])
+            (let [ref-token (get-in result [:response :refresh-token])
+                  token (get-in result [:response :token])
                   prev-req (:prev-req db)
                   new-req
                   (if (vector? prev-req)
@@ -141,3 +140,22 @@
                     [:dispatch [::noti/notify {:text "Logged out"
                                                :type :info}]]]})))
 
+(reg-event-fx
+ ::guard
+ (fn-traced [{:keys [db]} [_ {:keys [next route-match]}]]
+            (let [role (get-in db [:user :role])
+                  auth? (:auth? db)
+                  auth-route (get-in route-match [:data :auth?])
+                  role-route (get-in route-match [:data :role])]
+              (if  (= auth? auth-route)
+                (if auth-route
+                  (if (= role role-route)
+                    {:fx [[:dispatch next]]}
+                    {:fx [[:dispatch [:cinemart.events/back]]
+                          [:dispatch [::noti/notify {:text "should not be here"}]]]})
+                  {:fx [[:dispatch next]]})
+                (if auth-route
+                  {:fx [[:dispatch [::noti/notify {:text "login first"}]]
+                        [:dispatch [:cinemart.events/navigate :cinemart.router/login]]]}
+                  {:fx [[:dispatch [:cinemart.events/back]]
+                        [:dispatch [::noti/notify {:text "should not be here"}]]]})))))
