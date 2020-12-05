@@ -5,12 +5,10 @@
             [cinemart.overlay.events :as overlay]
             [cinemart.notification.view :refer [noti-type]]
             [cinemart.events :as fetch]
+            [cinemart.config :refer [json-string]]
             [cinemart.subs :as sub]
             [reitit.frontend.easy :refer [href]]
             [re-frame.core :as rf]))
-
-(defn json-string [m]
-  (.stringify js/JSON (clj->js m) nil 2))
 
 (defn about-page []
   (let [http-result @(rf/subscribe [::sub/http-result])

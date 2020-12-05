@@ -8,9 +8,11 @@
    [cinemart.movie.events :as movie-events]
    [cinemart.home.view :refer [home-page]]
    [cinemart.about.view :refer [about-page]]
+   [cinemart.admin.view :refer [admin]]
    [cinemart.movie.view :refer [movie]]
    [cinemart.auth.login :refer [login]]
    [cinemart.notification.events :as noti]
+   [cinemart.admin.events :as admin-ev]
    [cinemart.auth.signup :refer [signup]]
    [re-frame.core :refer [dispatch]]))
 
@@ -26,15 +28,13 @@
        ;; I.e (re-frame/dispatch [::events/load-something-with-ajax])
        :start (fn [& params] (js/console.log "Entering home page"))
        ;; Teardown can be done here.
-       :stop  (fn [& params] (js/console.log "Leaving home page"))}]}]
-   ["about"
-    {:name      ::about
-     :link-text "about"
-     :view about-page
-     :hidden false
-     :controllers
-     [{:start (fn [params] (js/console.log params))
-       :stop  (fn [params] (js/console.log "Leaving sub-page 1"))}]}]
+       :stop  (fn [& params] (js/console.log "Leaving home page"))}]}] ["about" {:name      ::about
+                                                                                 :link-text "about"
+                                                                                 :view about-page
+                                                                                 :hidden false
+                                                                                 :controllers
+                                                                                 [{:start (fn [params] (js/console.log params))
+                                                                                   :stop  (fn [params] (js/console.log "Leaving sub-page 1"))}]}]
    ["movie/:id"
     {:name ::movie
      :link-text "movie"
@@ -83,14 +83,13 @@
    ["admin"
     {:name      ::admin
      :link-text "admin"
-     :view about-page
+     :view admin
      :auth? true
      :role "admin"
      :hidden false
      :controllers
      [{:identity identity
-       :start (fn [match] (dispatch [::auth/guard {:next [::noti/notify {:text "admin"
-                                                                         :type :success}]
+       :start (fn [match] (dispatch [::auth/guard {:next [::admin-ev/init-admin]
                                                    :route-match match}]))
        :stop  (fn [& params] (js/console.log "Leaving sub-page 1"))}]}]])
 

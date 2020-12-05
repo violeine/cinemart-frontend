@@ -64,7 +64,6 @@
             (let [status (:status result)
                   response (get-in result [:response :error] " something very wrong happened!")
                   ref-token (get-in db [:user :refresh-token])]
-
               (if (= 401 status)
                 ;; unauthorized
                 (if (.includes response "expired")
@@ -94,15 +93,14 @@
                   new-req
                   (if (vector? prev-req)
                     ; insert new token
-                    (map #(merge %  {:interceptors [backend-interceptor token-interceptor token]}))
+                    (map #( merge %  {:interceptors [backend-interceptor (token-interceptor token)]}) prev-req)
                     (merge prev-req {:interceptors [backend-interceptor (token-interceptor token)]}))]
               {:db
                (-> db
                    (assoc :auth? true)
                    (dissoc :prev-req)
-                   (assoc :user (:user result)))
-               :fx [[::fx/save-storage! ["refresh-token" ref-token]]
-                    [::fx/save-storage! ["token" token]]
+                   (assoc :user (:response result)))
+               :fx [[::fx/save-storage! ["user" (.stringify js/JSON (clj->js (:response result)))]]
                     [:http-xhrio new-req]
                     [:dispatch [::noti/notify {:text "refresh token successfully"
                                                :type :success}]]]})))
@@ -137,6 +135,7 @@
               {:fx [[::fx/clear-storage!]
                     [:http-xhrio request]
                     [:dispatch [::remove-user]]
+                    [:dispatch [:cinemart.events/navigate :cinemart.router/home]]
                     [:dispatch [::noti/notify {:text "Logged out"
                                                :type :info}]]]})))
 

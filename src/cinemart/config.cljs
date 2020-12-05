@@ -81,3 +81,5 @@
   [vect]
   (vec (flatten vect)))
 
+(defn json-string [m]
+  (.stringify js/JSON (clj->js m) nil 2))
