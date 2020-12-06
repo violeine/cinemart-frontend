@@ -18,14 +18,14 @@
       [:div.flex
        [:div.mr-2.w-32 "idx"]
        (for [col order]
-         [:div.mr-2.w-32  {:key (random-uuid)} (name col)])]
+         [:div.mr-2.w-48  {:key (random-uuid)} (name col)])]
       (map-indexed
        (fn [idx item]
          [:div.flex
           {:key (:id item)}
           [:div.mr-2.w-32 idx]
           (for [col order]
-            [:div.mr-2.w-32 {:key (random-uuid)}  (get item col)])
+            [:div.mr-2.w-48 {:key (random-uuid)}  (get item col)])
           [:button
            {:on-click #(rf/dispatch [::admin-ev/delete type (:id item)])} "delete this"]
           [:a.bg-indigo-600.text-md.px-2.py-2
@@ -34,14 +34,23 @@
                          {:component
                           (fn []
                             [update-btn
-                             {:init-data (-> item
-                                             (dissoc :id)
-                                             (dissoc :created_at))
+                             {:type type
+                              :init-data
+                              (if (= type :theaters)
+                                {:theater (-> item
+                                              (dissoc :id)
+                                              (dissoc :created_at)
+                                              (dissoc :theater_id))}
+                                (-> item
+                                    (dissoc :id)
+                                    (dissoc :theater_id)
+                                    (dissoc :theater_name)
+                                    (dissoc :created_at)))
                               :on-submit-fn
                               (fn [payload]
                                 (fn [e]
                                   (.preventDefault e)
-                                  (rf/dispatch [::admin-ev/update :users payload {:id (:id item)
-                                                                                  :idx idx}])))}])}])}
-           "Update User"]])
+                                  (rf/dispatch [::admin-ev/update type payload {:id (:id item)
+                                                                                :idx idx}])))}])}])}
+           (str "Update " (name type))]])
        arr)])])

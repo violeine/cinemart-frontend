@@ -75,6 +75,7 @@
  ::create
  (fn-traced [{:keys [db]} [_ k payload]]
             (let [token (get-in db [:user :token])]
+              (println payload)
               {:http-xhrio {:method :post
                             :uri  (get link k)
                             :params payload
@@ -83,6 +84,30 @@
                             :interceptors [backend-interceptor (token-interceptor token)]
                             :on-success [::create-success k]
                             :on-failure [::crud-failure]}})))
+
+(rf/reg-event-fx
+ ::create-theaters
+ (fn-traced [{:keys [db]} [_ payload]]
+            (let [token (get-in db [:user :token])]
+              {:http-xhrio {:method :post
+                            :uri (:theaters link)
+                            :params payload
+                            :format (ajax/json-request-format)
+                            :response-format (ajax/json-response-format {:keywords? true})
+                            :interceptors [backend-interceptor (token-interceptor token)]
+                            :on-success [::create-theater-success]
+                            :on-failure [::crud-failure]}})))
+
+(rf/reg-event-fx
+ ::create-theater-success
+ (fn-traced [{:keys [db]} [_ result]]
+            (let [old-theaters (get-in db [:admin :theaters])
+                  old-managers (get-in db [:admin :managers])]
+              {:fx [[:dispatch [::overlay/close]]
+                    [:dispatch [::noti/notify {:text "create success"}]]]
+               :db (-> db
+                       (assoc-in [:admin :theaters] (conj old-theaters (get-in result [:response :theater])))
+                       (assoc-in [:admin :managers] (conj old-managers (get-in result [:response :manager]))))})))
 
 (rf/reg-event-fx
  ::delete
