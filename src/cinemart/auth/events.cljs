@@ -93,7 +93,7 @@
                   new-req
                   (if (vector? prev-req)
                     ; insert new token
-                    (map #( merge %  {:interceptors [backend-interceptor (token-interceptor token)]}) prev-req)
+                    (map #(merge %  {:interceptors [backend-interceptor (token-interceptor token)]}) prev-req)
                     (merge prev-req {:interceptors [backend-interceptor (token-interceptor token)]}))]
               {:db
                (-> db
