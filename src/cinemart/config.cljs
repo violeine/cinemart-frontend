@@ -50,6 +50,17 @@
                      :Authorization]
                     (str "Bearer " token))))}))
 
+(defn delete-is-empty [{:keys [method] :as request}]
+  (if (= method "DELETE")
+    (reduced (assoc request :body nil))
+    request))
+
+(def app-engine-delete-interceptor
+  (ajax/to-interceptor {:name "Google App Engine Delete Rule"
+                        :request delete-is-empty}))
+
+(swap! ajax/default-interceptors concat [app-engine-delete-interceptor])
+
 (def image-base-url "https://image.tmdb.org/t/p/")
 
 (def image-type {:backdrop {:sm "w300"
