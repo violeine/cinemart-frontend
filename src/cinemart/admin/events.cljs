@@ -108,6 +108,17 @@
                        (assoc-in [:admin :managers] (conj old-managers (get-in result [:response :manager]))))})))
 
 (rf/reg-event-fx
+ ::get
+ (fn-traced [{:keys [db]} [_ k]]
+            (let [token (get-in db [:user :token])]
+              {:http-xhrio {:method :get
+                            :uri (get link k)
+                            :response-format (ajax/json-response-format {:keywords? true})
+                            :interceptors [backend-interceptor (token-interceptor token)]
+                            :on-success [::get-success k]
+                            :on-failure [::crud-failure]}})))
+
+(rf/reg-event-fx
  ::delete
  (fn-traced [{:keys [db]} [_ k payload]]
             (let [token (get-in db [:user :token])]
@@ -152,6 +163,12 @@
               {:fx [[:dispatch [::overlay/close]]
                     [:dispatch [::noti/notify {:text "create success"}]]]
                :db (assoc-in db [:admin k] (conj old (:response result)))})))
+
+(rf/reg-event-db
+ ::get-success
+ (fn-traced [db [_ k result]]
+            (assoc-in db [:admin k] (:response result))))
+
 (rf/reg-event-fx
  ::update-success
  (fn-traced [{:keys [db]} [_ k idx result]]

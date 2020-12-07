@@ -43,7 +43,9 @@
 (rf/reg-event-db
  ::success-movie
  (fn-traced [db [_ result]]
-            (assoc db :movie result)))
+            (-> db
+                (assoc :movie result)
+                (assoc :http-result result))))
 
 (rf/reg-event-db
  ::success-credit
