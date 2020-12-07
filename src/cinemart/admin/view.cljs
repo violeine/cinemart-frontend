@@ -15,14 +15,14 @@
   (let [{:keys [theaters admins users managers] :as admin} @(rf/subscribe [::sub/admin])]
     [container {:classes ["flex" "flex-col"]}
      [:<>
-      [:h2.text-lg "admin panel"]
-      [:pre.bg-green-300.text-black (json-string admin)]
+      [:h2.text-3xl.ml-6.mb-16 "admin panel"]
+      ; [:pre.bg-green-300.text-black (json-string admin)]
       [dashboard {:type :users
                   :arr users
                   :order [:id :mail :fullname :dob :username :created_at]
                   :update-btn (fn [prop]
                                 [user-form prop])}
-       [:a.bg-indigo-600.text-md.px-2.py-2
+       [:a.text-md.px-2.py-2.block
         {:on-click #(rf/dispatch
                      [::overlay/open
                       {:component (fn []
@@ -54,7 +54,7 @@
                   :arr theaters
                   :update-btn (fn [prop]
                                 [theater-form prop])
-                  :order [:id  :name :address]}
+                  :order [:id  :name :address :created_at]}
        [:a.bg-indigo-600.text-md.px-2.py-2
         {:on-click #(rf/dispatch
                      [::overlay/open

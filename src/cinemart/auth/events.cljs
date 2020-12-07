@@ -109,7 +109,7 @@
 (reg-event-fx
  ::refresh-failure
  (fn-traced [{:keys [db]} [_ result]]
-            {:fx [[:dispatch [::remove-user]]
+            {:fx [[:dispatch [::logout]]
                   [:dispatch [::noti/notify {:text "token invalid"
                                              :type :danger}]]
                   [:dispatch [:cinemart.events/navigate :cinemart.router/login]]]}))

@@ -8,49 +8,53 @@
 
 (defn dashboard
   [{:keys [type arr order update-btn]} create-btn]
-  [:div
-   [:div.flex
-    [:p.mr-auto (name type)]
-    create-btn]
+  [:div.p-2.mb-16
+   [:div.flex.items-center.mb-8
+    [:h2.mr-auto.text-3xl.text-gray-300.ml-2 (name type)]
+    [:div.mr-32.bg-indigo-500
+     create-btn]]
    (if (empty? arr)
      [:div "there's is none"]
-     [:<>
-      [:div.flex
-       [:div.mr-2.w-32 "idx"]
+     [:table.table-fixed.w-full.mt-2.text-left
+      [:thead>tr
+       [:th.w-16 "Index"]
        (for [col order]
-         [:div.mr-2.w-48  {:key (random-uuid)} (name col)])]
-      (map-indexed
-       (fn [idx item]
-         [:div.flex
-          {:key (:id item)}
-          [:div.mr-2.w-32 idx]
-          (for [col order]
-            [:div.mr-2.w-48 {:key (random-uuid)}  (get item col)])
-          [:button
-           {:on-click #(rf/dispatch [::admin-ev/delete type (:id item)])} "delete this"]
-          [:a.bg-indigo-600.text-md.px-2.py-2
-           {:on-click #(rf/dispatch
-                        [::overlay/open
-                         {:component
-                          (fn []
-                            [update-btn
-                             {:type type
-                              :init-data
-                              (if (= type :theaters)
-                                {:theater (-> item
-                                              (dissoc :id)
-                                              (dissoc :created_at)
-                                              (dissoc :theater_id))}
-                                (-> item
-                                    (dissoc :id)
-                                    (dissoc :theater_id)
-                                    (dissoc :theater_name)
-                                    (dissoc :created_at)))
-                              :on-submit-fn
-                              (fn [payload]
-                                (fn [e]
-                                  (.preventDefault e)
-                                  (rf/dispatch [::admin-ev/update type payload {:id (:id item)
-                                                                                :idx idx}])))}])}])}
-           (str "Update " (name type))]])
-       arr)])])
+         [:th  {:key (random-uuid)} (name col)])
+       [:th "Action"]]
+      [:tbody.align-baseline
+       (map-indexed
+        (fn [idx item]
+          [:tr.border-t.border-gray-300.mb-8
+           {:key (:id item)}
+           [:td.py-2 idx]
+           (for [col order]
+             [:td {:key (random-uuid)}  (get item col)])
+           [:td.flex
+            [:button.mr-2
+             {:on-click #(rf/dispatch [::admin-ev/delete type (:id item)])} "Delete"]
+            [:a.bg-indigo-600.block.p-1
+             {:on-click #(rf/dispatch
+                          [::overlay/open
+                           {:component
+                            (fn []
+                              [update-btn
+                               {:type type
+                                :init-data
+                                (if (= type :theaters)
+                                  {:theater (-> item
+                                                (dissoc :id)
+                                                (dissoc :created_at)
+                                                (dissoc :theater_id))}
+                                  (-> item
+                                      (dissoc :id)
+                                      (dissoc :theater_id)
+                                      (dissoc :theater_name)
+                                      (dissoc :created_at)))
+                                :on-submit-fn
+                                (fn [payload]
+                                  (fn [e]
+                                    (.preventDefault e)
+                                    (rf/dispatch [::admin-ev/update type payload {:id (:id item)
+                                                                                  :idx idx}])))}])}])}
+             (str "Update " (name type))]]])
+        arr)]])])
