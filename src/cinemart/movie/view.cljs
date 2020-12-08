@@ -1,6 +1,7 @@
 (ns cinemart.movie.view
   (:require [re-frame.core :as rf]
             [reagent.core :as r]
+            [reitit.frontend.easy :refer [href]]
             [cinemart.movie.subs :as movie]
             [cinemart.overlay.events :as overlay]
             [cinemart.components.container :refer [container]]
@@ -11,7 +12,7 @@
 
 (defn movie
   []
-  (let [{:keys [title overview runtime genres release-date poster_path backdrop_path vote_average]}
+  (let [{:keys [title overview runtime genres release-date poster_path backdrop_path vote_average id]}
         @(rf/subscribe [::movie/movie])
         {:keys [cast]} @(rf/subscribe [::movie/credit])
         {:keys [results]} @(rf/subscribe [::movie/review])
@@ -54,7 +55,9 @@
          [:div.inline-block
           [card
            "text-indigo-400"
-           [:a.bg-indigo-600.text-lg.px-8.py-4.flex "buy ticket"]]]]]]
+           [:a.bg-indigo-600.text-lg.px-8.py-4.flex
+            {:href (href :cinemart.router/ticket {:id id})}
+            "buy ticket"]]]]]]
       ;; Casts
       [:div.px-3.py-5
        [:div.text-indigo-300.text-2xl.ml-8 "Casts"]

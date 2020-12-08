@@ -4,6 +4,7 @@
             [cinemart.notification.events :as noti]
             [cinemart.overlay.events :as overlay]
             [cinemart.notification.view :refer [noti-type]]
+            [cinemart.components.seatmap :refer [seatmap]]
             [cinemart.events :as fetch]
             [cinemart.config :refer [json-string]]
             [cinemart.subs :as sub]
@@ -53,13 +54,25 @@
         {:href (href :cinemart.router/movie {:id 335984})}
         "go to movie page"]
        [:a.mt-3.py-2.px-3.bg-blue-300.rounded.mr-2
+        {:href (href :cinemart.router/ticket {:id 335984})}
+        "go to ticket page"]
+       [:a.mt-3.py-2.px-3.bg-blue-300.rounded.mr-2
         {:on-click #(rf/dispatch [::overlay/open {:component
                                                   (fn
                                                     []
                                                     [card
                                                      "text-gray-400"
                                                      [:div.w-64.h-32.bg-indidgo-200 "hello"]])}])}
-        "Open overlay"]]
+        "Open overlay"]
+       [:a.mt-3.py-2.px-3.bg-blue-300.rounded.mr-2
+        {:on-click #(rf/dispatch [::overlay/open {:component
+                                                  (fn
+                                                    []
+                                                    [seatmap
+                                                     {:row 8
+                                                      :col 12
+                                                      :your-seat [27 30 48]}])}])}
+        "Seat overlay"]]
       [:div
        (when http-result
          [:pre.bg-green-300.text-black (json-string http-result)])

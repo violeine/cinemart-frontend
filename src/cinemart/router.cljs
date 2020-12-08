@@ -6,9 +6,11 @@
    [cinemart.events :as events]
    [cinemart.auth.events :as auth]
    [cinemart.movie.events :as movie-events]
+   [cinemart.ticket.events :as ticket-events]
    [cinemart.home.view :refer [home-page]]
    [cinemart.about.view :refer [about-page]]
    [cinemart.admin.view :refer [admin]]
+   [cinemart.ticket.view :refer [ticket]]
    [cinemart.movie.view :refer [movie]]
    [cinemart.auth.login :refer [login]]
    [cinemart.notification.events :as noti]
@@ -28,13 +30,14 @@
        ;; I.e (re-frame/dispatch [::events/load-something-with-ajax])
        :start (fn [& params] (js/console.log "Entering home page"))
        ;; Teardown can be done here.
-       :stop  (fn [& params] (js/console.log "Leaving home page"))}]}] ["about" {:name      ::about
-                                                                                 :link-text "about"
-                                                                                 :view about-page
-                                                                                 :hidden false
-                                                                                 :controllers
-                                                                                 [{:start (fn [params] (js/console.log params))
-                                                                                   :stop  (fn [params] (js/console.log "Leaving sub-page 1"))}]}]
+       :stop  (fn [& params] (js/console.log "Leaving home page"))}]}]
+   ["about" {:name      ::about
+             :link-text "about"
+             :view about-page
+             :hidden false
+             :controllers
+             [{:start (fn [params] (js/console.log params))
+               :stop  (fn [params] (js/console.log "Leaving sub-page 1"))}]}]
    ["movie/:id"
     {:name ::movie
      :link-text "movie"
@@ -43,6 +46,15 @@
      :controllers [{:parameters {:path [:id]}
                     :start (fn [params] (dispatch
                                          [::movie-events/fetch-movie
+                                          (-> params :path :id)]))}]}]
+   ["ticket/:id"
+    {:name ::ticket
+     :link-text "ticket"
+     :view ticket
+     :hidden true
+     :controllers [{:parameters {:path [:id]}
+                    :start (fn [params] (dispatch
+                                         [::ticket-events/init-ticket
                                           (-> params :path :id)]))}]}]
    ["login"
     {:name      ::login
