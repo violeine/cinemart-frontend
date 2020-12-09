@@ -28,7 +28,12 @@
            {:key (:id item)}
            [:td.py-2 idx]
            (for [col order]
-             [:td {:key (random-uuid)}  (get item col)])
+             [:td {:key (random-uuid)}
+              (if (= col :created_at)
+                (.toLocaleString
+                 (new js/Date (get item col))
+                 "en-US")
+                (get item col))])
            [:td.flex
             [:button.mr-2
              {:on-click #(rf/dispatch [::admin-ev/delete type (:id item)])} "Delete"]

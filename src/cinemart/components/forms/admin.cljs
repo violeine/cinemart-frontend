@@ -27,7 +27,8 @@
            :name "email"
            :required true
            :value (:mail @values)
-           :on-change #(swap! values assoc :mail (-> % .-target .-value))
+           :on-change #(swap! values assoc :mail
+                              (-> % .-target .-value))
            :placeholder "john@doe.com"}]]
         [:div.mb-6
          [:label.block.text-gray-700.font-bold.mb-1 {:for "password"}
