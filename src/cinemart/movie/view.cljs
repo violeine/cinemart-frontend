@@ -6,6 +6,7 @@
             [cinemart.overlay.events :as overlay]
             [cinemart.components.container :refer [container]]
             [cinemart.components.review :refer [review]]
+            [cinemart.components.forms.schedule :refer [schedule]]
             [clojure.string :as s]
             [cinemart.components.card :refer [card]]
             [cinemart.config :refer [image-link]]))
@@ -52,7 +53,17 @@
          [:span.mr-2 "Rating:"]
          [:span.text-2xl.font-bold vote_average]]
         [:div.mt-12
+         [:div.inline-block.mr-2
+          [card
+           "text-indigo-400"
+           [:a.bg-indigo-600.text-lg.px-8.py-4.flex
+            {:on-click #(rf/dispatch [::overlay/open {:component
+                                                      (fn
+                                                        []
+                                                        [schedule {:movie_id id}])}])}
+            "Seat overlay"]]]
          [:div.inline-block
+
           [card
            "text-indigo-400"
            [:a.bg-indigo-600.text-lg.px-8.py-4.flex
@@ -73,8 +84,8 @@
              {:href (str "https://www.themoviedb.org/person/"
                          (apply str
                                 (interpose
-                                 "-"
-                                 (apply conj [id] (s/split name  " ")))))
+                                  "-"
+                                  (apply conj [id] (s/split name  " ")))))
               :target "_blank"}
              [:img.max-w-lg {:src (image-link [:profile :md] profile_path)}]
              [:div.absolute.bottom-0.left-0.inline-flex.flex-col

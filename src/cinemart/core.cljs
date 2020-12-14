@@ -10,7 +10,6 @@
             [cinemart.overlay.view :refer [overlay]]
             [cinemart.components.footer :refer [footer]]
             [cinemart.components.header :refer [header]]))
-
 (defn hello-world []
   (let [current-route @(rf/subscribe [::subs/current-route])]
     [:div.flex.flex-col.justify-between.min-h-screen.bg-purple-900
@@ -37,4 +36,3 @@
   (rf/dispatch-sync [::events/init-db])
   (dev-setup)
   (mount-root))
-

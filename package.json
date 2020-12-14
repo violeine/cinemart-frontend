@@ -10,7 +10,7 @@
     "postinstall": "cross-env NODE_ENV=dev postcss tw/tailwind.css -o public/css/main.css"
   },
   "devDependencies": {
-    "shadow-cljs": "2.11.4"
+    "shadow-cljs": "2.11.8"
   },
   "dependencies": {
     "@fullhuman/postcss-purgecss": "^3.0.0",

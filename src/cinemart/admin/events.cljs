@@ -28,7 +28,8 @@
                         :uri "/admins"
                         :response-format (ajax/json-response-format
                                           {:keywords? true})
-                        :interceptors [backend-interceptor (token-interceptor token)] :on-success [::success :admins] :on-failure [::failure]}
+                        :interceptors [backend-interceptor (token-interceptor token)]
+                        :on-success [::success :admins] :on-failure [::failure]}
                        {:method :get
                         :uri "/managers"
                         :response-format (ajax/json-response-format

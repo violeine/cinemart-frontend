@@ -94,3 +94,15 @@
 
 (defn json-string [m]
   (.stringify js/JSON (clj->js m) nil 2))
+
+(defn now
+  []
+  (let [n (new js/Date)
+        pad #(if (< % 10 ) (str 0 %) %)]
+    (str (.getFullYear n) "-" (.getMonth n) "-" (.getDate n)
+         "T"
+         (pad (.getHours n))
+         ":"
+         (pad (.getMinutes n)))))
+
+

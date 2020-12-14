@@ -2,22 +2,27 @@
   (:require [reagent.core :as r]
             [re-frame.core :as rf]
             [cinemart.components.seatmap :refer [seatmap]]
-            [cinemart.config :refer [json-string]]))
+            [cinemart.config :refer [json-string now]]))
 
-(defn schedule []
-  (let [form (r/atom {:row 5
+(defn schedule [{:keys [movie_id]}]
+  (let [
+        form (r/atom {:row 5
                       :col 12
-                      :time
-                      (.replace
-                       (.toISOString
-                        (new js/Date))
-                       "Z" "")
-                      :seat-option ([2 "20000"]
-                                    [3 "30000"]
-                                    [5 "50000"])})]
+                      :time (now)
+                      :movie_id movie_id
+                      :price 50000 })]
     (fn []
       [:div
        [:form
+        [:label
+         [:span "price"]
+         [:input {:type "number"
+                  :name "row"
+                  :value (:price @form)
+                  :min 50000
+                  :max 100000
+                  :on-change #(swap! form assoc :price
+                                     (-> % .-target .-value int))}]]
         [:label
          [:span "row"]
          [:input {:type "number"
@@ -42,7 +47,7 @@
                   :type "datetime-local"
                   :value (:time @form)
                   :on-change #(swap! form assoc :time (-> % .-target .-value))}]]]
+       [:a.px-2.py-2 {:on-click #(print @form)} "Create"]
        [:div
         [seatmap (dissoc @form :time)]]])))
 
-(partition 2 1 [1 2 3])

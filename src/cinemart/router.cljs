@@ -10,11 +10,13 @@
    [cinemart.home.view :refer [home-page]]
    [cinemart.about.view :refer [about-page]]
    [cinemart.admin.view :refer [admin]]
+   [cinemart.manager.view :refer [manager]]
    [cinemart.ticket.view :refer [ticket]]
    [cinemart.movie.view :refer [movie]]
    [cinemart.auth.login :refer [login]]
    [cinemart.notification.events :as noti]
    [cinemart.admin.events :as admin-ev]
+   [cinemart.manager.events :as manager-ev]
    [cinemart.auth.signup :refer [signup]]
    [re-frame.core :refer [dispatch]]))
 
@@ -103,7 +105,19 @@
      [{:identity identity
        :start (fn [match] (dispatch [::auth/guard {:next [::admin-ev/init-admin]
                                                    :route-match match}]))
-       :stop  (fn [& params] (js/console.log "Leaving sub-page 1"))}]}]])
+       :stop  (fn [& params] (js/console.log "Leaving sub-page 1"))}]}]
+   ["manager"
+    {:name      ::manager
+     :link-text "manager"
+     :view manager
+     :auth? true
+     :role "manager"
+     :hidden false
+     :controllers
+     [{:identity identity
+       :start (fn [match] (dispatch [::auth/guard {:next [::manager-ev/init-manager]
+                                                   :route-match match}]))
+       }]}]])
 
 (defn on-navigate [new-match]
   (when new-match
@@ -115,4 +129,3 @@
   []
   (println "init routes")
   (rfe/start! router on-navigate {:use-fragment false}))
-

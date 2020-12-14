@@ -12,7 +12,7 @@
                      "Create Theater"
                      "Update Theater")]
     (fn []
-      [:div.m-auto.bg-gray-100.shadow.rounded.px-5.py-3
+      [:div.mx-auto.bg-gray-100.shadow.rounded.px-5.py-3
        [:p.text-xl.text-center.mb-8.text-gray-800
         form-title]
        [:form

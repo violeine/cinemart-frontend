@@ -32,7 +32,7 @@
               (if (= col :created_at)
                 (.toLocaleString
                  (new js/Date (get item col))
-                 "en-US")
+                 "vi-VN")
                 (get item col))])
            [:td.flex
             [:button.mr-2
@@ -59,7 +59,8 @@
                                 (fn [payload]
                                   (fn [e]
                                     (.preventDefault e)
-                                    (rf/dispatch [::admin-ev/update type payload {:id (:id item)
-                                                                                  :idx idx}])))}])}])}
+                                    (rf/dispatch [::admin-ev/update type payload
+                                                  {:id (:id item)
+                                                   :idx idx}])))}])}])}
              (str "Update " (name type))]]])
         arr)]])])
