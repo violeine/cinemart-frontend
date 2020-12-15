@@ -5,11 +5,13 @@
 (defn admin-form
   [{:keys [init-data on-submit-fn theaters type]}]
   (let [values (r/atom
-                (merge
-                 {:mail ""
-                  :password nil}
-                 (if theaters {:theater 1})
-                 init-data))
+                 (merge
+                   {:mail ""
+                    :password nil}
+                   (if theaters {:theater
+                                 (:id
+                                   (first theaters))})
+                   init-data))
         form-title (if init-data
                      (str "Update " (name type))
                      (str "Create " (name type)))]
@@ -40,11 +42,12 @@
            :value (:password @values)}]]
         (when theaters
           [:select {:value (:theater @values)
-                    :on-change #(swap! values assoc :theater (-> % .-target .-value))}
+                    :on-change #(swap! values assoc :theater
+                                       (-> % .-target .-value))}
            (for [theater theaters
                  :let [{:keys [id name]} theater]]
              [:option {:key id
-                       :value (int id)} name])])
+                       :value id} name])])
         [:div.mb-3
          [:button.w-full.bg-blue-300.py-2.rounded-lg.shadow-lg.mb-2.text-gray-100.font-bold.focus:outline-none.focus:shadow-outline.hover:bg-blue-400
           {:on-click (on-submit-fn @values)}
