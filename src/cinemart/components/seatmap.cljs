@@ -5,15 +5,15 @@
 (defn in? [arr i]
   (some #(= i %) arr))
 
-(defn seatmap [{:keys [on-click-fn your-seat reserved-seat row col on-delete-fn]}]
+(defn seatmap [{:keys [on-click-fn your-seat reserved-seat nrow ncolumn on-delete-fn]}]
   [:div.flex.justify-center.p-4
    [:div.inline-block
     (map-indexed
      (fn [idx itm]
        [:div.flex.mb-2.text-black
         {:key idx}
-        (for [c (range 1 (inc col))
-              :let [d1 (+ (* idx col) c)
+        (for [c (range 1 (inc ncolumn))
+              :let [d1 (+ (* idx ncolumn) c)
                     name-seat (.toUpperCase (str itm c))]]
           [:div.w-16.h-16.mr-2.text-center
            {:key c
@@ -31,4 +31,4 @@
             name-seat]
            [:span.block
             d1]])])
-     (take row alphabet))]])
+     (take nrow alphabet))]])

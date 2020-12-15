@@ -2,22 +2,33 @@
   (:require [reagent.core :as r]
             [re-frame.core :as rf]
             [cinemart.components.seatmap :refer [seatmap]]
-            [cinemart.config :refer [json-string now]]))
+            [cinemart.manager.events :as manager-ev]
+            [cinemart.config :refer [json-string now iso-time]]))
 
 (defn schedule [{:keys [movie_id]}]
   (let [
-        form (r/atom {:row 5
-                      :col 12
+        form (r/atom {:nrow 5
+                      :ncolumn 12
+                      :room 10
                       :time (now)
-                      :movie_id movie_id
+                      :movie movie_id
                       :price 50000 })]
     (fn []
       [:div
        [:form
         [:label
+         [:span "room"]
+         [:input {:type "number"
+                  :name "room"
+                  :value (:room @form)
+                  :min 0
+                  :max 10
+                  :on-change #(swap! form assoc :room
+                                     (-> % .-target .-value int))}]]
+        [:label
          [:span "price"]
          [:input {:type "number"
-                  :name "row"
+                  :name "price"
                   :value (:price @form)
                   :min 50000
                   :max 100000
@@ -27,10 +38,10 @@
          [:span "row"]
          [:input {:type "number"
                   :name "row"
-                  :value (:row @form)
+                  :value (:nrow @form)
                   :min 5
                   :max 10
-                  :on-change #(swap! form assoc :row
+                  :on-change #(swap! form assoc :nrow
                                      (-> % .-target .-value int))}]]
         [:label
          [:span "col"]
@@ -38,8 +49,8 @@
                   :name "col"
                   :min 8
                   :max 15
-                  :value (:col @form)
-                  :on-change #(swap! form assoc :col
+                  :value (:ncolumn @form)
+                  :on-change #(swap! form assoc :ncolumn
                                      (-> % .-target .-value int))}]]
         [:label
          [:span "time"]
@@ -47,7 +58,12 @@
                   :type "datetime-local"
                   :value (:time @form)
                   :on-change #(swap! form assoc :time (-> % .-target .-value))}]]]
-       [:a.px-2.py-2 {:on-click #(print @form)} "Create"]
+       [:a.px-2.py-2 {:on-click #(rf/dispatch [::manager-ev/create-schedule
+                                               (-> @form
+                                                   (dissoc :time)
+                                                   (assoc :time (iso-time
+                                                                  (:time @form))))])}
+        "Create"]
        [:div
         [seatmap (dissoc @form :time)]]])))
 

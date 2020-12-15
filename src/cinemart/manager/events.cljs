@@ -7,6 +7,7 @@
             [cinemart.overlay.events :as overlay]
             [day8.re-frame.async-flow-fx]
             [cinemart.config :refer [backend-interceptor token-interceptor]]))
+
 (def link {:users "/users"
            :theater "/theaters"
            :admins "/admins"
@@ -16,13 +17,21 @@
  ::fetch-manager
  (fn-traced [{:keys [db]} _]
             (let [token (get-in db [:user :token])
-                  theater-id ( get-in db [:user :theater_id])
+                  theater-id (first
+                               (get-in db [:user :theater_id]))
                   req [{:method :get
-                        :uri (str "/theaters/" (first theater-id))
+                        :uri (str "/theaters/" theater-id)
                         :response-format (ajax/json-response-format
                                           {:keywords? true})
                         :interceptors [backend-interceptor (token-interceptor token)]
                         :on-success [::success :theater]
+                        :on-failure [::failure]}
+                       {:method :get
+                        :uri (str "/theaters/" theater-id "/schedules")
+                        :response-format (ajax/json-response-format
+                                           {:keywords? true})
+                        :interceptors [backend-interceptor (token-interceptor token)]
+                        :on-success [::success :schedules]
                         :on-failure [::failure]}
                        {:method :get
                         :uri "/me"
@@ -39,7 +48,7 @@
 (rf/reg-event-fx
  ::init-manager
  (fn-traced [{:keys [db]} _]
-            {:async-flow {:id ::async-init-manager
+            {:async-flow {:id ::async-init-manager596161
                           :first-dispatch [::fetch-manager]
                           :rules [{:when :seen?
                                    :events ::failure
@@ -73,6 +82,22 @@
                             :interceptors [backend-interceptor (token-interceptor token)]
                             :on-success [::update-success k]
                             :on-failure [:cinemart.admin.events/crud-failure]}})))
+
+(rf/reg-event-fx
+  ::create-schedule
+  (fn-traced [{:keys [db]} [_ payload]]
+             (let [token (get-in db [:user :token])
+                   theater (first
+                             (get-in db [:user :theater_id]))]
+               {:http-xhrio {:method :post
+                             :uri (str "/theaters/" theater "/schedules")
+                             :params payload
+                             :format (ajax/json-request-format)
+                             :response-format (ajax/json-response-format {:keywords? true})
+                             :interceptors [backend-interceptor (token-interceptor token)]
+                             :on-success [::create-success]
+                             :on-failure [:cinemart.admin.events/crud-failure]
+                             }})))
 
 (rf/reg-event-fx
  ::update-success

@@ -5,7 +5,7 @@
    [day8.re-frame.tracing :refer-macros [fn-traced]]
    [cinemart.effects :as fx]
    [ajax.core :as ajax]
-   [cinemart.config :refer [movie-interceptor]]
+   [cinemart.config :refer [movie-interceptor backend-interceptor]]
    [reitit.frontend.controllers :as rfc]))
 
 (rf/reg-event-fx
@@ -39,6 +39,18 @@
                            :interceptors [movie-interceptor]
                            :on-success [::success-media]
                            :on-failure [::failure]}]}))
+
+(rf/reg-event-fx
+  ::post-movie
+  (fn-traced [_ [_ payload]]
+             {:http-xhrio {:method :patch
+                           :uri "/movies"
+                           :params payload
+                           :response-format (ajax/json-response-format)
+                           :format (ajax/json-request-format)
+                           :interceptors [backend-interceptor]
+                           :on-success [:cinemart.events/nothing]
+                           :on-failure [:cinemart.events/nothing]}}))
 
 (rf/reg-event-db
  ::success-movie

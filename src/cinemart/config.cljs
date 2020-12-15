@@ -105,4 +105,9 @@
          ":"
          (pad (.getMinutes n)))))
 
+(defn iso-time
+  [t]
+  (.toISOString
+    (new js/Date t)))
 
+(iso-time (now))

@@ -4,6 +4,7 @@
             [reitit.frontend.easy :refer [href]]
             [cinemart.movie.subs :as movie]
             [cinemart.overlay.events :as overlay]
+            [cinemart.movie.events :as movie-ev]
             [cinemart.components.container :refer [container]]
             [cinemart.components.review :refer [review]]
             [cinemart.components.forms.schedule :refer [schedule]]
@@ -63,12 +64,23 @@
                                                         [schedule {:movie_id id}])}])}
             "Seat overlay"]]]
          [:div.inline-block
-
           [card
            "text-indigo-400"
            [:a.bg-indigo-600.text-lg.px-8.py-4.flex
             {:href (href :cinemart.router/ticket {:id id})}
-            "buy ticket"]]]]]]
+            "buy ticket"]]]
+         [:div.inline-block
+          [card
+           "text-indigo-400"
+           [:a.bg-indigo-600.text-lg.px-8.py-4.flex
+            {:on-click #(rf/dispatch [::movie-ev/post-movie {:id id
+                                                             :runtime runtime
+                                                             :overview overview
+                                                             :genres genres
+                                                             :title title
+                                                             :poster_path poster_path
+                                                             :backdrop_path backdrop_path}])}
+            "create movie"]]]]]]
       ;; Casts
       [:div.px-3.py-5
        [:div.text-indigo-300.text-2xl.ml-8 "Casts"]

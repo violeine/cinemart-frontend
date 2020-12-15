@@ -29,8 +29,8 @@
             [:div.bg-yellow-200.text-black.ml-8
              {:class ["w-10/12"]}
 
-             [seatmap {:row 8
-                       :col 12
+             [seatmap {:nrow 8
+                       :ncolumn 12
                        :reserved-seat [1 5 8 10 23]
                        :your-seat @your-seat
                        :on-click-fn #(swap! your-seat conj %)
