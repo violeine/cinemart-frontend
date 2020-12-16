@@ -59,7 +59,6 @@
 (rf/reg-event-db
  ::success
  (fn-traced [db [_ k result]]
-            (print result)
             (-> db
                 (assoc k (:response result)))))
 

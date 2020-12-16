@@ -6,3 +6,8 @@
   ::theater
   (fn-traced [db]
              (:theater db)))
+
+(rf/reg-sub
+  ::schedules
+  (fn-traced [db]
+             (-> db :schedules :all)))
