@@ -4,7 +4,7 @@
             [cinemart.overlay.events :as overlay]
             [cinemart.admin.subs :as sub]
             [cinemart.admin.events :as admin-ev]
-            [cinemart.config :refer [json-string]]))
+            [cinemart.config :refer [json-string to-vn-time]]))
 
 (defn dashboard
   [{:keys [type arr order update-btn]} create-btn]
@@ -30,9 +30,7 @@
            (for [col order]
              [:td {:key (random-uuid)}
               (if (= col :created_at)
-                (.toLocaleString
-                 (new js/Date (get item col))
-                 "vi-VN")
+                (to-vn-time (get item col))
                 (get item col))])
            [:td.flex
             [:button.mr-2

@@ -15,6 +15,20 @@
                   :alt "re-frame"
                   :href "https://day8.github.io/re-frame/"}])
 
+(def alphabet (map char (range 97 123)))
+
+(defn to-readable-seat
+  [n r ]
+  (if (= (mod n r) 0)
+    (str
+      (nth alphabet (- (quot n r) 1))
+      r
+      )
+    (str
+      (nth alphabet (quot n r))
+      (mod n r))))
+
+
 ;;TODO change name to tmdb
 (def movie-interceptor
   (ajax/to-interceptor
@@ -110,4 +124,8 @@
   (.toISOString
     (new js/Date t)))
 
-(iso-time (now))
+(defn to-vn-time [t]
+  (.toLocaleString
+                 (new js/Date t)
+                 "vi-VN"))
+

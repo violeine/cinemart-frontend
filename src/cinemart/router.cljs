@@ -9,6 +9,7 @@
    [cinemart.ticket.events :as ticket-events]
    [cinemart.home.view :refer [home-page]]
    [cinemart.about.view :refer [about-page]]
+   [cinemart.profile.view :refer [profile]]
    [cinemart.admin.view :refer [admin]]
    [cinemart.manager.view :refer [manager]]
    [cinemart.ticket.view :refer [ticket]]
@@ -17,6 +18,7 @@
    [cinemart.notification.events :as noti]
    [cinemart.admin.events :as admin-ev]
    [cinemart.manager.events :as manager-ev]
+   [cinemart.profile.events :as profile-ev]
    [cinemart.auth.signup :refer [signup]]
    [re-frame.core :refer [dispatch]]))
 
@@ -47,8 +49,8 @@
      :hidden true
      :controllers [{:parameters {:path [:id]}
                     :start (fn [params] (dispatch
-                                         [::movie-events/fetch-movie
-                                          (-> params :path :id)]))}]}]
+                                          [::movie-events/fetch-movie
+                                           (-> params :path :id)]))}]}]
    ["ticket/:id"
     {:name ::ticket
      :link-text "ticket"
@@ -56,8 +58,8 @@
      :hidden true
      :controllers [{:parameters {:path [:id]}
                     :start (fn [params] (dispatch
-                                         [::ticket-events/init-ticket
-                                          (-> params :path :id)]))}]}]
+                                          [::ticket-events/init-ticket
+                                           (-> params :path :id)]))}]}]
    ["login"
     {:name      ::login
      :link-text "log in"
@@ -84,16 +86,15 @@
    ["profile"
     {:name      ::profile
      :link-text "profile"
-     :view about-page
+     :view profile
      :auth? true
      :role "user"
      :hidden false
      :controllers
      [{:identity identity
-       :start (fn [match] (dispatch [::auth/guard {:next [::noti/notify {:text "profile"
-                                                                         :type :success}]
+       :start (fn [match] (dispatch [::auth/guard {:next [::profile-ev/init-profile]
                                                    :route-match match}]))
-       :stop  (fn [& params] (js/console.log "Leaving sub-page 1"))}]}]
+       }]}]
    ["admin"
     {:name      ::admin
      :link-text "admin"
@@ -105,7 +106,7 @@
      [{:identity identity
        :start (fn [match] (dispatch [::auth/guard {:next [::admin-ev/init-admin]
                                                    :route-match match}]))
-       :stop  (fn [& params] (js/console.log "Leaving sub-page 1"))}]}]
+       }]}]
    ["manager"
     {:name      ::manager
      :link-text "manager"

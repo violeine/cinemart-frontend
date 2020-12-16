@@ -52,7 +52,7 @@
  (fn-traced [{:keys [db]} _]
             (println (.includes "Token invalid" "invalid"))
             (let [http-req {:method :get
-                            :uri "/me"
+                            :uri "/me/invoices"
                             :interceptors [backend-interceptor (token-interceptor
                                                                 (get-in db [:user :token]))]
                             :response-format (ajax/json-response-format

@@ -21,14 +21,13 @@
             (when (not (in? reserved-seat d1))
               (if
                (in? your-seat d1)
-                #(on-delete-fn d1)
-                #(on-click-fn d1)))
+                #(on-delete-fn d1 name-seat)
+                #(on-click-fn d1 name-seat)))
             :class [(cond
-                      (in? reserved-seat d1) "bg-red-300"
+                      (in? reserved-seat d1) "bg-gray-300"
                       (in? your-seat d1) "bg-blue-300"
                       :else "bg-green-200")]}
            [:span.block
             name-seat]
-           [:span.block
-            d1]])])
+           ])])
      (take nrow alphabet))]])
