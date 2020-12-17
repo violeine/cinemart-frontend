@@ -1,6 +1,7 @@
 (ns cinemart.components.forms.admin
   (:require [reagent.core :as r]
-            [cinemart.config :refer [json-string]]))
+            [cinemart.config :refer [json-string]]
+            [cinemart.components.input :refer [input]]))
 
 (defn admin-form
   [{:keys [init-data on-submit-fn theaters type]}]
@@ -21,25 +22,21 @@
         form-title]
        [:form
         {:auto-complete "off"}
-        [:div.mb-3
-         [:label.block.text-gray-700.font-bold.mb-1 {:for "email"}
-          "Email Address:"]
-         [:input#email.border.border-gray-300.rounded.px-3.py-2.w-64.leading-tight.text-gray-700
-          {:type "text"
+        [input {:type "text"
            :name "email"
            :required true
            :value (:mail @values)
            :on-change #(swap! values assoc :mail
                               (-> % .-target .-value))
-           :placeholder "john@doe.com"}]]
-        [:div.mb-6
-         [:label.block.text-gray-700.font-bold.mb-1 {:for "password"}
-          "Password:"]
-         [:input#password.border.border-gray-300.rounded.px-3.py-2.w-64.leading-tight.text-gray-700
-          {:type "password"
+           :placeholder "john@doe.com"}
+         {:title "Email Address:"
+          :class ["block"]}]
+        [input {:type "password"
            :placeholder "password"
            :on-change #(swap! values assoc :password (-> % .-target .-value))
-           :value (:password @values)}]]
+           :value (:password @values)}
+         {:title "Password:"
+          :class ["block"]}]
         (when theaters
           [:select {:value (:theater @values)
                     :on-change #(swap! values assoc :theater

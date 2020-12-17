@@ -1,4 +1,5 @@
 const defaultTheme = require("tailwindcss/defaultTheme");
+const formplugin = require('@tailwindcss/forms');
 module.exports = {
   future: {
     // removeDeprecatedGapUtilities: true,
@@ -13,5 +14,7 @@ module.exports = {
     },
   },
   variants: {},
-  plugins: [],
+  plugins: [
+    formplugin
+  ,],
 };

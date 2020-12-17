@@ -10,3 +10,9 @@
     [:a.flex
      prop
      title]]])
+
+(defn button-outline
+  [prop title]
+  [:a.rounded.border-solid.border-current.border-2.p-2
+   prop
+   title])

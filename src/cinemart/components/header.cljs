@@ -5,6 +5,8 @@
             [reitit.frontend.easy :refer [href]]
             [cinemart.auth.events :as events]
             [cinemart.auth.subs :as auth]
+            [cinemart.components.button :refer [button-outline]]
+
             [cinemart.components.icons :refer [i-film]]))
 
 (defn header
@@ -26,12 +28,15 @@
              :when (and (or (= role-route role) (= auth-route :always))
                         (not hidden))]
          (cond
-           (= route-name ::rt/signup) [:a.mr-2.text-xl.rounded.border-solid.border-gray-500.text-gray-500.border-2.p-2
+           (= route-name ::rt/signup) [button-outline
                                        {:href (href route-name)
                                         :key route-name
-                                        :class (when (= route-name
+                                        :class ["mr-2" "text-xl"
+                                                (if (= route-name
                                                         (-> current-route :data :name))
-                                                 ["text-purple-500" "border-purple-500"])}
+                                                   "text-purple-500"
+                                                   "text-gray-500"
+                                                   )]}
                                        text]
            :else [:a.mr-2.text-xl.text-gray-500 {:class (when (= route-name
                                                                  (-> current-route :data :name))
@@ -40,6 +45,7 @@
                                                  :key route-name}
                   text]))
        (when auth?
-         [:a.mr-2.text-xl.rounded.border-solid.border-gray-500.text-gray-500.border-2.p-2 {:href "#"
-                                                                                           :class "text-red-500"
-                                                                                           :on-click #(rf/dispatch [::events/logout])} "Log out"])]]]))
+         [ button-outline
+          {:href "#"
+           :class ["text-red-500" "text-xl" "mr-2"]
+           :on-click #(rf/dispatch [::events/logout])} "Log out"])]]]))
