@@ -34,3 +34,5 @@
          [:div {:on-click #(rf/dispatch [::events/close])}
           [i-x {:class ["w-4" "absolute" "top-0" "right-0" "mr-1" "mt-1"]}]]
          [component]]])]))
+
+

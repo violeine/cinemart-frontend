@@ -26,6 +26,5 @@
                                                        :ncolumn 12
                                                        :your-seat seats}])}])}
          "You are here"]
-
       )]]))
 

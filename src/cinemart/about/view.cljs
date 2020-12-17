@@ -75,11 +75,12 @@
                                                       :your-seat [27 30 48]}])}])}
         "Seat overlay"]
        [:a.mt-3.py-2.px-3.bg-blue-300.rounded.mr-2
-        {:on-click #(rf/dispatch [::overlay/open {:component
+        {:on-click #(rf/dispatch [::overlay/open {:class ["w-10/12"]
+                                                  :component
                                                   (fn
                                                     []
                                                     [schedule])}])}
-        "Seat overlay"]]
+        "Form seat overlay"]]
       [:div
        (when http-result
          [:pre.bg-green-300.text-black (json-string http-result)])
