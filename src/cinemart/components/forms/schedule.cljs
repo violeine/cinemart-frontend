@@ -46,7 +46,7 @@
              :class [ "w-24" "inline-block"]
              } ]]
           ]
-         [:div.flex.mb-3
+         [:div.flex
           [:div.flex
            {:class ["w-1/2"]}
            [:div.mr-2

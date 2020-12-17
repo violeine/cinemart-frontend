@@ -38,7 +38,7 @@
       (case @btn-state
         :users [dashboard {:type :users
                            :arr users
-                           :order [:id :mail :fullname :dob :username :created_at]
+                           :order [:id :mail :fullname :username :created_at]
                            :update-btn (fn [prop]
                                          [user-form prop])}
                 [:a.text-md.px-2.py-2.block

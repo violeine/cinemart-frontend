@@ -1,16 +1,17 @@
 (ns cinemart.components.forms.user
-  (:require [reagent.core :as r]))
+  (:require [reagent.core :as r]
+            [cinemart.components.input :refer [input submit]]))
 
 (defn user-form
   [{:keys [init-data on-submit-fn]}]
   (let [values (r/atom
-                (merge
-                 {:mail ""
-                  :password nil
-                  :username "john"
-                  :dob "1/1/1970"
-                  :fullname "John Doe"}
-                 init-data))
+                 (merge
+                   {:mail ""
+                    :password ""
+                    :username ""
+                    :dob "2011-10-05T14:48:00.000Z"
+                    :fullname ""}
+                   init-data))
         form-title (if init-data
                      "Update Users"
                      "Create Users")]
@@ -20,24 +21,47 @@
         form-title]
        [:form
         [:div.mb-3
-         [:label.block.text-gray-700.font-bold.mb-1 {:for "email"}
-          "Email Address:"]
-         [:input#email.border.border-gray-300.rounded.px-3.py-2.w-64.leading-tight.text-gray-700
-          {:type "text"
-           :name "email"
-           :required true
-           :value (:mail @values)
-           :on-change #(swap! values assoc :mail (-> % .-target .-value))
-           :placeholder "john@doe.com"}]]
+         [input {:type "text"
+                 :name "email"
+                 :required true
+                 :value (:mail @values)
+                 :on-change #(swap! values assoc :mail (-> % .-target .-value))
+                 :placeholder "john@doe.com"}
+          {:title "Email Address:"
+           :class ["block"]}]
+         ]
+        [:div.mb-3
+         [input {:type "text"
+                 :name "username"
+                 :required true
+                 :value (:username @values)
+                 :on-change #(swap! values assoc :username (-> % .-target .-value))
+                 :placeholder "johndoe"}
+          {:title "Username:"
+           :class ["block"]}]
+         ]
+        [:div.mb-3
+         [input {:type "text"
+                 :name "fullname"
+                 :required true
+                 :value (:fullname @values)
+                 :on-change #(swap! values assoc :fullname (-> % .-target .-value))
+                 :placeholder "johndoe"}
+          {:title "Full name:"
+           :class ["block"]}]
+         ]
         [:div.mb-6
-         [:label.block.text-gray-700.font-bold.mb-1 {:for "password"}
-          "Password:"]
-         [:input#password.border.border-gray-300.rounded.px-3.py-2.w-64.leading-tight.text-gray-700
+         [input
           {:type "password"
            :placeholder "password"
            :on-change #(swap! values assoc :password (-> % .-target .-value))
-           :value (:password @values)}]]
+           :value (:password @values)}
+          {:title "Password:"
+           :class ["block"]}]
+         ]
         [:div.mb-3
-         [:button.w-full.bg-blue-300.py-2.rounded-lg.shadow-lg.mb-2.text-gray-100.font-bold.focus:outline-none.focus:shadow-outline.hover:bg-blue-400
-          {:on-click (on-submit-fn @values)}
-          form-title]]]])))
+         [submit
+          {:class ["w-full" "bg-blue-300" "hover:bg-blue-400" "text-gray-100"]
+           :on-click (on-submit-fn @values)}
+          form-title]
+         ]]])))

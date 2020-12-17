@@ -16,3 +16,12 @@
   [:a.rounded.border-solid.border-current.border-2.p-2
    prop
    title])
+
+
+(defn button-n
+  [prop title]
+  [:a
+   prop
+   title])
+
+
