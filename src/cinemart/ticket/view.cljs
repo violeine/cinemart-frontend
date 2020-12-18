@@ -34,7 +34,7 @@
               {:src (image-link [:backdrop :lg] backdrop_path)
                :style {:filter "brightness(50%)"}}]]
             [:div.bg-yellow-200.text-black.ml-8
-             {:class ["w-10/12"]}
+             {:class ["xl:w-10/12 w-9/12"]}
              [:select
               {:on-change #(rf/dispatch [::ticket-ev/get-schedules (-> % .-target .-value) id])}
               [:option {:selected true

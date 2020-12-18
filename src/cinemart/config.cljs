@@ -113,7 +113,9 @@
   []
   (let [n (new js/Date)
         pad #(if (< % 10 ) (str 0 %) %)]
-    (str (.getFullYear n) "-" (.getMonth n) "-" (.getDate n)
+    (str (.getFullYear n) "-"
+         (+
+          (.getMonth n) 1) "-" (.getDate n)
          "T"
          (pad (.getHours n))
          ":"

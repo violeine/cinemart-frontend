@@ -10,12 +10,12 @@
    [:div.inline-block
     (map-indexed
      (fn [idx itm]
-       [:div.flex.mb-2.text-black
+       [:div.flex.mb-2.text-black.justify-between
         {:key idx}
         (for [c (range 1 (inc ncolumn))
               :let [d1 (+ (* idx ncolumn) c)
                     name-seat (.toUpperCase (str itm c))]]
-          [:div.w-16.h-16.mr-2.text-center
+          [:div.mr-2.text-center.lg:w-10.lg:h-10.w-auto.xl:w-16.xl:h-16
            {:key c
             :on-click
             (when (not (in? reserved-seat d1))
