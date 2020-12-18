@@ -68,8 +68,7 @@
      :hidden false
      :controllers
      [{:identity identity
-       :start (fn [match] (dispatch [::auth/guard {:next [::noti/notify {:text "login"
-                                                                         :type :success}]
+       :start (fn [match] (dispatch [::auth/guard {:next []
                                                    :route-match match}]))
        :stop  (fn [& params] (js/console.log "Leaving sub-page login"))}]}]
    ["signup"
@@ -80,8 +79,7 @@
      :hidden false
      :controllers
      [{:identity identity
-       :start (fn [match] (dispatch [::auth/guard {:next [::noti/notify {:text "signup"
-                                                                         :type :success}]
+       :start (fn [match] (dispatch [::auth/guard {:next []
                                                    :route-match match}]))}]}]
    ["profile"
     {:name      ::profile

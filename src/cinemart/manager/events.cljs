@@ -94,10 +94,15 @@
                              :format (ajax/json-request-format)
                              :response-format (ajax/json-response-format {:keywords? true})
                              :interceptors [backend-interceptor (token-interceptor token)]
-                             ;;TODO do this
                              :on-success [::create-success]
                              :on-failure [:cinemart.admin.events/crud-failure]
                              }})))
+
+(rf/reg-event-fx
+  ::create-success
+  (fn-traced [_ _]
+             {:fx [[:dispatch [::overlay/close]]
+                   [:dispatch [::noti/notify {:text "Create Success"}]]]}))
 
 (rf/reg-event-fx
  ::update-success

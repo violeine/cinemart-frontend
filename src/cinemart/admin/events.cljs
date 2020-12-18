@@ -45,9 +45,7 @@
                         :on-success [::success :users]
                         :on-failure [::failure]}]]
               {:http-xhrio req
-               :db (assoc db :prev-req req)
-               :fx [[:dispatch [::noti/notify {:text "admin"
-                                               :type :success}]]]})))
+               :db (assoc db :prev-req req)})))
 
 (rf/reg-event-fx
  ::init-admin
@@ -74,7 +72,6 @@
  ::create
  (fn-traced [{:keys [db]} [_ k payload]]
             (let [token (get-in db [:user :token])]
-              (println payload)
               {:http-xhrio {:method :post
                             :uri  (get link k)
                             :params payload

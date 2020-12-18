@@ -31,7 +31,7 @@
              ]]
         [:div.flex
          {:key id}
-         [:img {:src (image-link [:poster :xsm] movie_poster_path)}]
+         [:img.w-48 {:src movie_poster_path}]
          [:span.text-white.mr-2 movie_title]
          [:span.text-white.mr-2 max-seats]
          [:span.text-white.mr-2 price]

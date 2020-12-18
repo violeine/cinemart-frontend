@@ -81,7 +81,6 @@
 
 (reg-event-fx
  ::login-failure
- ;;TODO noti it's up
  (fn-traced [{:keys [db]} [_ result]]
             (let [status (:status result)
                   response (get-in result [:response :error] "Something very wrong happened!")
@@ -90,7 +89,6 @@
                :fx [[:dispatch [::noti/notify {:text response
                                                :type :warning}]]]})))
 
-;; TODO implement refresh mechanism herre
 (reg-event-fx
  ::api-failure
  (fn-traced [{:keys [db]} [_ result]]
