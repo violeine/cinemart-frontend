@@ -68,6 +68,11 @@
             (assoc db :http-result result)))
 
 (rf/reg-event-db
+  ::insert
+  (fn-traced [db [_ k data]]
+            (assoc-in db k data)))
+
+(rf/reg-event-db
  ::bad-http-result
  (fn-traced [db [_ result]]
             (assoc db :http-failure result)))

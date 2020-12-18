@@ -28,6 +28,39 @@
                           :interceptors [backend-interceptor]
                           :on-success [::login-success]
                           :on-failure [::login-failure]}}))
+(reg-event-fx
+  ::get-me
+  (fn-traced [{:keys [db]} [_ payload]]
+             (let [token (get-in db [:user :token])]
+               {:http-xhrio {:method :get
+                             :uri  "/me"
+                             :params payload
+                             :format (ajax/json-request-format)
+                             :response-format (ajax/json-response-format {:keywords? true})
+                             :interceptors [backend-interceptor (token-interceptor token)]
+                             :on-success [::me-success]
+                             :on-failure [::api-failure]}})))
+(reg-event-fx
+  ::update-me
+  (fn-traced [{:keys [db]} [_ payload]]
+             (let [token (get-in db [:user :token])
+                   pl    (if (nil? (:password payload))
+                           (dissoc payload :password)
+                           payload)]
+               {:http-xhrio {:method :put
+                             :uri  "/me"
+                             :params pl
+                             :format (ajax/json-request-format)
+                             :response-format (ajax/json-response-format {:keywords? true})
+                             :interceptors [backend-interceptor (token-interceptor token)]
+                             :on-success [::me-success]
+                             :on-failure [::api-failure]}})))
+(reg-event-db
+  ::me-success
+  (fn-traced [db [_ result]]
+             (let [old (:user db)
+                   new-me (merge old (:response result))]
+               (assoc db :user new-me))))
 
 (reg-event-fx
  ::login-success

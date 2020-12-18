@@ -94,6 +94,7 @@
                              :format (ajax/json-request-format)
                              :response-format (ajax/json-response-format {:keywords? true})
                              :interceptors [backend-interceptor (token-interceptor token)]
+                             ;;TODO do this
                              :on-success [::create-success]
                              :on-failure [:cinemart.admin.events/crud-failure]
                              }})))

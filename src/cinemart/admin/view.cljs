@@ -12,30 +12,40 @@
             [cinemart.config :refer [json-string]]))
 (def btn-state (r/atom :admins))
 
-(def arr [[:admins "Admin"]
+(def arr [[:me "Me"]
+          [:admins "Admin"]
           [:theaters "Theater"]
           [:users "User"]
           [:managers "Manager"]])
 
 (defn admin []
-  (let [{:keys [theaters admins users managers] :as admin} @(rf/subscribe [::sub/admin])]
+  (let [{:keys [theaters admins users managers] :as admin} @(rf/subscribe [::sub/admin])
+        me @(rf/subscribe [:cinemart.auth.subs/me])]
     [container {:classes ["flex" "flex-col"]}
      [:<>
       [:h2.text-3xl.ml-6.mb-16 "admin panel"]
       [:div.flex.p-2
-
        (doall
-        (for [btn arr]
-          [:a.p-2.mr-2 {:key (first btn)
-                        :on-click (fn []
-                                    (rf/dispatch [::admin-ev/get @btn-state])
-                                    (reset! btn-state (first btn)))
-                        :class [(if (= (first btn) @btn-state)
-                                  "bg-indigo-300"
-                                  "bg-indigo-600")]}
-           (second btn)]))]
+         (for [btn arr]
+           [:a.p-2.mr-2 {:key (first btn)
+                         :on-click (fn []
+                                     (reset! btn-state (first btn))
+                                     (if (= :me @btn-state)
+                                       (rf/dispatch [:cinemart.auth.events/get-me])
+                                       (rf/dispatch [::admin-ev/get @btn-state])))
+                         :class [(if (= (first btn) @btn-state)
+                                   "bg-indigo-300"
+                                   "bg-indigo-600")]}
+            (second btn)]))]
       ; [:pre.bg-green-300.text-black (json-string admin)]
       (case @btn-state
+        :me [admin-form {:type :admin
+                         :init-data me
+                         :on-submit-fn (fn [payload]
+                                         (fn [e]
+                                           (.preventDefault e)
+                                           (rf/dispatch
+                                             [:cinemart.auth.events/update-me payload])))}]
         :users [dashboard {:type :users
                            :arr users
                            :order [:id :mail :fullname :username :created_at]
@@ -43,14 +53,15 @@
                                          [user-form prop])}
                 [:a.text-md.px-2.py-2.block
                  {:on-click #(rf/dispatch
-                              [::overlay/open
-                               {:component (fn []
-                                             [user-form
-                                              {:on-submit-fn (fn [payload]
-                                                               (fn [e]
-                                                                 (.preventDefault e)
-                                                                 (rf/dispatch
-                                                                  [::admin-ev/create :users payload])))}])}])}
+                               [::overlay/open
+                                {:component (fn []
+                                              [user-form
+                                               {:on-submit-fn
+                                                (fn [payload]
+                                                  (fn [e]
+                                                    (.preventDefault e)
+                                                    (rf/dispatch
+                                                      [::admin-ev/create :users payload])))}])}])}
                  "Create Users"]]
         :admins [dashboard {:type :admins
                             :arr admins
@@ -59,15 +70,15 @@
                                           [admin-form prop])}
                  [:a.bg-indigo-600.text-md.px-2.py-2
                   {:on-click #(rf/dispatch
-                               [::overlay/open
-                                {:component (fn []
-                                              [admin-form
-                                               {:type :admin
-                                                :on-submit-fn (fn [payload]
-                                                                (fn [e]
-                                                                  (.preventDefault e)
-                                                                  (rf/dispatch
-                                                                   [::admin-ev/create :admins payload])))}])}])}
+                                [::overlay/open
+                                 {:component (fn []
+                                               [admin-form
+                                                {:type :admin
+                                                 :on-submit-fn (fn [payload]
+                                                                 (fn [e]
+                                                                   (.preventDefault e)
+                                                                   (rf/dispatch
+                                                                     [::admin-ev/create :admins payload])))}])}])}
                   "Create Admins"]]
         :theaters [dashboard {:type :theaters
                               :arr theaters
@@ -76,16 +87,16 @@
                               :order [:id  :name :address :created_at]}
                    [:a.bg-indigo-600.text-md.px-2.py-2
                     {:on-click #(rf/dispatch
-                                 [::overlay/open
-                                  {:component (fn []
-                                                [theater-form
-                                                 {:init-data {:manager {:mail ""
-                                                                        :password ""}}
-                                                  :on-submit-fn (fn [payload]
-                                                                  (fn [e]
-                                                                    (.preventDefault e)
-                                                                    (rf/dispatch
-                                                                     [::admin-ev/create-theaters payload])))}])}])}
+                                  [::overlay/open
+                                   {:component (fn []
+                                                 [theater-form
+                                                  {:init-data {:manager {:mail ""
+                                                                         :password ""}}
+                                                   :on-submit-fn (fn [payload]
+                                                                   (fn [e]
+                                                                     (.preventDefault e)
+                                                                     (rf/dispatch
+                                                                       [::admin-ev/create-theaters payload])))}])}])}
                     "Create Theater"]]
         :managers [dashboard {:type :managers
                               :arr managers
@@ -94,16 +105,16 @@
                               :order [:id :mail :theater_name :created_at]}
                    [:a.bg-indigo-600.text-md.px-2.py-2
                     {:on-click #(rf/dispatch
-                                 [::overlay/open
-                                  {:component (fn []
-                                                [admin-form
-                                                 {:type :managers
-                                                  :theaters theaters
-                                                  :on-submit-fn (fn [payload]
-                                                                  (fn [e]
-                                                                    (.preventDefault e)
-                                                                    (rf/dispatch
-                                                                     [::admin-ev/create :managers payload])))}])}])}
+                                  [::overlay/open
+                                   {:component (fn []
+                                                 [admin-form
+                                                  {:type :managers
+                                                   :theaters theaters
+                                                   :on-submit-fn (fn [payload]
+                                                                   (fn [e]
+                                                                     (.preventDefault e)
+                                                                     (rf/dispatch
+                                                                       [::admin-ev/create :managers payload])))}])}])}
                     "Create Manager"]])]]))
 
 

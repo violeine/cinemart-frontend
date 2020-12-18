@@ -7,12 +7,14 @@
             [cinemart.overlay.events :as overlay]
             [cinemart.components.seatmap :refer [seatmap]]
             [cinemart.components.forms.theater :refer [theater-form]]
+            [cinemart.components.forms.admin :refer [admin-form]]
             [cinemart.manager.subs :as sub]
             [cinemart.config :refer [json-string to-vn-time image-link]]))
 
 (defn manager []
   (let [theater-data @(rf/subscribe [::sub/theater])
-        schedules @(rf/subscribe [::sub/schedules])]
+        schedules @(rf/subscribe [::sub/schedules])
+        me @(rf/subscribe [:cinemart.auth.subs/me])]
     [container {:classes ["flex" "flex-col"]}
      [:<>
       [:h2.text-3xl.ml-6.mb-16 "managers panel"]
@@ -55,7 +57,14 @@
                                        (.preventDefault e)
                                        (rf/dispatch [::manager-ev/update :theater
                                                      payload
-                                                     {:id (:id theater-data)}])))}]]]))
+                                                     {:id (:id theater-data)}])))}]
+      [admin-form {:type :manager
+                   :init-data me
+                   :on-submit-fn (fn [payload]
+                                   (fn [e]
+                                     (.preventDefault e)
+                                     (rf/dispatch
+                                       [:cinemart.auth.events/update-me payload])))}]]]))
 
 
 

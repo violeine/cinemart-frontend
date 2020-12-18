@@ -11,3 +11,18 @@
  ::auth?
  (fn-traced [db]
             (:auth? db)))
+
+(rf/reg-sub
+  ::me
+  (fn-traced [db]
+             (->
+               (:user db)
+               (dissoc :id)
+               (dissoc :theater_address)
+               (dissoc :theater_name)
+               (dissoc :theater_id)
+               (dissoc :role)
+               (dissoc :refresh-token)
+               (dissoc :token)
+               (dissoc :dob)
+               (dissoc :created_at))))
