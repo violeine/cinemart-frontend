@@ -17,6 +17,7 @@
    [cinemart.auth.login :refer [login]]
    [cinemart.notification.events :as noti]
    [cinemart.admin.events :as admin-ev]
+   [cinemart.home.events :as home-ev]
    [cinemart.manager.events :as manager-ev]
    [cinemart.profile.events :as profile-ev]
    [cinemart.auth.signup :refer [signup]]
@@ -32,7 +33,7 @@
      :controllers
      [{;; Do whatever initialization needed for home page
        ;; I.e (re-frame/dispatch [::events/load-something-with-ajax])
-       :start (fn [& params] (js/console.log "Entering home page"))
+       :start (fn [& params] (dispatch [::home-ev/init-home]))
        ;; Teardown can be done here.
        :stop  (fn [& params] (js/console.log "Leaving home page"))}]}]
    ["about" {:name      ::about
