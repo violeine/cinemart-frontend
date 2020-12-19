@@ -22,7 +22,4 @@
           [:div.absolute.bottom-0.left-0.inline-flex.flex-col
            [:div
             [:span.bg-indigo-400.inline-block.m-0.px-1.font-bold title]]
-           [:div
-            [:span.bg-indigo-400.inline-block.m-0.px-1.text-indigo-200 "as"]]
-           [:div
-            [:span.bg-indigo-400.inline-block.m-0.px-1 runtime]]]]]])]])
+           ]]]])]])

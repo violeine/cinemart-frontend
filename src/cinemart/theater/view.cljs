@@ -15,10 +15,17 @@
 (defn theater
   []
   (let [theater-movie @(rf/subscribe [:cinemart.subs/get-in
-                                      [:theater :movies :response :all]])]
+                                      [:theater :movies :response :all]])
+        {:keys [name address]} @(rf/subscribe [:cinemart.subs/get-in
+                                               [:theater :response]])]
     [container
      {:classes ["flex" "flex-col" "px-5"]}
-     [:<>
+     [:div.text-white
+      [:div.mb-6.flex.items-baseline
+       [:p.text-3xl.font-bold.text-indigo-500.mr-auto name]
+       [:p.text-lg.text-indigo-300.mr-8 address]]
+      [:div
+       [:h3.text-lg.text-indigo-200.mb-2"In this theater"]]
       [search theater-movie]
       ]]))
 

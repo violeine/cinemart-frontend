@@ -11,13 +11,21 @@
 (rf/reg-event-fx
   ::fetch-theater
   (fn-traced [_ [_ id]]
-             {:http-xhrio {:method :get
-                            :uri (str "/theaters/" id "/movies")
-                            :response-format (ajax/json-response-format
-                                               {:keywords? true})
-                            :interceptors [backend-interceptor]
-                            :on-success [:cinemart.events/insert [:theater :movies]]
-                            :on-failure [:cinemart.auth.events/api-failure]}}))
+             {:http-xhrio
+              [{:method :get
+                :uri (str "/theaters/" id )
+                :response-format (ajax/json-response-format
+                                   {:keywords? true})
+                :interceptors [backend-interceptor]
+                :on-success [:cinemart.events/insert [:theater]]
+                :on-failure [:cinemart.auth.events/api-failure]}
+               {:method :get
+                :uri (str "/theaters/" id "/movies")
+                :response-format (ajax/json-response-format
+                                   {:keywords? true})
+                :interceptors [backend-interceptor]
+                :on-success [:cinemart.events/insert [:theater :movies]]
+                :on-failure [:cinemart.auth.events/api-failure]}]}))
 
 
 

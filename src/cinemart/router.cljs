@@ -65,7 +65,7 @@
                                            (-> params :path :id)]))}]}]
    ["login"
     {:name      ::login
-     :link-text "log in"
+     :link-text "login"
      :view login
      :auth? false
      :hidden false

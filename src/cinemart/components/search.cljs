@@ -10,6 +10,7 @@
       [:<>
        [input {:type "text"
                :class ["w-full" "px-5"]
+               :placeholder "type to search"
                :on-change (fn [e]
                             (let [value (-> e .-target .-value)
                                   new-list (filter
@@ -21,8 +22,8 @@
                               ))}]
        (if
          (not
-         (empty?
-           @filtered-list))
+           (empty?
+             @filtered-list))
          (for [l @filtered-list
                :let [{:keys [id]} l]]
            ^{:key id}
