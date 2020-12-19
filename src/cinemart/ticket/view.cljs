@@ -30,7 +30,7 @@
               [:p.text-lg.text-gray-200.mb-4.ml-2 runtime [:span " mins"]]
               [:p.text-md.text-gray-100
                {:class ["w-1/2"]} overview]]
-             [:img.object-cover.w-full.object-center.shadow-lg.h-96.relative.rounded-lg.mb-8
+             [:img.object-cover.w-full.object-center.shadow-lg.h-96.rounded-lg.mb-8
               {:src (image-link [:backdrop :lg] backdrop_path)
                :style {:filter "brightness(50%)"}}]]
             [:div.bg-yellow-200.text-black.ml-8

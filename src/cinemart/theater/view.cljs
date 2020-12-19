@@ -8,7 +8,7 @@
             [cinemart.components.container :refer [container]]
             [cinemart.components.review :refer [review]]
             [cinemart.components.forms.schedule :refer [schedule]]
-            [cinemart.components.moviediv :refer [movie-div]]
+            [cinemart.components.search :refer [search]]
             [cinemart.subs]
             [cinemart.config :refer [image-link json-string]]))
 
@@ -17,11 +17,10 @@
   (let [theater-movie @(rf/subscribe [:cinemart.subs/get-in
                                       [:theater :movies :response :all]])]
     [container
-     {:classes []}
+     {:classes ["flex" "flex-col" "px-5"]}
      [:<>
-      (for [movie theater-movie]
-        [movie-div movie])
-      [:pre (json-string theater-movie)]]]))
+      [search theater-movie]
+      ]]))
 
 
 
