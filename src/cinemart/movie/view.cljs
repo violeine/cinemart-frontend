@@ -83,64 +83,64 @@
                                                              :poster_path (image-link [:poster :lg] poster_path)
                                                              :backdrop_path (image-link [:backdrop :lg] backdrop_path)}])}
             "create movie"]]]]]]
-      ;; Casts & optional
-      ; [:div.px-3.py-5
-      ;  [:div.text-indigo-300.text-2xl.ml-8 "Casts"]
-      ;  [:div.flex.overflow-x-scroll.overflow-y-visible.mx-8.pt-3.pb-1.text-gray-700.track-current
-      ;   (for [dv cast
-      ;         :let [{:keys [character name profile_path id]} dv]
-      ;         :when (not (nil? profile_path))]
-      ;     [:div.w-full.mr-5
-      ;      {:key id}
-      ;      [card
-      ;       "text-indigo-400"
-      ;       [:a.relative.text-indigo-100.text-lg.block
-      ;        {:href (str "https://www.themoviedb.org/person/"
-      ;                    (apply str
-      ;                           (interpose
-      ;                             "-"
-      ;                             (apply conj [id] (s/split name  " ")))))
-      ;         :target "_blank"}
-      ;        [:img.max-w-lg {:src (image-link [:profile :md] profile_path)}]
-      ;        [:div.absolute.bottom-0.left-0.inline-flex.flex-col
-      ;         [:div
-      ;          [:span.bg-indigo-400.inline-block.m-0.px-1.font-bold name]]
-      ;         [:div
-      ;          [:span.bg-indigo-400.inline-block.m-0.px-1.text-indigo-200 "as"]]
-      ;         [:div
-      ;          [:span.bg-indigo-400.inline-block.m-0.px-1 character]]]]]])]]
-      ;;Media and Reviews
-      ; [:div.md:flex.w-full
-      ;  [:div.px-1.py-5
-      ;   {:class ["w-full"
-      ;            "lg:w-3/5"]}
-      ;   [:div.text-indigo-300.text-2xl.ml-8.mb-4 "Media"]
-      ;   [:div.flex.flex-wrap.ml-8
-      ;    (for [poster (take 12 posters)
-      ;          :let [path (:file_path poster)]]
-      ;      [:div.px-3.pb-3
-      ;       {:class ["w-1/3"]}
-      ;       [card
-      ;        "text-red-400"
-      ;        [:img.w-full {:on-click #((rf/dispatch [::overlay/open
-      ;                                                {:component
-      ;                                                 (fn []
-      ;                                                   [:div.shadow-md
-      ;                                                    [:img
-      ;                                                     {:src (image-link [:poster :og] path)}]])
-      ;                                                 :class ["max-w-md"]}]))
-      ;                      :src
-      ;                      (image-link [:poster :og] path)}]]])]]
-      ;  [:div.pl-8.py-5.pr-5
-      ;   {:class ["w-full"
-      ;            "lg:w-2/5"]}
-      ;   [:div.text-indigo-300.text-2xl.mb-4 "Reviews"]
-      ;   [:div.flex.flex-col
-      ;    (for [rev (take 5 results)
-      ;          :let [{:keys [content author id]} rev]]
-      ;      [:div.mb-3
-      ;       {:key id}
-      ;       [review content author]])]]]
+      ; Casts & optional
+      [:div.px-3.py-5
+       [:div.text-indigo-300.text-2xl.ml-8 "Casts"]
+       [:div.flex.overflow-x-scroll.overflow-y-visible.mx-8.pt-3.pb-1.text-gray-700.track-current
+        (for [dv cast
+              :let [{:keys [character name profile_path id]} dv]
+              :when (not (nil? profile_path))]
+          [:div.w-full.mr-5
+           {:key id}
+           [card
+            "text-indigo-400"
+            [:a.relative.text-indigo-100.text-lg.block
+             {:href (str "https://www.themoviedb.org/person/"
+                         (apply str
+                                (interpose
+                                  "-"
+                                  (apply conj [id] (s/split name  " ")))))
+              :target "_blank"}
+             [:img.max-w-lg {:src (image-link [:profile :md] profile_path)}]
+             [:div.absolute.bottom-0.left-0.inline-flex.flex-col
+              [:div
+               [:span.bg-indigo-400.inline-block.m-0.px-1.font-bold name]]
+              [:div
+               [:span.bg-indigo-400.inline-block.m-0.px-1.text-indigo-200 "as"]]
+              [:div
+               [:span.bg-indigo-400.inline-block.m-0.px-1 character]]]]]])]]
+      ;Media and Reviews
+      [:div.md:flex.w-full
+       [:div.px-1.py-5
+        {:class ["w-full"
+                 "lg:w-3/5"]}
+        [:div.text-indigo-300.text-2xl.ml-8.mb-4 "Media"]
+        [:div.flex.flex-wrap.ml-8
+         (for [poster (take 12 posters)
+               :let [path (:file_path poster)]]
+           [:div.px-3.pb-3
+            {:class ["w-1/3"]}
+            [card
+             "text-red-400"
+             [:img.w-full {:on-click #((rf/dispatch [::overlay/open
+                                                     {:component
+                                                      (fn []
+                                                        [:div.shadow-md
+                                                         [:img
+                                                          {:src (image-link [:poster :og] path)}]])
+                                                      :class ["max-w-md"]}]))
+                           :src
+                           (image-link [:poster :og] path)}]]])]]
+       [:div.pl-8.py-5.pr-5
+        {:class ["w-full"
+                 "lg:w-2/5"]}
+        [:div.text-indigo-300.text-2xl.mb-4 "Reviews"]
+        [:div.flex.flex-col
+         (for [rev (take 5 results)
+               :let [{:keys [content author id]} rev]]
+           [:div.mb-3
+            {:key id}
+            [review content author]])]]]
 ]]))
 
 

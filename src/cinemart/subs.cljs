@@ -16,3 +16,8 @@
  ::http-failure
  (fn-traced [db]
             (:http-failure db)))
+
+(rf/reg-sub
+  ::get-in
+  (fn-traced [db [_ k]]
+             (get-in db k)))

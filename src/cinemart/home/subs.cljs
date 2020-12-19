@@ -6,3 +6,8 @@
   ::home
   (fn-traced [db]
              (:home db)))
+
+(rf/reg-sub
+  ::get-home
+  (fn-traced [db [_ k]]
+             (get-in db [:home k])))
