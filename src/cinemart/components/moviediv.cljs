@@ -15,7 +15,7 @@
       [:span.mr-6.text-lg (str runtime " mins")]
       (for [genre (interpose "," genres)]
         [:span {:key (random-uuid)} (:name genre ", ")])]
-     [:p.mt-6.text-gray-100 {:class ["lg:w-10/12"
+     [:p.mt-6.text-gray-100.overflow-y-hidden.h-32.overflow-ellipsis {:class ["lg:w-10/12"
                                      "w-full"]} overview]]]
    [:img.object-cover.object-center.rounded-lg.h-64.w-full
     {:style {:filter "brightness(50%)"}

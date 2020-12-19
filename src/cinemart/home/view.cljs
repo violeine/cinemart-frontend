@@ -30,8 +30,8 @@
       [:div
        [:h2.text-3xl.ml-5 "By Genres"]
        (map-indexed
-         (fn [idx {:keys [name]}]
-           [lists name (get-in genres [:movies idx])]
+         (fn [idx {:keys [id name]}]
+           [lists name (get-in genres [:movies idx]) id]
            )
          (:genres genres))]
       [:div

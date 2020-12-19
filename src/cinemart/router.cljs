@@ -12,6 +12,7 @@
    [cinemart.profile.view :refer [profile]]
    [cinemart.admin.view :refer [admin]]
    [cinemart.manager.view :refer [manager]]
+   [cinemart.genres.view :refer [genres]]
    [cinemart.theater.view :refer [theater]]
    [cinemart.ticket.view :refer [ticket]]
    [cinemart.movie.view :refer [movie]]
@@ -20,6 +21,7 @@
    [cinemart.admin.events :as admin-ev]
    [cinemart.home.events :as home-ev]
    [cinemart.manager.events :as manager-ev]
+   [cinemart.genres.events :as genres-ev]
    [cinemart.theater.events :as theater-ev]
    [cinemart.profile.events :as profile-ev]
    [cinemart.auth.signup :refer [signup]]
@@ -120,6 +122,19 @@
                                             [::theater-ev/fetch-theater
                                              (-> params :path :id)]))
                       }]}]
+   ["genres/:id"
+    {:name ::genres
+     :link-text "genres"
+     :view genres
+     :auth? false
+     :hidden true
+     :controllers
+     [{:parameters {:path [:id]}
+       :start (fn [params] (dispatch
+                             [::genres-ev/fetch-genres
+                              (-> params :path :id)]))
+
+       }]}]
    ["manager"
     {:name      ::manager
      :link-text "manager"

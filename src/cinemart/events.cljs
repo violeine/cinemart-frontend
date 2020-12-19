@@ -85,6 +85,11 @@
                 (dissoc :http-failure))))
 
 (rf/reg-event-db
+  ::remove-in
+  (fn-traced [db [_ k]]
+             (dissoc db k)))
+
+(rf/reg-event-db
  ::nothing
  (fn [db _]
    db))
