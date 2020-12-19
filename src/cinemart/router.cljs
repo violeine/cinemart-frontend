@@ -12,6 +12,7 @@
    [cinemart.profile.view :refer [profile]]
    [cinemart.admin.view :refer [admin]]
    [cinemart.manager.view :refer [manager]]
+   [cinemart.theater.view :refer [theater]]
    [cinemart.ticket.view :refer [ticket]]
    [cinemart.movie.view :refer [movie]]
    [cinemart.auth.login :refer [login]]
@@ -19,6 +20,7 @@
    [cinemart.admin.events :as admin-ev]
    [cinemart.home.events :as home-ev]
    [cinemart.manager.events :as manager-ev]
+   [cinemart.theater.events :as theater-ev]
    [cinemart.profile.events :as profile-ev]
    [cinemart.auth.signup :refer [signup]]
    [re-frame.core :refer [dispatch]]))
@@ -106,6 +108,18 @@
        :start (fn [match] (dispatch [::auth/guard {:next [::admin-ev/init-admin]
                                                    :route-match match}]))
        }]}]
+   ["theater/:id"
+    {:name ::theater
+     :link-text "theater"
+     :view theater
+     :auth? false
+     :hidden true
+     :controllers
+     [{:parameters {:path [:id]}
+                      :start (fn [params] (dispatch
+                                            [::theater-ev/fetch-theater
+                                             (-> params :path :id)]))
+                      }]}]
    ["manager"
     {:name      ::manager
      :link-text "manager"
