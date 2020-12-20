@@ -47,14 +47,20 @@
   (fn-traced [{:keys [db]} [_ payload]]
              (let [user-id (get-in db [:user :id])
                    token (get-in db [:user :token])]
-               {:http-xhrio {:method :post
-                             :uri "/me/invoices"
-                             :params (merge payload {:user user-id})
-                             :format (ajax/json-request-format)
-                             :response-format (ajax/json-response-format {:keywords? true})
-                             :interceptors [backend-interceptor (token-interceptor token)]
-                             :on-success [::create-success]
-                             :on-failure [:cinemart.auth.events/api-failure]}}
+               (if token
+                 {:http-xhrio {:method :post
+                               :uri "/me/invoices"
+                               :params (merge payload {:user user-id})
+                               :format (ajax/json-request-format)
+                               :response-format (ajax/json-response-format {:keywords? true})
+                               :interceptors [backend-interceptor (token-interceptor token)]
+                               :on-success [::create-success]
+                               :on-failure [:cinemart.auth.events/api-failure]}}
+                 {:fx [[:dispatch
+                        [:cinemart.events/navigate :cinemart.router/login]]
+                       [:dispatch
+                        [::noti/notify {:text "login first"
+                                        :type :info}]]]})
                )))
 
 (reg-event-fx

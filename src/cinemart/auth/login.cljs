@@ -2,6 +2,7 @@
   (:require [reagent.core :as r]
             [re-frame.core :refer [dispatch]]
             [cinemart.components.container :refer [container]]
+            [reitit.frontend.easy :refer [href]]
             [cinemart.auth.events :as events]))
 
 (defn login
@@ -18,7 +19,7 @@
         [:form
          [:div.mb-3
           [:label.block.text-gray-700.font-bold.mb-1 {:for "mail"}
-           "mail Address:"]
+           "Mail Address:"]
           [:input#mail.border.border-gray-300.rounded.px-3.py-2.w-64.leading-tight.text-gray-700
            {:type "text"
             :name "mail"
@@ -34,14 +35,13 @@
             :placeholder "password"
             :on-change #(swap! values assoc-in [:payload :password] (-> % .-target .-value))
             :value (-> @values :payload :password)}]]
-         [:div.mb-6
-          [:label.block.text-gray-700.font-bold.mb-1 {:for "role"}
-           "Role:"]
-          [:input#role.border.border-gray-300.rounded.px-3.py-2.w-64.leading-tight.text-gray-700
-           {:type "text"
-            :placeholder "role"
-            :on-change #(swap! values assoc :role (-> % .-target .-value))
-            :value (-> @values :role)}]]
+         [:select.rounded.px-5.w-64.text-gray-700.mb-4
+          {:on-change #(swap! values assoc-in [:role] (-> % .-target .-value))}
+          [:option {:value ""} "Users"]
+          [:option {:value "/manager"} "Managers"]
+          [:option {:value "/admin"} "admins"]
+          ]
+
          [:div.mb-3
           [:button.w-full.bg-blue-300.py-2.rounded-lg.shadow-lg.mb-2.text-gray-100.font-bold.focus:outline-none.focus:shadow-outline.hover:bg-blue-400
            {:on-click (fn [e]
@@ -49,7 +49,7 @@
                         (dispatch [::events/login @values]))}
            "Login"]
           [:a.text-sm.text-gray-500
-           {:href "/"}
+           {:href (href :cinemart.router/signup)}
            "Don't have account? Sign Up Now"]]]]])))
 
 

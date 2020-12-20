@@ -19,9 +19,7 @@
         seatname (r/atom [])]
     (fn []
       (let
-        [{:keys [title overview backdrop_path runtime poster_path id]} @sub-movie
-         t @theaters
-         ]
+        [{:keys [title overview backdrop_path runtime poster_path id]} @sub-movie ]
         [container {:classes ["flex" "flex-col"]}
          [:<>
           [:h3.text-3xl.font-bold.pl-4 "ticket"]
@@ -39,33 +37,36 @@
                :style {:filter "brightness(50%)"}}]]
             [:div.text-black.ml-8
              {:class ["xl:w-10/12 w-9/12"]}
-             ^{:key t}
-             [:select.rounded.px-5.w-64
-              {:on-change #(rf/dispatch [::ticket-ev/get-schedules (-> % .-target .-value) id])}
-              [:option {:selected true
-                        :disabled true
-                        :hidden true} "Chose your theater"]
-              (when @theaters
+             (if
+               (not (empty?  @theaters))
+               [:select.rounded.px-5.w-64
+                {:on-change #(rf/dispatch [::ticket-ev/get-schedules (-> % .-target .-value) id])}
+                [:option {:selected true
+                          :disabled true
+                          :hidden true} "Chose your theater"]
                 (for [theater @theaters
                       :let [{:keys [id name]} theater]]
                   [:option {:key id
                             :value id}
-                   name]))]
+                   name])]
+               [:p.text-3xl.text-gray-100.mt-4 "No schedules for this movie yet :("])
              (when @schedules
-               [:div.flex.bg-indigo-400.py-2.mt-4.justify-center
-                (map-indexed (fn [idx {:keys [id time price]}]
-                               (let [local-time (new js/Date time)
-                                     day (nth week-day (.getDay local-time))
-                                     date (str (.getDate local-time) "-" (inc (.getMonth local-time)))]
-                                 [:div.mr-2.bg-indigo-300.rounded.text-center.p-5
-                                  {:key id
-                                   :on-click #( reset! select-schedule (nth @schedules idx))}
-                                  [:div day]
-                                  [:div date]
-                                  [:div (to-vnd price)]
-                                  ]))
-                             (reverse
-                               @schedules))])
+               (if (not (empty? @schedules))
+                 [:div.flex.bg-indigo-400.py-2.mt-4.justify-center
+                  (map-indexed (fn [idx {:keys [id time price]}]
+                                 (let [local-time (new js/Date time)
+                                       day (nth week-day (.getDay local-time))
+                                       date (str (.getDate local-time) "-" (inc (.getMonth local-time)))]
+                                   [:div.mr-2.bg-indigo-300.rounded.text-center.p-5
+                                    {:key id
+                                     :on-click #( reset! select-schedule (nth @schedules idx))}
+                                    [:div day]
+                                    [:div date]
+                                    [:div (to-vnd price)]
+                                    ]))
+                               (reverse
+                                 @schedules))]
+                 [:p.text-3xl.text-gray-100.mt-4 "Sorry, come back later!"]))
 
              (when @select-schedule
                (let [
@@ -102,7 +103,8 @@
               {:src (image-link [:poster :lg] poster_path)}]]
             [:div.flex.mb-2
              [:h2.text-2xl.font-bold.mb-2.mr-auto "Your Ticket"]
-             [:a.p-2.bg-indigo-600.text-white.rounded {:on-click
+             [:button.p-2.bg-indigo-600.text-white.rounded {:disabled (empty?  @your-seat)
+                                                       :on-click
                                                        #(rf/dispatch
                                                           [::ticket-ev/book
                                                            {:booked_seats @your-seat
