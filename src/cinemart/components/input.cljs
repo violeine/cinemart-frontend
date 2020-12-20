@@ -3,7 +3,7 @@
 
 (defn input
   [prop {:keys [title class]}]
-  [:label.block.text-gray-700.mb-3
+  [:label.block.text-gray-700.mb-3.w-full
    [:span.font-bold.mb-1
     {:class class} title]
    [:input.border.border-gray-300.rounded.px-3.py-2.leading-tight.text-gray-700
@@ -21,9 +21,4 @@
    prop
    child
    ])
-(defn option
-  [prop name]
-  [:option.mb-2.border-b.border-black
-   prop
-   name])
 
