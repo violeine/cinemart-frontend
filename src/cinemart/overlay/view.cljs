@@ -15,7 +15,7 @@
       :component "div"
       :className
       (apply str (interpose " "
-                            ["fixed" "w-screen" "h-screen" "top-0" "right-0" "bg-gray-800" " bg-opacity-80"
+                            ["fixed" "z-50" "w-screen" "h-screen" "top-0" "right-0" "bg-gray-800" " bg-opacity-80"
                              (if open "" "hidden")]))}
      (when (not (nil? component))
        [:> CSSTransition
@@ -23,7 +23,7 @@
          :in true
          :appear true
          :timeout 250}
-        [:div.absolute.bg-red-300.p-5
+        [:div.absolute.bg-red-300.p-5.z-50
          {:class
           (apply conj
                  ["top-1/2" "left-1/2" "transform" "-translate-x-50" "-translate-y-50"]

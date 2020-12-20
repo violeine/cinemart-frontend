@@ -1,12 +1,16 @@
 (ns cinemart.components.moviediv
   (:require [cinemart.config :refer [json-string]]
             [re-frame.core :as rf]
+            [cinemart.overlay.events :as overlay]
+            [cinemart.components.button :refer [button-n]]
+            [cinemart.components.seatmap :refer [seatmap]]
+            [cinemart.config :refer [to-vn-time]]
             [reitit.frontend.easy :refer [href]]))
 
 (defn movie-div
   [{:keys [id runtime genres overview poster_path backdrop_path title]}]
   [:div.px-3.mx-5.h-64.mb-4.py-2.relative
-   [:div.absolute.h-60.mr-2.w-full.z-20.my-2.mx-2.flex
+   [:div.absolute.h-60.mr-2.w-full.z-10.my-2.mx-2.flex
     [:img.h-60.rounded.shadow-md {:src poster_path
                                   :on-click #(rf/dispatch [:cinemart.events/navigate :cinemart.router/movie {:id id}])}]
     [:div.ml-16
@@ -19,6 +23,48 @@
                                      "w-full"]} overview]]]
    [:img.object-cover.object-center.rounded-lg.h-64.w-full
     {:style {:filter "brightness(50%)"}
-     :src backdrop_path}]])
+    :src backdrop_path}]])
+
+(defn manager-div
+  [{:keys [movie_id movie_runtime movie_genres
+           movie_overview movie_poster_path
+           movie_backdrop_path movie_title
+           reserved_seats nrow ncolumn time
+           reserved price]}]
+  (let [booked_seat (if (= reserved_seats [nil]) []
+                      reserved_seats)
+        total-seat (* nrow ncolumn)]
+    [:div.px-3.mx-5.h-64.mb-4.py-2.relative
+     [:div.absolute.h-60.mr-2.w-full.z-10.my-2.mx-2.flex
+      [:img.h-60.rounded.shadow-md {:src movie_poster_path
+                                    :on-click #(rf/dispatch
+                                                 [:cinemart.events/navigate
+                                                  :cinemart.router/movie {:id movie_id}])}]
+      [:div.ml-16
+       [:a.text-xl.font-bold.text-white {:href (href :cinemart.router/movie {:id movie_id})} movie_title]
+       [:div.text-white.mt-2
+        [:span.mr-6.text-lg (str movie_runtime " mins")]
+        (for [movie_genre (interpose "," movie_genres)]
+          [:span {:key (random-uuid)} (:name movie_genre ", ")])]
+       [:p.text-xl "Show time:"
+        [:span.ml-2
+        (to-vn-time time)]]
+       [:p.text-lg.mt-2 "Ticket price:" [:span.ml-2 price]]
+       [:p.mt-2 "Reserved seats:"
+        [:span.ml-2
+         reserved [:span "/"] total-seat]]
+       [button-n {:class ["bg-indigo-400" "mt-8" "inline-block"]
+                  :on-click #(rf/dispatch
+                               [::overlay/open
+                                {:component
+                                 (fn []
+                                   [seatmap
+                                    {:nrow nrow
+                                     :ncolumn ncolumn
+                                     :reserved-seat booked_seat}])}])}
+        "show booked seat"]]]
+     [:img.object-cover.object-center.rounded-lg.h-64.w-full
+      {:style {:filter "brightness(50%)"}
+       :src movie_backdrop_path}]]))
 
 

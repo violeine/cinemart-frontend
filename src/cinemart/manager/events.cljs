@@ -17,8 +17,7 @@
  ::fetch-manager
  (fn-traced [{:keys [db]} _]
             (let [token (get-in db [:user :token])
-                  theater-id (first
-                               (get-in db [:user :theater_id]))
+                  theater-id (get-in db [:user :theater_id])
                   req [{:method :get
                         :uri (str "/theaters/" theater-id)
                         :response-format (ajax/json-response-format
@@ -86,8 +85,7 @@
   ::create-schedule
   (fn-traced [{:keys [db]} [_ payload]]
              (let [token (get-in db [:user :token])
-                   theater (first
-                             (get-in db [:user :theater_id]))]
+                   theater (get-in db [:user :theater_id])]
                {:http-xhrio {:method :post
                              :uri (str "/theaters/" theater "/schedules")
                              :params payload

@@ -121,6 +121,15 @@
          ":"
          (pad (.getMinutes n)))))
 
+(defn today
+  []
+  (let [n (new js/Date)
+        pad #(if (< % 10 ) (str 0 %) %)]
+    (str (.getFullYear n) "-"
+         (+
+          (.getMonth n) 1) "-" (.getDate n)
+         "T00:00:000Z")))
+
 (defn iso-time
   [t]
   (.toISOString

@@ -13,7 +13,7 @@
         {:href (href :cinemart.router/genres {:id b})}
         "See more"]]
       [:div.text-indigo-300.text-2xl.ml-8 n])
-    [:div.flex.overflow-x-scroll.overflow-y-visible.mx-8.pt-3.pb-1.text-gray-700.track-current
+    [:div.flex.overflow-x-auto.overflow-y-visible.mx-8.pt-3.pb-1.text-gray-700
      (for [dv l
            :let [{:keys [runtime title poster_path id]} dv]]
 

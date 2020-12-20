@@ -8,8 +8,9 @@
             [cinemart.components.seatmap :refer [seatmap]]
             [cinemart.components.forms.theater :refer [theater-form]]
             [cinemart.components.forms.admin :refer [admin-form]]
+            [cinemart.components.moviediv :refer [manager-div]]
             [cinemart.manager.subs :as sub]
-            [cinemart.config :refer [json-string to-vn-time image-link]]))
+            [cinemart.config :refer [json-string today to-vn-time image-link]]))
 
 (defn manager []
   (let [theater-data @(rf/subscribe [::sub/theater])
@@ -21,33 +22,16 @@
       ; [:pre (json-string schedules)]
       (for [schedule schedules
             :let
-            [{:keys
-              [ reserved_seats nrow ncolumn time
-               movie_title movie_poster_path id price ]}
-             schedule
+            [{:keys [reserved_seats nrow ncolumn time
+                     movie_title movie_poster_path id price]} schedule
              max-seats (* nrow ncolumn)
              booked_seat (if (= reserved_seats [nil]) []
                            reserved_seats)
              ]]
-        [:div.flex
-         {:key id}
-         [:img.w-48 {:src movie_poster_path}]
-         [:span.text-white.mr-2 movie_title]
-         [:span.text-white.mr-2 max-seats]
-         [:span.text-white.mr-2 price]
-         [:span.text-white.mr-2 (to-vn-time time)]
-         [:div
-          [:a.p-2.bg-green-300 {:on-click
-                                #(rf/dispatch
-                                   [::overlay/open
-                                    {:component
-                                     (fn []
-                                       [seatmap
-                                        {:nrow nrow
-                                         :ncolumn ncolumn
-                                         :reserved-seat booked_seat
-                                         }])}])}
-           "view booked seats"]]])
+        ^{:key id}
+        [manager-div schedule]
+        )
+      ^{:key theater-data}
       [theater-form {:init-data {:theater (-> theater-data
                                               (dissoc :id)
                                               (dissoc :created_at)

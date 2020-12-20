@@ -20,7 +20,7 @@
 
 (defn button-n
   [prop title]
-  [:a
+  [:a.rounded.px-5.py-2
    prop
    title])
 

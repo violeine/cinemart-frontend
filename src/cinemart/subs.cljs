@@ -21,8 +21,3 @@
   ::get-in
   (fn-traced [db [_ k]]
              (get-in db k)))
-
-(rf/reg-sub
-  ::remove-in
-  (fn-traced [db [_ k]]
-             (dissoc db k)))
