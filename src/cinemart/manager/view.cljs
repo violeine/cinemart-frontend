@@ -14,7 +14,7 @@
             [cinemart.config :refer [json-string today to-vn-time image-link]]))
 
 (def tab
-  [[:schedule "Your Schedule"]
+  [[:schedule "Your Schedules"]
    [:theater "Update Theater"]
    [:me "Update Profile"]])
 

@@ -20,6 +20,7 @@
    [cinemart.notification.events :as noti]
    [cinemart.admin.events :as admin-ev]
    [cinemart.home.events :as home-ev]
+   [cinemart.ticket.view :refer [select-schedule]]
    [cinemart.manager.events :as manager-ev]
    [cinemart.genres.events :as genres-ev]
    [cinemart.theater.events :as theater-ev]
@@ -64,7 +65,10 @@
      :controllers [{:parameters {:path [:id]}
                     :start (fn [params] (dispatch
                                           [::ticket-events/init-ticket
-                                           (-> params :path :id)]))}]}]
+                                           (-> params :path :id)]))
+                    :stop (fn [params]
+                            (reset! select-schedule nil)
+                            (dispatch [::ticket-events/remove-ticket]))}]}]
    ["login"
     {:name      ::login
      :link-text "login"

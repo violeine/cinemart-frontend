@@ -20,14 +20,14 @@
                         :response-format (ajax/json-response-format
                                            {:keywords? true})
                         :interceptors [backend-interceptor (token-interceptor token)]
-                        :on-success [::success :ticket]
+                        :on-success [::success [:users :ticket]]
                         :on-failure [::failure]}
                        {:method :get
                         :uri "/me"
                         :response-format (ajax/json-response-format
                                           {:keywords? true})
                         :interceptors [backend-interceptor (token-interceptor token)]
-                        :on-success [::success :users]
+                        :on-success [::success [:users]]
                         :on-failure [::failure]}
                        ]]
               {:http-xhrio req
@@ -48,5 +48,4 @@
 (rf/reg-event-db
  ::success
  (fn-traced [db [_ k result]]
-            (-> db
-                (assoc k (:response result)))))
+            (assoc-in db k (:response result))))

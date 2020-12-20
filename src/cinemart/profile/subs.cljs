@@ -6,4 +6,4 @@
 (rf/reg-sub
   ::get-ticket
   (fn-traced [db]
-             (:ticket db)))
+             (get-in db [:users :ticket])))

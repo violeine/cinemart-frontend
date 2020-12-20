@@ -62,3 +62,8 @@
   (fn-traced []
              {:fx [[:dispatch
                     [ ::noti/notify {:text "Booked" :type :success}]]]}))
+
+(reg-event-db
+  ::remove-ticket
+  (fn-traced [db [_ _]]
+             (dissoc db :ticket)))

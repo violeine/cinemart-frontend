@@ -7,16 +7,18 @@
             [re-frame.core :as rf]
             [reagent.core :as r]))
 
+(def select-schedule (r/atom nil))
+
 (defn ticket []
   (let [sub-movie (rf/subscribe [:cinemart.movie.subs/movie])
         theaters (rf/subscribe [::sub/get :theaters])
         schedules (rf/subscribe [::sub/get :schedules])
         your-seat (r/atom [])
-        seatname (r/atom [])
-        select-schedule (r/atom nil)]
+        seatname (r/atom [])]
     (fn []
       (let
         [{:keys [title overview backdrop_path runtime poster_path id]} @sub-movie
+         t @theaters
          ]
         [container {:classes ["flex" "flex-col"]}
          [:<>
@@ -35,7 +37,7 @@
                :style {:filter "brightness(50%)"}}]]
             [:div.bg-yellow-200.text-black.ml-8
              {:class ["xl:w-10/12 w-9/12"]}
-             ^{:key @theaters}
+             ^{:key t}
              [:select
               {:on-change #(rf/dispatch [::ticket-ev/get-schedules (-> % .-target .-value) id])}
               [:option {:selected true
@@ -48,6 +50,7 @@
                             :value id}
                    name]))]
              (when @schedules
+               ^{:key @schedules}
                [:select
                 {:on-change #(reset! select-schedule
                                      (nth
@@ -105,9 +108,7 @@
                                    #(rf/dispatch
                                       [::ticket-ev/book
                                        {:booked_seats @your-seat
-                                        :seats_name @seatname
-                                        :schedule (:id @select-schedule)}])}
-              "book your ticket"]]
+                                        :seats_name @seatname :schedule (:id @select-schedule)}])} "book your ticket"]]
             [:div.flex.flex-col
              (for [ticket @seatname]
                [:div.mb-2.py-4.flex.bg-indigo-400.px-2.rounded.bg-opacity-70 {:key ticket}

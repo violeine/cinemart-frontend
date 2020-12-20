@@ -67,4 +67,45 @@
       {:style {:filter "brightness(50%)"}
        :src movie_backdrop_path}]]))
 
-
+(defn user-div
+  [{:keys [movie_id movie_runtime movie_genres
+           movie_overview movie_poster_path
+           movie_backdrop_path movie_title seats_name
+           schedule_nrow schedule_ncolumn schedule_time
+           seats cost theater_name theater_address]}]
+  (let [total-seat (* schedule_nrow schedule_ncolumn)]
+    [:div.px-3.mx-5.h-64.mb-4.py-2.relative
+     [:div.absolute.h-60.mr-2.w-full.z-10.my-2.mx-2.flex
+      [:img.h-60.rounded.shadow-md {:src movie_poster_path
+                                    :on-click #(rf/dispatch
+                                                 [:cinemart.events/navigate
+                                                  :cinemart.router/movie {:id movie_id}])}]
+      [:div.ml-16
+       [:div.flex.items-baseline
+        [:a.text-xl.font-bold.text-white.mr-8 {:href (href :cinemart.router/movie {:id movie_id})} movie_title]
+        [:div.text-white
+         [:span.mr-6.text-lg (str movie_runtime " mins")]
+         ]]
+       [:p.text-xl "Show time:"
+        [:span.ml-2
+         (to-vn-time schedule_time)]]
+       [:p.text-xl "Your seats: " (str seats_name)]
+       [:div.flex.mt-2
+        [:p.text-xl "Location: "
+         [:span theater_name]]
+        [:p.text-xl.ml-4 "Address: "
+         [:span theater_address]]]
+       [:p.text-lg.mt-2 "Total price:" [:span.ml-2 cost]]
+       [button-n {:class ["bg-indigo-400" "mt-8" "inline-block"]
+                  :on-click #(rf/dispatch
+                               [::overlay/open
+                                {:component
+                                 (fn []
+                                   [seatmap
+                                    {:nrow schedule_nrow
+                                     :ncolumn schedule_ncolumn
+                                     :your-seat seats}])}])}
+        "show booked seat"]]]
+     [:img.object-cover.object-center.rounded-lg.h-64.w-full
+      {:style {:filter "brightness(50%)"}
+       :src movie_backdrop_path}]]))
