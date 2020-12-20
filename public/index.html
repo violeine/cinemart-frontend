@@ -16,5 +16,24 @@
     </noscript>
     <div id="app" class="bg-gray-100"></div>
     <script src="/js/main.js"></script>
+    <script>
+      const header = document.querySelector("header");
+      header.style.position = "sticky";
+      header.style.top = "0";
+      header.style.transition = "top .2s";
+      header.style.zIndex = "99999";
+
+      window.onscroll = (() => {
+        var prePos = window.pageYOffset;
+        const header = document.querySelector("header");
+
+        return () => {
+          var curPos = window.pageYOffset;
+          if (curPos > prePos) header.style.top = "-60px";
+          else header.style.top = "0";
+          prePos = curPos;
+        };
+      })();
+    </script>
   </body>
 </html>
