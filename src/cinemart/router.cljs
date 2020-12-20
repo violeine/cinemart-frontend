@@ -44,7 +44,7 @@
    ["about" {:name      ::about
              :link-text "about"
              :view about-page
-             :hidden false
+             :hidden true
              :controllers
              [{:start (fn [params] (js/console.log params))
                :stop  (fn [params] (js/console.log "Leaving sub-page 1"))}]}]

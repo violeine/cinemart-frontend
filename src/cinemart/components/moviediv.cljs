@@ -4,7 +4,7 @@
             [cinemart.overlay.events :as overlay]
             [cinemart.components.button :refer [button-n]]
             [cinemart.components.seatmap :refer [seatmap]]
-            [cinemart.config :refer [to-vn-time]]
+            [cinemart.config :refer [to-vn-time to-vnd]]
             [reitit.frontend.easy :refer [href]]))
 
 (defn movie-div
@@ -49,7 +49,7 @@
        [:p.text-xl "Show time:"
         [:span.ml-2
         (to-vn-time time)]]
-       [:p.text-lg.mt-2 "Ticket price:" [:span.ml-2 price]]
+       [:p.text-lg.mt-2 "Ticket price:" [:span.ml-2 (to-vnd price)]]
        [:p.mt-2 "Reserved seats:"
         [:span.ml-2
          reserved [:span "/"] total-seat]]
@@ -97,7 +97,7 @@
          [:span theater_address]]
         [:p.text-xl.ml-4 "Room "
          [:span schedule_room]]]
-       [:p.text-lg.mt-2 "Total price:" [:span.ml-2 cost]]
+       [:p.text-lg.mt-2 "Total price:" [:span.ml-2 (to-vnd cost)]]
        [button-n {:class ["bg-indigo-400" "mt-8" "inline-block"]
                   :on-click #(rf/dispatch
                                [::overlay/open

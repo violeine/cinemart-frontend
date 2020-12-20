@@ -16,17 +16,22 @@
      [:<>
       [:div
        [:h2.text-3xl.ml-5 "On Theaters"]
-       [lists "Today" (:day latest-schedule)]
-       [lists "This Week" (:week latest-schedule)]
-       [lists "This Month" (:month latest-schedule)]]
+       (when
+         (not (empty?  (:day latest-schedule)))
+         [lists "Today" (:day latest-schedule)])
+       (when (not (empty? (:week latest-schedule)))
+         [lists "This Week" (:week latest-schedule)])
+       (when (not (empty? (:month latest-schedule)))
+         [lists "This Month" (:month latest-schedule)])]
       [:div
        [:h2.text-3xl.ml-5 "Theaters"]
        [:div.mx-8.px-3
         (for [theater theaters]
-          [button-a "text-indigo-400"
-           {:href (href :cinemart.router/theater {:id (:id theater)})
-            :class ["mt-2" "px-8" "py-3" "bg-indigo-700"]}
-           (:name theater)])]]
+          [:div.inline-block.mr-2
+           [button-a "text-indigo-400"
+            {:href (href :cinemart.router/theater {:id (:id theater)})
+             :class ["mt-2" "px-8" "py-3" "bg-indigo-700"  ]}
+            (:name theater)]])]]
       [:div
        [:h2.text-3xl.ml-5 "By Genres"]
        (map-indexed
