@@ -4,19 +4,6 @@
   @apply inline-block px-1 py-2 rounded-sm;
 }
 
-::-webkit-scrollbar {
-  @apply w-2 h-2;
-}
-::-webkit-scrollbar-thumb {
-  @apply rounded;
-}
-::-webkit-scrollbar-thumb {
-  @apply bg-gray-500;
-}
-::-webkit-scrollbar-track {
-  @apply bg-gray-300 rounded;
-}
-
 @tailwind utilities;
 
 .h-96 {
@@ -123,5 +110,18 @@
 .overlay-exit.overlay-exit-active {
   transform: translate(-50%, -380%);
   transition: transform 300ms;
+}
+
+::-webkit-scrollbar {
+  @apply w-2 h-2;
+}
+::-webkit-scrollbar-thumb {
+  @apply rounded;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-500;
+}
+::-webkit-scrollbar-track {
+  @apply bg-gray-300 rounded;
 }
 /*! purgecss end ignore */
