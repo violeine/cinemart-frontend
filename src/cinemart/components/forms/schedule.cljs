@@ -49,7 +49,7 @@
          [:div.flex
           [:div.flex
            {:class ["w-1/2"]}
-           [:div.mr-2
+           [:div.mr-4
             [input
              {:type "number"
               :name "row"

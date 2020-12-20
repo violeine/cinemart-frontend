@@ -140,3 +140,8 @@
                  (new js/Date t)
                  "vi-VN"))
 
+(defn to-vnd [number]
+  (.format
+    (js/Intl.NumberFormat.
+         "vi-VN" #js{:style "currency" :currency "VND"})
+    number))

@@ -61,7 +61,10 @@
   ::create-success
   (fn-traced []
              {:fx [[:dispatch
-                    [ ::noti/notify {:text "Booked" :type :success}]]]}))
+                    [:cinemart.events/navigate :cinemart.router/profile]]
+                   [:dispatch
+                    [::noti/notify {:text "Booked"
+                                     :type :success}]]]}))
 
 (reg-event-db
   ::remove-ticket

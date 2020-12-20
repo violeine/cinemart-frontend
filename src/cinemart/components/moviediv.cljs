@@ -69,7 +69,7 @@
 
 (defn user-div
   [{:keys [movie_id movie_runtime movie_genres
-           movie_overview movie_poster_path
+           movie_overview movie_poster_path schedule_room
            movie_backdrop_path movie_title seats_name
            schedule_nrow schedule_ncolumn schedule_time
            seats cost theater_name theater_address]}]
@@ -94,7 +94,9 @@
         [:p.text-xl "Location: "
          [:span theater_name]]
         [:p.text-xl.ml-4 "Address: "
-         [:span theater_address]]]
+         [:span theater_address]]
+        [:p.text-xl.ml-4 "Room "
+         [:span schedule_room]]]
        [:p.text-lg.mt-2 "Total price:" [:span.ml-2 cost]]
        [button-n {:class ["bg-indigo-400" "mt-8" "inline-block"]
                   :on-click #(rf/dispatch
