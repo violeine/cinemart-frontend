@@ -1,8 +1,12 @@
 (ns cinemart.components.search
   (:require [reagent.core :as r]
             [cinemart.components.input :refer [input select]]
+            [cinemart.components.button :refer [button-n]]
+            [re-frame.core :as rf]
             [cinemart.config :refer [json-string today]]
             [cinemart.components.moviediv :refer [user-div movie-div manager-div]]
+            [cinemart.components.forms.movie :refer [movie-form]]
+            [cinemart.overlay.events :as overlay]
             [cinemart.components.admindiv :refer [admin-div]]))
 
 (defn search
@@ -137,18 +141,26 @@
   (let [filtered-list (r/atom li)]
     (fn [li]
       [:<>
-       [input {:type "text"
-               :class ["w-full" "px-5"]
-               :placeholder "type to search"
-               :on-change (fn [e]
-                            (let [value (-> e .-target .-value)
-                                  new-list (filter
-                                             #(.includes
-                                                (.toLowerCase
-                                                  (:title %)) value)
-                                             li)]
-                              (reset! filtered-list new-list)
-                              ))}]
+       [:div.flex.items-center
+        [button-n {:class ["bg-indigo-400" "mr-2" "inline-block"]
+                   :on-click #(rf/dispatch
+                                [::overlay/open
+                                 {:component
+                                  (fn []
+                                    [movie-form])}])}
+         "Create"]
+        [:input.rounded {:type "text"
+                :class ["w-full" "px-5"]
+                :placeholder "type to search"
+                :on-change (fn [e]
+                             (let [value (-> e .-target .-value)
+                                   new-list (filter
+                                              #(.includes
+                                                 (.toLowerCase
+                                                   (:title %)) value)
+                                              li)]
+                               (reset! filtered-list new-list)
+                               ))}]]
        (if (not (empty?  @filtered-list))
          (for [l @filtered-list
                :let [{:keys [id]} l

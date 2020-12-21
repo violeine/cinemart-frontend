@@ -39,6 +39,13 @@
                         :on-success [::success :movies]
                         :on-failure [::failure]}
                        {:method :get
+                        :uri "/movies/genres/all"
+                        :response-format (ajax/json-response-format
+                                           {:keywords? true})
+                        :interceptors [backend-interceptor (token-interceptor token)]
+                        :on-success [::success :genres]
+                        :on-failure [::failure]}
+                       {:method :get
                         :uri "/managers"
                         :response-format (ajax/json-response-format
                                           {:keywords? true})
