@@ -11,7 +11,8 @@
 (def link {:users "/users"
            :theaters "/theaters"
            :admins "/admins"
-           :managers "/managers"})
+           :managers "/managers"
+           :movie "/movies"})
 
 (rf/reg-event-fx
  ::fetch-admin
@@ -30,6 +31,13 @@
                                           {:keywords? true})
                         :interceptors [backend-interceptor (token-interceptor token)]
                         :on-success [::success :admins] :on-failure [::failure]}
+                       {:method :get
+                        :uri "/movies"
+                        :response-format (ajax/json-response-format
+                                           {:keywords? true})
+                        :interceptors [backend-interceptor (token-interceptor token)]
+                        :on-success [::success :movies]
+                        :on-failure [::failure]}
                        {:method :get
                         :uri "/managers"
                         :response-format (ajax/json-response-format

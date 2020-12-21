@@ -52,16 +52,18 @@
                [:p.text-3xl.text-gray-100.mt-4 "No schedules for this movie yet :("])
              (when @schedules
                (if (not (empty? @schedules))
-                 [:div.flex.bg-indigo-400.py-2.mt-4.justify-center
+                 [:div.flex.bg-indigo-400.py-2.mt-4.justify-center.overflow-x-auto
                   (map-indexed (fn [idx {:keys [id time price]}]
                                  (let [local-time (new js/Date time)
                                        day (nth week-day (.getDay local-time))
-                                       date (str (.getDate local-time) "-" (inc (.getMonth local-time)))]
+                                       date (str (.getDate local-time) "-" (inc (.getMonth local-time)))
+                                       t (str (.getHours local-time) ":" (.getMinutes local-time))]
                                    [:div.mr-2.bg-indigo-300.rounded.text-center.p-5
                                     {:key id
                                      :on-click #( reset! select-schedule (nth @schedules idx))}
                                     [:div day]
                                     [:div date]
+                                    [:div t]
                                     [:div (to-vnd price)]
                                     ]))
                                (reverse

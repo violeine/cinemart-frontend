@@ -8,6 +8,7 @@
             [cinemart.components.forms.theater :refer [theater-form]]
             [cinemart.admin.dashboard :refer [dashboard]]
             [cinemart.overlay.events :as overlay]
+            [cinemart.components.search :refer [search-admin]]
             [cinemart.admin.events :as admin-ev]
             [cinemart.config :refer [json-string]]))
 (def btn-state (r/atom :admins))
@@ -16,10 +17,11 @@
           [:admins "Admin"]
           [:theaters "Theater"]
           [:users "User"]
+          [:movie "Movie"]
           [:managers "Manager"]])
 
 (defn admin []
-  (let [{:keys [theaters admins users managers] :as admin} @(rf/subscribe [::sub/admin])
+  (let [{:keys [theaters admins users managers movies] :as admin} @(rf/subscribe [::sub/admin])
         me @(rf/subscribe [:cinemart.auth.subs/me])]
     [container {:classes ["flex" "flex-col"]}
      [:<>
@@ -115,7 +117,11 @@
                                                                      (.preventDefault e)
                                                                      (rf/dispatch
                                                                        [::admin-ev/create :managers payload])))}])}])}
-                    "Create Manager"]])]]))
+                    "Create Manager"]]
+        :movie
+        [:div.px-5
+         [search-admin movies]]
+        )]]))
 
 
 

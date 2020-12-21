@@ -25,6 +25,8 @@
     {:style {:filter "brightness(50%)"}
     :src backdrop_path}]])
 
+
+
 (defn manager-div
   [{:keys [movie_id movie_runtime movie_genres
            movie_overview movie_poster_path
