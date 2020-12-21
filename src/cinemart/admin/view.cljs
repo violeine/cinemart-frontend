@@ -25,7 +25,6 @@
         me @(rf/subscribe [:cinemart.auth.subs/me])]
     [container {:classes ["flex" "flex-col"]}
      [:<>
-      [:h2.text-3xl.ml-6.mb-16 "admin panel"]
       [:div.flex.p-2
        (doall
          (for [btn arr]
@@ -120,6 +119,7 @@
                     "Create Manager"]]
         :movie
         [:div.px-5
+         ^{:key movies}
          [search-admin movies]]
         )]]))
 

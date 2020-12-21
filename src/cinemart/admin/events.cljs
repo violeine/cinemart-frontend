@@ -51,8 +51,7 @@
                                           {:keywords? true})
                         :interceptors [backend-interceptor (token-interceptor token)]
                         :on-success [::success :managers]
-                        :on-failure [::failure]}
-                       {:method :get
+                        :on-failure [::failure]} {:method :get
                         :uri "/users"
                         :response-format (ajax/json-response-format
                                           {:keywords? true})
@@ -84,17 +83,19 @@
                 (assoc-in  [:admin k] (:response result)))))
 
 (rf/reg-event-fx
- ::create
- (fn-traced [{:keys [db]} [_ k payload]]
-            (let [token (get-in db [:user :token])]
-              {:http-xhrio {:method :post
-                            :uri  (get link k)
-                            :params payload
-                            :format (ajax/json-request-format)
-                            :response-format (ajax/json-response-format {:keywords? true})
-                            :interceptors [backend-interceptor (token-interceptor token)]
-                            :on-success [::create-success k]
-                            :on-failure [::crud-failure]}})))
+  ::create
+  (fn-traced [{:keys [db]} [_ k payload]]
+             (let [token (get-in db [:user :token])]
+               {:http-xhrio {:method :post
+                             :uri  (get link k)
+                             :params payload
+                             :format (ajax/json-request-format)
+                             :response-format (ajax/json-response-format {:keywords? true})
+                             :interceptors [backend-interceptor (token-interceptor token)]
+                             :on-success (if (= k :movie)
+                                           [::movie-success]
+                                           [::create-success k])
+                             :on-failure [::crud-failure]}})))
 
 (rf/reg-event-fx
  ::create-theaters
@@ -132,16 +133,19 @@
                             :on-failure [::crud-failure]}})))
 
 (rf/reg-event-fx
- ::delete
- (fn-traced [{:keys [db]} [_ k payload]]
-            (let [token (get-in db [:user :token])]
-              {:http-xhrio {:method :delete
-                            :uri (str (get link k) "/" payload)
-                            :format (ajax/json-request-format)
-                            :response-format (ajax/json-response-format {:keywords? true})
-                            :interceptors [backend-interceptor (token-interceptor token)]
-                            :on-success [::delete-success k]
-                            :on-failure [::crud-failure]}})))
+  ::delete
+  (fn-traced [{:keys [db]} [_ k payload]]
+             (let [token (get-in db [:user :token])]
+               {:http-xhrio {:method :delete
+                             :uri (str (get link k) "/" payload)
+                             :format (ajax/json-request-format)
+                             :response-format (ajax/json-response-format {:keywords? true})
+                             :interceptors [backend-interceptor (token-interceptor token)]
+                             :on-success
+                             (if (= k :movie)
+                               [::movie-success]
+                               [::delete-success k])
+                             :on-failure [::crud-failure]}})))
 
 (rf/reg-event-fx
  ::update
@@ -158,6 +162,36 @@
                             :interceptors [backend-interceptor (token-interceptor token)]
                             :on-success [::update-success k idx]
                             :on-failure [::crud-failure]}})))
+
+(rf/reg-event-fx
+ ::update-movie
+ (fn-traced [{:keys [db]} [_ k payload id]]
+            (let [token (get-in db [:user :token])
+                  pl (if (nil? (:password payload))
+                       (dissoc payload :password)
+                       payload)]
+              {:http-xhrio {:method :put
+                            :uri (str (get link k) "/" id)
+                            :format (ajax/json-request-format)
+                            :params pl
+                            :response-format (ajax/json-response-format {:keywords? true})
+                            :interceptors [backend-interceptor (token-interceptor token)]
+                            :on-success [::movie-success]
+                            :on-failure [::crud-failure]}})))
+
+(rf/reg-event-fx
+  ::movie-success
+  (fn-traced [{:keys [db]} [_ result]]
+             {:fx [[:dispatch [::overlay/close]]
+                   [:dispatch [::noti/notify {:text "update success"}]]]
+              :http-xhrio
+              {:method :get
+               :uri "/movies"
+               :response-format (ajax/json-response-format
+                                  {:keywords? true})
+               :interceptors [backend-interceptor]
+               :on-success [::success :movies]
+               :on-failure [::failure]}}))
 
 (rf/reg-event-fx
  ::crud-failure

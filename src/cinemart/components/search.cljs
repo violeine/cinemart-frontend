@@ -149,22 +149,25 @@
                                   (fn []
                                     [movie-form])}])}
          "Create"]
-        [:input.rounded {:type "text"
-                :class ["w-full" "px-5"]
-                :placeholder "type to search"
-                :on-change (fn [e]
-                             (let [value (-> e .-target .-value)
-                                   new-list (filter
-                                              #(.includes
-                                                 (.toLowerCase
-                                                   (:title %)) value)
-                                              li)]
-                               (reset! filtered-list new-list)
-                               ))}]]
-       (if (not (empty?  @filtered-list))
-         (for [l @filtered-list
-               :let [{:keys [id]} l
-                     t (get-in li [0 :id])]]
-           ^{:key (random-uuid)}
-           [admin-div l])
-         [:p.text-xl.text-white "Nothing found!"])])))
+        [:input.rounded.text-black {:type "text"
+                         :class ["w-full" "px-5"]
+                         :placeholder "type to search"
+                         :on-change (fn [e]
+                                      (let [value (-> e .-target .-value)
+                                            new-list (filter
+                                                       #(.includes
+                                                          (.toLowerCase
+                                                            (:title %)) value)
+                                                       li)]
+                                        (reset! filtered-list new-list)
+                                        ))}]]
+       ^{:key @filtered-list}
+       [:div
+        (if (not (empty?  @filtered-list))
+          (for [l @filtered-list
+                :let [{:keys [id]} l
+                      t (get-in li [0 :id])]]
+            ^{:key (random-uuid)}
+
+            [admin-div l])
+          [:p.text-xl.text-white "Nothing found!"])]])))

@@ -5,7 +5,7 @@
             [cinemart.components.input :refer [input select]]
             [cinemart.components.moviediv :refer [movie-div]]
             [cinemart.components.button :refer [button-a button-n]]
-            [cinemart.manager.events :as manager-ev]
+            [cinemart.admin.events :as admin-ev]
             [cinemart.config :refer [json-string now iso-time]]))
 
 (defn remove-by-id [v id]
@@ -53,23 +53,20 @@
               "text-indigo-400"
               {:class ["bg-indigo-600" "text-md" "px-2" "py-2" ]
                :on-click
-               #(rf/dispatch [::manager-ev/create-schedule
+               #(rf/dispatch [::admin-ev/update-movie
+                              :movie
                               (-> @form
-                                  (dissoc :time)
-                                  (assoc :time (iso-time
-                                                 (:time @form))))])}
-              "Update schedule"
+                                  (dissoc :id)
+                                  (dissoc :created_at))
+                              (:id @form)])}
+              "Update movie"
               ]
              [button-a
               "text-indigo-400"
               {:class ["bg-indigo-600" "text-md" "px-2" "py-2" ]
                :on-click
-               #(rf/dispatch [::manager-ev/create-schedule
-                              (-> @form
-                                  (dissoc :time)
-                                  (assoc :time (iso-time
-                                                 (:time @form))))])}
-              "Create schedule"
+               #(rf/dispatch [::admin-ev/create :movie @form])}
+              "Create movie"
               ])]]
          [:div.flex.items-center.mb-4
           [:label.text-gray-700.font-bold.mr-2.w-40 "Genres:"]
@@ -126,5 +123,5 @@
          ]
         ]
 
-[:div
- [movie-div @form]]])))
+       [:div
+        [movie-div @form]]])))

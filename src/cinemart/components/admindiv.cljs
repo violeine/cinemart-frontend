@@ -20,14 +20,18 @@
       (for [genre (interpose "," genres)]
         [:span {:key (random-uuid)} (:name genre ", ")])]
      [:p.mt-6.text-gray-100.overflow-y-auto.h-16.overflow-ellipsis {:class ["lg:w-10/12"
-                                                                              "w-full"]} overview]
-     [button-n {:class ["bg-indigo-400" "mt-8" "inline-block"]
+                                                                            "w-full"]} overview]
+     [button-n {:class ["bg-indigo-400" "mt-8" "inline-block" "mr-2"]
                 :on-click #(rf/dispatch
                              [::overlay/open
                               {:component
                                (fn []
                                  [movie-form mov])}])}
-      "Update"]]]
+      "Update"]
+     [button-n {:class ["bg-red-400" "mt-8" "inline-block"]
+                :on-click #(rf/dispatch
+                             [:cinemart.admin.events/delete :movie id])}
+      "Delete"]]]
    [:img.object-cover.object-center.rounded-lg.h-64.w-full
     {:style {:filter "brightness(50%)"}
      :src backdrop_path}]])
