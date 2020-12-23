@@ -33,7 +33,7 @@
               [:p.text-md.text-gray-100
                {:class ["w-1/2"]} overview]]
              [:img.object-cover.w-full.object-center.shadow-lg.h-96.rounded-lg.mb-8
-              {:src (image-link [:backdrop :lg] backdrop_path)
+              {:src backdrop_path
                :style {:filter "brightness(50%)"}}]]
             [:div.text-black.ml-8
              {:class ["xl:w-10/12 w-9/12"]}
@@ -102,7 +102,7 @@
              :style {:backdrop-filter "blur(40px)"}}
             [:div.mb-2
              [:img.w-full.shadow-lg.rounded-lg
-              {:src (image-link [:poster :lg] poster_path)}]]
+              {:src poster_path}]]
             [:div.flex.mb-2
              [:h2.text-2xl.font-bold.mb-2.mr-auto "Your Ticket"]
              [:button.p-2.bg-indigo-600.text-white.rounded {:disabled (empty?  @your-seat)
