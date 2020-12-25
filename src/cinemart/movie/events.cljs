@@ -5,7 +5,7 @@
    [day8.re-frame.tracing :refer-macros [fn-traced]]
    [cinemart.effects :as fx]
    [ajax.core :as ajax]
-   [cinemart.config :refer [movie-interceptor backend-interceptor]]
+   [cinemart.config :refer [ backend-interceptor]]
    [reitit.frontend.controllers :as rfc]))
 
 (rf/reg-event-fx

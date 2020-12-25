@@ -1,6 +1,7 @@
 (ns cinemart.config
   (:require [ajax.core :as ajax]
-            [cinemart.env :refer [api-key]]))
+            ; [cinemart.env :refer [api-key] ]
+            ))
 
 (def debug?
   ^boolean goog.DEBUG)
@@ -30,19 +31,19 @@
 
 
 ;;TODO change name to tmdb
-(def movie-interceptor
-  (ajax/to-interceptor
-   {:name "inject api key and append uri"
-    :request (fn [request]
-               (let [uri (:uri request)]
-                 (-> request
-                     (assoc-in
-                      [:headers
-                       :Authorization]
-                      (str "Bearer " api-key))
-                     (assoc-in
-                      [:uri]
-                      (str "https://api.themoviedb.org/3" uri)))))}))
+; (def movie-interceptor
+;   (ajax/to-interceptor
+;    {:name "inject api key and append uri"
+;     :request (fn [request]
+;                (let [uri (:uri request)]
+;                  (-> request
+;                      (assoc-in
+;                       [:headers
+;                        :Authorization]
+;                       (str "Bearer " api-key))
+;                      (assoc-in
+;                       [:uri]
+;                       (str "https://api.themoviedb.org/3" uri)))))}))
 
 (def backend-interceptor
   (ajax/to-interceptor
