@@ -53,7 +53,8 @@
                  (-> request
                      (assoc-in
                       [:uri]
-                      (str "https://violeine.duckdns.org" uri)))))}))
+                      ;change localhost to your backend
+                      (str "http://localhost:4000" uri)))))}))
 
 (defn token-interceptor [token]
   (ajax/to-interceptor
