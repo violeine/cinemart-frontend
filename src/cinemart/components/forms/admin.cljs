@@ -41,7 +41,7 @@
           [select {:class ["mb-2"]
                    :value (:theater @values)
                    :on-change #(swap! values assoc :theater
-                                      (-> % .-target .-value))}
+                                      (-> % .-target .-value int))}
            (for [theater theaters
                  :let [{:keys [id name]} theater]]
              [:option {:key id
