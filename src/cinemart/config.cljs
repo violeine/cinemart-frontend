@@ -54,7 +54,7 @@
                      (assoc-in
                       [:uri]
                       ;change localhost to your backend
-                      (str "http://localhost:4000" uri)))))}))
+                      (str "https://api.cinemart.duckdns.org" uri)))))}))
 
 (defn token-interceptor [token]
   (ajax/to-interceptor
@@ -116,8 +116,8 @@
   (let [n (new js/Date)
         pad #(if (< % 10 ) (str 0 %) %)]
     (str (.getFullYear n) "-"
-         (+
-          (.getMonth n) 1) "-" (.getDate n)
+         (pad (+ (.getMonth n) 1)) "-"
+         (pad (.getDate n))
          "T"
          (pad (.getHours n))
          ":"
@@ -128,8 +128,8 @@
   (let [n (new js/Date)
         pad #(if (< % 10 ) (str 0 %) %)]
     (str (.getFullYear n) "-"
-         (+
-          (.getMonth n) 1) "-" (.getDate n)
+         (pad (+ (.getMonth n) 1)) "-"
+         (pad (.getDate n))
          "T00:00:000Z")))
 
 (defn iso-time
