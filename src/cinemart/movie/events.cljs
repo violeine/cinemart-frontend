@@ -5,40 +5,41 @@
    [day8.re-frame.tracing :refer-macros [fn-traced]]
    [cinemart.effects :as fx]
    [ajax.core :as ajax]
-   [cinemart.config :refer [movie-interceptor backend-interceptor]]
+   [cinemart.config :refer [ backend-interceptor]]
    [reitit.frontend.controllers :as rfc]))
 
 (rf/reg-event-fx
  ::fetch-movie
  (fn-traced [_ [_ id]]
             {:http-xhrio [{:method :get
-                           :uri (str "/movie/" id)
+                           :uri (str "/movies/" id)
                            :response-format (ajax/json-response-format
                                              {:keywords? true})
-                           :interceptors [movie-interceptor]
+                           :interceptors [backend-interceptor]
                            :on-success [::success-movie]
                            :on-failure [::failure]}
-                          {:method :get
-                           :uri (str "/movie/" id "/credits")
-                           :response-format (ajax/json-response-format
-                                             {:keywords? true})
-                           :interceptors [movie-interceptor]
-                           :on-success [::success-credit]
-                           :on-failure [::failure]}
-                          {:method :get
-                           :uri (str "/movie/" id "/reviews")
-                           :response-format (ajax/json-response-format
-                                             {:keywords? true})
-                           :interceptors [movie-interceptor]
-                           :on-success [::success-review]
-                           :on-failure [::failure]}
-                          {:method :get
-                           :uri (str "/movie/" id "/images?language=en")
-                           :response-format (ajax/json-response-format
-                                             {:keywords? true})
-                           :interceptors [movie-interceptor]
-                           :on-success [::success-media]
-                           :on-failure [::failure]}]}))
+                          ; {:method :get
+                          ;  :uri (str "/movie/" id "/credits")
+                          ;  :response-format (ajax/json-response-format
+                          ;                     {:keywords? true})
+                          ;  :interceptors [movie-interceptor]
+                          ;  :on-success [::success-credit]
+                          ;  :on-failure [::failure]}
+                          ; {:method :get
+                          ;  :uri (str "/movie/" id "/reviews")
+                          ;  :response-format (ajax/json-response-format
+                          ;                     {:keywords? true})
+                          ;  :interceptors [movie-interceptor]
+                          ;  :on-success [::success-review]
+                          ;  :on-failure [::failure]}
+                          ; {:method :get
+                          ;  :uri (str "/movie/" id "/images?language=en")
+                          ;  :response-format (ajax/json-response-format
+                          ;                     {:keywords? true})
+                          ;  :interceptors [movie-interceptor]
+                          ;  :on-success [::success-media]
+                          ;  :on-failure [::failure]}
+                          ]}))
 
 (rf/reg-event-fx
   ::post-movie
@@ -56,7 +57,7 @@
  ::success-movie
  (fn-traced [db [_ result]]
             (-> db
-                (assoc :movie result)
+                (assoc :movie (:response result))
                 (assoc :http-result result))))
 
 (rf/reg-event-db

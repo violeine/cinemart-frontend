@@ -1,6 +1,7 @@
 (ns cinemart.config
   (:require [ajax.core :as ajax]
-            [cinemart.env :refer [api-key]]))
+            ; [cinemart.env :refer [api-key] ]
+            ))
 
 (def debug?
   ^boolean goog.DEBUG)
@@ -30,19 +31,19 @@
 
 
 ;;TODO change name to tmdb
-(def movie-interceptor
-  (ajax/to-interceptor
-   {:name "inject api key and append uri"
-    :request (fn [request]
-               (let [uri (:uri request)]
-                 (-> request
-                     (assoc-in
-                      [:headers
-                       :Authorization]
-                      (str "Bearer " api-key))
-                     (assoc-in
-                      [:uri]
-                      (str "https://api.themoviedb.org/3" uri)))))}))
+; (def movie-interceptor
+;   (ajax/to-interceptor
+;    {:name "inject api key and append uri"
+;     :request (fn [request]
+;                (let [uri (:uri request)]
+;                  (-> request
+;                      (assoc-in
+;                       [:headers
+;                        :Authorization]
+;                       (str "Bearer " api-key))
+;                      (assoc-in
+;                       [:uri]
+;                       (str "https://api.themoviedb.org/3" uri)))))}))
 
 (def backend-interceptor
   (ajax/to-interceptor
@@ -52,6 +53,7 @@
                  (-> request
                      (assoc-in
                       [:uri]
+                      ;change localhost to your backend
                       (str "https://cinemart-backend.herokuapp.com" uri)))))}))
 
 (defn token-interceptor [token]
@@ -114,8 +116,8 @@
   (let [n (new js/Date)
         pad #(if (< % 10 ) (str 0 %) %)]
     (str (.getFullYear n) "-"
-         (+
-          (.getMonth n) 1) "-" (.getDate n)
+         (pad (+ (.getMonth n) 1)) "-"
+         (pad (.getDate n))
          "T"
          (pad (.getHours n))
          ":"
@@ -126,8 +128,8 @@
   (let [n (new js/Date)
         pad #(if (< % 10 ) (str 0 %) %)]
     (str (.getFullYear n) "-"
-         (+
-          (.getMonth n) 1) "-" (.getDate n)
+         (pad (+ (.getMonth n) 1)) "-"
+         (pad (.getDate n))
          "T00:00:000Z")))
 
 (defn iso-time
