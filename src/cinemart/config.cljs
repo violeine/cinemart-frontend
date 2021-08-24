@@ -54,7 +54,7 @@
                      (assoc-in
                       [:uri]
                       ;change localhost to your backend
-                      (str "https://api.cinemart.duckdns.org" uri)))))}))
+                      (str "https://cinemart-backend.herokuapp.com" uri)))))}))
 
 (defn token-interceptor [token]
   (ajax/to-interceptor
