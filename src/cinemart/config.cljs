@@ -52,7 +52,7 @@
                  (-> request
                      (assoc-in
                       [:uri]
-                      (str "https://violeine.duckdns.org" uri)))))}))
+                      (str "https://cinemart-backend.herokuapp.com" uri)))))}))
 
 (defn token-interceptor [token]
   (ajax/to-interceptor
